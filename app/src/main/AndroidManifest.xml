@@ -12,7 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoMoviles">
         <activity
+            android:name=".RegistroUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.ProyectoMoviles">
             <intent-filter>
