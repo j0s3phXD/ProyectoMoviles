@@ -31,7 +31,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogin.setOnClickListener(view -> {
-            // Pantalla siguiente de inicio de sesion
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         binding.btnResgistrar.setOnClickListener(view -> {

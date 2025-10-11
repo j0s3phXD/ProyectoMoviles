@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Título principal -->
+        <TextView
+            android:id="@+id/textTituloPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Publicar objeto"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/black"
+            android:paddingBottom="8dp" />
+
+        <!-- Subtítulo -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detalles del objeto"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
+        <!-- Campo: Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título"
+            android:textColor="@color/black"
+            android:paddingBottom="4dp" />
+
+        <EditText
+            android:id="@+id/editTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ingresa el título del objeto"
+            android:padding="10dp" />
+
+        <!-- Campo: Descripción -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textColor="@color/black"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <EditText
+            android:id="@+id/editDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="top"
+            android:hint="Describe el objeto"
+            android:inputType="textMultiLine"
+            android:padding="10dp" />
+
+        <!-- Campo: Categoría -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Categoría"
+            android:textColor="@color/black"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/seleccionar_categoria" />
+
+        <!-- Campo: Nivel de uso -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nivel de uso"
+            android:textColor="@color/black"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerUso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/seleccionar_nivel" />
+
+        <!-- Campo: Quiero intercambiarlo por -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quiero intercambiarlo por:"
+            android:textColor="@color/black"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <EditText
+            android:id="@+id/editIntercambio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej. Otro libro, accesorios, etc."
+            android:padding="10dp" />
+
+        <!-- Sección de fotos -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fotos del objeto"
+            android:textColor="@color/black"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <FrameLayout
+            android:id="@+id/frameAgregarFoto"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Añadir foto"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Botón -->
+        <Button
+            android:id="@+id/btnPublicar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Publicar objeto"
+            android:textAllCaps="false"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</ScrollView>

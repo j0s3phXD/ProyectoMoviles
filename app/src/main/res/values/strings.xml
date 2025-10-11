@@ -43,4 +43,23 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="seleccionar_categoria">Seleccionar categoria</string>
+    <string name="seleccionar_nivel">Seleccionar nivel de uso</string>
+    <string-array name="ubicaciones">
+        <item>Lima</item>
+        <item>Trujillo</item>
+        <item>Arequipa</item>
+        <item>Lambayeque</item>
+    </string-array>
+
+    <string-array name="categorias">
+        <item>Todos</item>
+        <item>Deporte</item>
+        <item>Libros</item>
+        <item>Ropa</item>
+        <item>Tecnología</item>
+    </string-array>
+
 </resources>
