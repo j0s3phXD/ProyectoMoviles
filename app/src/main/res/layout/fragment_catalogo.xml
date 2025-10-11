@@ -28,9 +28,12 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:queryHint="Buscar productos "
-            android:iconifiedByDefault="false" />
+            android:layout_height="48dp"
+            android:queryHint="Buscar productos..."
+            android:iconifiedByDefault="false"
+            android:layout_margin="16dp"
+            android:background="@drawable/logo_bar_serch"
+            android:padding="8dp" />
 
         <!-- Spinners -->
         <LinearLayout
@@ -44,16 +47,22 @@
                 android:id="@+id/spinner_categoria"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:entries="@array/categorias" />
+                android:layout_height="45dp"
+                android:entries="@array/categorias"
+                android:padding="8dp"
+                android:background="@android:drawable/editbox_background"
+                android:backgroundTint="#BDBDBD" />
+
 
             <Spinner
                 android:id="@+id/spinner_ubicacion"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:entries="@array/ubicaciones" />
+                android:layout_height="45dp"
+                android:padding="8dp"
+                android:entries="@array/ubicaciones"
+                android:background="@android:drawable/editbox_background"
+                android:backgroundTint="#BDBDBD"/>
         </LinearLayout>
 
         <!-- Texto de Categorías -->

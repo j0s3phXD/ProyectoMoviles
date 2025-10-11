@@ -2,17 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_explorar"
+        android:icon="@drawable/logo_explorar"
         android:title="Explorar" />
 
     <item
         android:id="@+id/nav_publicar"
+        android:icon="@drawable/logo_publicar"
         android:title="Publicar" />
 
     <item
         android:id="@+id/nav_chat"
+        android:icon="@drawable/logo_chat"
         android:title="Chat" />
 
     <item
         android:id="@+id/nav_perfil"
+        android:icon="@drawable/logo_perfil"
         android:title="Perfil" />
 </menu>

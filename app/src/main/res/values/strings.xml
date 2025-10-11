@@ -62,4 +62,10 @@
         <item>Tecnología</item>
     </string-array>
 
+    <string-array name="nivel_uso">
+        <item>Bajo</item>
+        <item>Medio</item>
+        <item>Alto</item>
+    </string-array>
+
 </resources>

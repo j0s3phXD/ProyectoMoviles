@@ -28,7 +28,7 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background"
+            android:src="@drawable/logo_registrar"
             android:layout_marginBottom="16dp"
             android:contentDescription="Imagen del producto" />
 

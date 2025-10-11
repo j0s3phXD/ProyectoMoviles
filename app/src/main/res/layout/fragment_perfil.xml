@@ -31,6 +31,7 @@
             <!-- Foto de perfil -->
             <ImageView
                 android:id="@+id/imgPerfil"
+                android:src="@drawable/logo_registrar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
