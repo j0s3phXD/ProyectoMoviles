@@ -54,4 +54,14 @@
         android:name="com.example.proyectomoviles.PerfilFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
+
+    <fragment
+        android:id="@+id/nav_gestionProductos"
+        android:name="com.example.proyectomoviles.GestionProductosFragment"
+        android:label="Gestion Productos"
+        tools:layout="@layout/fragment_gestion_productos">
+        <action
+            android:id="@+id/action_productos_to_publicar"
+            app:destination="@id/nav_publicar" />
+    </fragment>
 </navigation>

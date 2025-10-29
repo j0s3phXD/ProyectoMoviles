@@ -1,17 +1,35 @@
 package com.example.proyectomoviles;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPublicarBinding;
+import com.example.proyectomoviles.model.CategoriaRequest;
+import com.example.proyectomoviles.model.CategoriaResponse;
+import com.example.proyectomoviles.model.ProductoEntry;
+import com.example.proyectomoviles.model.PublicarRequest;
+import com.example.proyectomoviles.model.RptaGeneral;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +39,8 @@ import com.example.proyectomoviles.databinding.FragmentPublicarBinding;
 public class PublicarFragment extends Fragment {
 
     private FragmentPublicarBinding binding;
+    private boolean modoEdicion = false;
+    private int idProductoEditar = -1;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,18 +86,197 @@ public class PublicarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentPublicarBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        if (getArguments() != null && getArguments().getSerializable("producto") != null) {
+            ProductoEntry producto = (ProductoEntry) getArguments().getSerializable("producto");
+            cargarDatosProducto(producto);
 
-        // Acción del botón
-        binding.btnPublicar.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Objeto publicado correctamente", Toast.LENGTH_SHORT).show();
-        });
+            modoEdicion = true;
+            idProductoEditar = producto.getId_producto();
+
+            binding.btnPublicar.setText("Actualizar producto");
+        }
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("tokenJWT", "");
+
+        cargarCategorias();
 
         // Acción del cuadro de foto
         binding.frameAgregarFoto.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Aquí puedes abrir la galería o cámara", Toast.LENGTH_SHORT).show();
         });
 
-        return view;
+        // Listener del botón publicar
+        binding.btnPublicar.setOnClickListener(v -> {
+            if (token.isEmpty()) {
+                Toast.makeText(getContext(), "No se encontró token de sesión", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (modoEdicion) {
+                editarProducto("JWT " + token, idProductoEditar);
+            } else {
+                publicarObjeto("JWT " + token);
+            }
+        });
     }
+
+
+    private void cargarCategorias() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply swaply = retrofit.create(Swaply.class);
+
+        Call<CategoriaResponse> call = swaply.listarCategorias();
+
+        call.enqueue(new Callback<CategoriaResponse>() {
+            @Override
+            public void onResponse(Call<CategoriaResponse> call, Response<CategoriaResponse> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                CategoriaResponse rpta = response.body();
+                if (rpta != null && rpta.getCode() == 1) {
+                    List<CategoriaRequest> lista = rpta.getData();
+
+                    ArrayAdapter<CategoriaRequest> adapter = new ArrayAdapter<>(
+                            getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            lista
+                    );
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    binding.spinnerCategoria.setAdapter(adapter);
+                } else {
+                    Toast.makeText(getActivity(), "Sin categorías disponibles", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CategoriaResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void publicarObjeto(String token) {
+        String titulo = binding.editTitulo.getText().toString().trim();
+        String descripcion = binding.editDescripcion.getText().toString().trim();
+        String intercambio = binding.editIntercambio.getText().toString().trim();
+        String condicion = binding.spinnerUso.getSelectedItem().toString();
+        CategoriaRequest categoriaSeleccionada = (CategoriaRequest) binding.spinnerCategoria.getSelectedItem();
+
+        if (titulo.isEmpty() || descripcion.isEmpty()) {
+            Toast.makeText(getActivity(), "Completa todos los campos requeridos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int idCategoria = categoriaSeleccionada.getId_categoria();
+
+        PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Swaply api = retrofit.create(Swaply.class);
+        Call<RptaGeneral> call = api.publicarObjeto(token, request);
+        call.enqueue(new Callback<RptaGeneral>() {
+            @Override
+            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                RptaGeneral rpta = response.body();
+                if (rpta != null && rpta.getCode() == 1) {
+                    Toast.makeText(getActivity(), rpta.getMessage(), Toast.LENGTH_LONG).show();
+
+                    // Limpiar campos
+                    binding.editTitulo.setText("");
+                    binding.editDescripcion.setText("");
+                    binding.editIntercambio.setText("");
+                    binding.spinnerCategoria.setSelection(0);
+                    binding.spinnerUso.setSelection(0);
+                } else {
+                    Toast.makeText(getActivity(), (rpta != null ? rpta.getMessage() : "Error desconocido"), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cargarDatosProducto(ProductoEntry producto) {
+        binding.editTitulo.setText(producto.getTitulo());
+        binding.editDescripcion.setText(producto.getDescripcion());
+        binding.editIntercambio.setText(producto.getIntercambio_deseado());
+    }
+
+    private void editarProducto(String token, int idProducto) {
+        String titulo = binding.editTitulo.getText().toString().trim();
+        String descripcion = binding.editDescripcion.getText().toString().trim();
+        String intercambio = binding.editIntercambio.getText().toString().trim();
+        String condicion = binding.spinnerUso.getSelectedItem().toString();
+        CategoriaRequest categoriaSeleccionada = (CategoriaRequest) binding.spinnerCategoria.getSelectedItem();
+
+        if (titulo.isEmpty() || descripcion.isEmpty()) {
+            Toast.makeText(getActivity(), "Completa todos los campos requeridos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int idCategoria = categoriaSeleccionada.getId_categoria();
+
+        PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
+        request.setId_producto(idProducto);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+        Call<RptaGeneral> call = api.editarProducto(token, request);
+
+        call.enqueue(new Callback<RptaGeneral>() {
+            @Override
+            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                RptaGeneral rpta = response.body();
+                if (rpta != null && rpta.getCode() == 1) {
+                    Toast.makeText(getActivity(), "Producto actualizado correctamente", Toast.LENGTH_SHORT).show();
+
+                    // Regresar a la lista
+                    requireActivity().onBackPressed();
+                } else {
+                    Toast.makeText(getActivity(), (rpta != null ? rpta.getMessage() : "Error desconocido"), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }

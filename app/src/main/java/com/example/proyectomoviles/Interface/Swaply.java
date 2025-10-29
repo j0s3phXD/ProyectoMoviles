@@ -2,11 +2,19 @@ package com.example.proyectomoviles.Interface;
 
 import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
+import com.example.proyectomoviles.model.CategoriaResponse;
+import com.example.proyectomoviles.model.EliminarProductoRequest;
+import com.example.proyectomoviles.model.ProductoEntry;
+import com.example.proyectomoviles.model.PublicarRequest;
 import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
+import com.example.proyectomoviles.model.RptaGeneral;
+import com.example.proyectomoviles.model.RptaProducto;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface Swaply {
@@ -16,5 +24,21 @@ public interface Swaply {
 
     @POST("api_registrar_usuario")
     Call<RegistroResponse> registrarUsuario(@Body RegistroRequest registroRequest);
+
+    @POST("api_registrar_producto")
+    Call<RptaGeneral> publicarObjeto(@Header("Authorization") String authorization, @Body PublicarRequest publicarRequest);
+
+    @GET("api_listarcategoria")
+    Call<CategoriaResponse> listarCategorias();
+
+    @GET("api_listar_productos")
+    Call<RptaProducto> listarProductos();
+
+    @POST("api_eliminar_producto")
+    Call<RptaGeneral> eliminarProducto(@Header("Authorization") String authorization, @Body EliminarProductoRequest eliminarRequest);
+
+    @POST("api_editar_producto")
+    Call<RptaGeneral> editarProducto(@Header("Authorization") String authorization, @Body PublicarRequest editarRequest);
+
 
 }
