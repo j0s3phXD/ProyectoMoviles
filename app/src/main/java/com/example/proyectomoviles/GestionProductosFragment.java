@@ -120,7 +120,11 @@ public class GestionProductosFragment extends Fragment {
 
                     // Configurar RecyclerView
                     binding.recyclerProductos.setHasFixedSize(true);
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
                     binding.recyclerProductos.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    binding.recyclerProductos.setClipToPadding(false);
+                    binding.recyclerProductos.setPadding(8, 8, 8, 8);
+
 
                     ProductoAdapter adapter = new ProductoAdapter(listaProductos, new ProductoAdapter.OnItemClickListener() {
                         @Override

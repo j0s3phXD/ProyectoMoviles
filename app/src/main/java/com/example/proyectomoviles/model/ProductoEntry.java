@@ -7,10 +7,18 @@ public class ProductoEntry implements Serializable {
     private String titulo;
     private String descripcion;
     private String condicion;
-    private String categoria;
+    private CategoriaRequest categoria;
     private String intercambio_deseado;
 
-    // Getters y setters
+    public ProductoEntry(int id_producto, String titulo, String condicion, String descripcion, CategoriaRequest categoria, String intercambio_deseado) {
+        this.id_producto = id_producto;
+        this.titulo = titulo;
+        this.condicion = condicion;
+        this.descripcion = descripcion;
+        this.categoria = categoria;
+        this.intercambio_deseado = intercambio_deseado;
+    }
+
     public int getId_producto() {
         return id_producto;
     }
@@ -43,11 +51,11 @@ public class ProductoEntry implements Serializable {
         this.condicion = condicion;
     }
 
-    public String getCategoria() {
+    public CategoriaRequest getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(CategoriaRequest categoria) {
         this.categoria = categoria;
     }
 

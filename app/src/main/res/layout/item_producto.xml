@@ -3,14 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="8dp"
+    android:layout_gravity="center"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center">
 
         <!-- Imagen del producto -->
         <ImageView
@@ -61,20 +65,28 @@
             android:gravity="end"
             android:padding="8dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEditar"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Editar"
-                android:textSize="13sp" />
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:minWidth="70dp"
+                android:layout_marginEnd="8dp"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEliminar"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Eliminar"
-                android:textSize="13sp"
-                android:layout_marginStart="8dp" />
+                android:textSize="12sp"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:minWidth="90dp"/>
         </LinearLayout>
     </LinearLayout>
 

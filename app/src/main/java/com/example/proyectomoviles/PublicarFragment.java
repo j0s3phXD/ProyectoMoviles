@@ -23,6 +23,7 @@ import com.example.proyectomoviles.model.ProductoEntry;
 import com.example.proyectomoviles.model.PublicarRequest;
 import com.example.proyectomoviles.model.RptaGeneral;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -41,6 +42,10 @@ public class PublicarFragment extends Fragment {
     private FragmentPublicarBinding binding;
     private boolean modoEdicion = false;
     private int idProductoEditar = -1;
+
+    private List<CategoriaRequest> listaCategorias = new ArrayList<>();
+
+    private int idCategoriaSeleccionada = 0;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -149,15 +154,28 @@ public class PublicarFragment extends Fragment {
 
                 CategoriaResponse rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
-                    List<CategoriaRequest> lista = rpta.getData();
+                    listaCategorias = rpta.getData();
 
+                    // 🔹 Creas el adapter con esa lista
                     ArrayAdapter<CategoriaRequest> adapter = new ArrayAdapter<>(
                             getActivity(),
                             android.R.layout.simple_spinner_item,
-                            lista
+                            listaCategorias
                     );
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     binding.spinnerCategoria.setAdapter(adapter);
+
+                    // 🔹 Si estás editando, selecciona la categoría del producto
+                    if (modoEdicion && idCategoriaSeleccionada != 0) {
+                        binding.spinnerCategoria.post(() -> {
+                            for (int i = 0; i < listaCategorias.size(); i++) {
+                                if (listaCategorias.get(i).getId_categoria() == idCategoriaSeleccionada) {
+                                    binding.spinnerCategoria.setSelection(i);
+                                    break;
+                                }
+                            }
+                        });
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Sin categorías disponibles", Toast.LENGTH_SHORT).show();
                 }
@@ -225,6 +243,13 @@ public class PublicarFragment extends Fragment {
         binding.editTitulo.setText(producto.getTitulo());
         binding.editDescripcion.setText(producto.getDescripcion());
         binding.editIntercambio.setText(producto.getIntercambio_deseado());
+
+        if (producto.getCategoria() != null) {
+            idCategoriaSeleccionada = producto.getCategoria().getId_categoria();
+            Log.d("EDITAR_PRODUCTO", "Categoría cargada: " + idCategoriaSeleccionada);
+        } else {
+            Log.d("EDITAR_PRODUCTO", "El producto no tiene categoría asociada");
+        }
     }
 
     private void editarProducto(String token, int idProducto) {
@@ -240,6 +265,7 @@ public class PublicarFragment extends Fragment {
         }
 
         int idCategoria = categoriaSeleccionada.getId_categoria();
+        Log.d("EDITAR_PRODUCTO", "id_categoria=" + idCategoria + ", titulo=" + titulo);
 
         PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
         request.setId_producto(idProducto);
