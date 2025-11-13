@@ -64,11 +64,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Sección de artículos -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Mis artículos"
+            android:text="Confirmación para intercambio"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -128,14 +127,14 @@
                                 android:id="@+id/btnEditar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/Editar"
+                                android:text="@string/Entregado"
                                 android:layout_marginEnd="8dp" />
 
                             <Button
                                 android:id="@+id/btnEliminar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/Eliminar"/>
+                                android:text="@string/Reportar"/>
 
                         </LinearLayout>
                     </LinearLayout>

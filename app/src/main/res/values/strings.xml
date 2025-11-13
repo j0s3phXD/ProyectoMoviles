@@ -61,6 +61,6 @@
     </string-array>
 
     <string name="Registrar">Registrar</string>
-    <string name="Editar">Editar</string>
-    <string name="Eliminar">Eliminar</string>
-    </resources>
+    <string name="Entregado">Entregado</string>
+    <string name="Reportar">Reportar</string>
+</resources>

@@ -10,12 +10,14 @@ import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaProducto;
+import com.example.proyectomoviles.model.RptaProductoDetalle;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface Swaply {
 
@@ -39,6 +41,9 @@ public interface Swaply {
 
     @POST("api_editar_producto")
     Call<RptaGeneral> editarProducto(@Header("Authorization") String authorization, @Body PublicarRequest editarRequest);
+
+    @GET("api_detalle_producto/{id_producto}")
+    Call<RptaProductoDetalle> detalleProducto(@Path("id_producto") int idProducto);
 
 
 }

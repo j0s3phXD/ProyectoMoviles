@@ -64,4 +64,5 @@
             android:id="@+id/action_productos_to_publicar"
             app:destination="@id/nav_publicar" />
     </fragment>
+
 </navigation>
