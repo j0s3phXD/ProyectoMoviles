@@ -1,10 +1,13 @@
 package com.example.proyectomoviles;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomoviles.Interface.Swaply;
+import com.example.proyectomoviles.databinding.FragmentDetalleProductoBinding;
+import com.example.proyectomoviles.model.IniciarIntercambioRequest;
+import com.example.proyectomoviles.model.IniciarIntercambioResponse;
 import com.example.proyectomoviles.model.ProductoEntry;
 import com.example.proyectomoviles.model.RptaProductoDetalle;
 
@@ -31,17 +37,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class    DetalleProductoFragment extends Fragment {
 
-    private ImageView imgProducto;
-    private TextView tvNombreProducto, tvDescripcionProducto, tvCategoriaProducto;
-    private Button btnContactarVendedor;
+    private FragmentDetalleProductoBinding binding;
+    private ProductoEntry productoActual;
 
     private static final String ARG_ID_PRODUCTO = "id_producto";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public DetalleProductoFragment() {
         // Required empty public constructor
@@ -54,64 +54,34 @@ public class    DetalleProductoFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetalleProductoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetalleProductoFragment newInstance(String param1, String param2) {
-        DetalleProductoFragment fragment = new DetalleProductoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        int idProducto = getArguments() != null ? getArguments().getInt("id_producto") : -1;
+        if (getArguments() != null) {
+            productoActual = (ProductoEntry) getArguments().getSerializable("producto");
 
-        if (idProducto != -1) {
-            cargarDetalleProducto(idProducto);
+            if (productoActual != null) {
+                binding.tvNombreProducto.setText(productoActual.getTitulo());
+                binding.tvDescripcionProducto.setText(productoActual.getDescripcion());
+                if (productoActual.getCategoria() != null)
+                    binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
+
+                binding.btnContactarVendedor.setOnClickListener(v -> iniciarIntercambio());
+            }
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detalle_producto, container, false);
-
-        imgProducto = view.findViewById(R.id.imgProducto);
-        tvNombreProducto = view.findViewById(R.id.tvNombreProducto);
-        tvDescripcionProducto = view.findViewById(R.id.tvDescripcionProducto);
-        tvCategoriaProducto = view.findViewById(R.id.tvCategoriaProducto);
-        btnContactarVendedor = view.findViewById(R.id.btnContactarVendedor);
-
-        if (getArguments() != null) {
-            int idProducto = getArguments().getInt(ARG_ID_PRODUCTO);
-            cargarDetalleProducto(idProducto);
-        }
-
-        return view;
+        binding = FragmentDetalleProductoBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     private void cargarDetalleProducto(int idProducto) {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://swaply.pythonanywhere.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -123,6 +93,7 @@ public class    DetalleProductoFragment extends Fragment {
         call.enqueue(new Callback<RptaProductoDetalle>() {
             @Override
             public void onResponse(Call<RptaProductoDetalle> call, Response<RptaProductoDetalle> response) {
+
                 if (!response.isSuccessful()) {
                     Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
@@ -130,12 +101,32 @@ public class    DetalleProductoFragment extends Fragment {
 
                 RptaProductoDetalle rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
+
                     ProductoEntry producto = rpta.getData();
+                    if (producto == null) {
+                        Toast.makeText(getContext(), "Producto no encontrado", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                    tvNombreProducto.setText(producto.getTitulo());
-                    tvDescripcionProducto.setText(producto.getDescripcion());
-                    tvCategoriaProducto.setText("Categoría: " + producto.getCategoria().getDes_categoria());
+                    // --- SET DATA ---
+                    binding.tvNombreProducto.setText(producto.getTitulo());
+                    binding.tvDescripcionProducto.setText(producto.getDescripcion());
 
+                    // 💥 PREVENCIÓN DE NULL EN CATEGORÍA
+                    if (producto.getCategoria() != null) {
+                        binding.tvCategoriaProducto.setText(
+                                "Categoría: " + producto.getCategoria().getDes_categoria()
+                        );
+                    } else {
+                        binding.tvCategoriaProducto.setText("Categoría: No especificada");
+                    }
+
+                    // FOTO
+                    // if (producto.getFoto() != null && !producto.getFoto().isEmpty()) {
+                    //     Glide.with(requireContext())
+                    //          .load(producto.getFoto())
+                    //          .into(binding.imgProducto);
+                    // }
                 }
             }
 
@@ -145,4 +136,65 @@ public class    DetalleProductoFragment extends Fragment {
             }
         });
     }
+
+    private void iniciarIntercambio() {
+
+        if (productoActual == null) {
+            Toast.makeText(getContext(), "Producto no cargado aún", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Obtener token
+        SharedPreferences prefs = getContext().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authHeader = "JWT " + token;
+
+        // Crear request con solo destino y producto
+        IniciarIntercambioRequest request = new IniciarIntercambioRequest(
+                productoActual.getId_usuario(),  // destino
+                productoActual.getId_producto()  // producto
+        );
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+        Call<IniciarIntercambioResponse> call = api.iniciarIntercambio(authHeader, request);
+
+        call.enqueue(new Callback<IniciarIntercambioResponse>() {
+            @Override
+            public void onResponse(Call<IniciarIntercambioResponse> call, Response<IniciarIntercambioResponse> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                IniciarIntercambioResponse rpta = response.body();
+                if (rpta != null) {
+                    Toast.makeText(getContext(), rpta.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id_usuario_destino", productoActual.getId_usuario()); // dueño del producto
+                    Navigation.findNavController(requireView()).navigate(R.id.chatFragment, bundle);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IniciarIntercambioResponse> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+
 }

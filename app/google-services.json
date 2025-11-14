@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "325246730216",
+    "project_id": "swaply-a76ae",
+    "storage_bucket": "swaply-a76ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325246730216:android:1158f009588538d4876e5d",
+        "android_client_info": {
+          "package_name": "com.example.proyectomoviles"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkBEloWQgFtn4247jbN6YDWjU6-FTr1Tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

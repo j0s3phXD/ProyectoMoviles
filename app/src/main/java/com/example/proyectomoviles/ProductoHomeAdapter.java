@@ -16,9 +16,16 @@ import java.util.List;
 public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapter.ProductoViewHolder> {
 
     private final List<ProductoEntry> listaProductos;
+    private final OnItemClickListener listener;
 
-    public ProductoHomeAdapter(List<ProductoEntry> listaProductos) {
+    // 👇 agregamos la interfaz para manejar el clic
+    public interface OnItemClickListener {
+        void onItemClick(ProductoEntry producto);
+    }
+
+    public ProductoHomeAdapter(List<ProductoEntry> listaProductos, OnItemClickListener listener) {
         this.listaProductos = listaProductos;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,11 +44,10 @@ public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapte
         holder.txtDescripcion.setText(producto.getDescripcion());
         holder.txtCondicion.setText("Condición: " + producto.getCondicion());
 
-        // Si tienes imagen, puedes cargarla con Glide (opcional)
-        // Glide.with(holder.itemView.getContext())
-        //      .load(producto.getUrlImagen())
-        //      .placeholder(R.drawable.placeholder)
-        //      .into(holder.imgProducto);
+        // CLIC del item para ver DETALLE
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(producto));
+
+        // (Opcional) cargar imagen con Glide
     }
 
     @Override
@@ -53,7 +59,6 @@ public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapte
         ImageView imgProducto;
         TextView txtTitulo, txtDescripcion, txtCondicion;
 
-        @SuppressLint("WrongViewCast")
         public ProductoViewHolder(@NonNull View itemView) {
             super(itemView);
             imgProducto = itemView.findViewById(R.id.imgProducto);
@@ -63,3 +68,4 @@ public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapte
         }
     }
 }
+

@@ -13,49 +13,54 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
+        <!-- Título de la app (si lo necesitas) -->
         <TextView
             android:id="@+id/tvTituloApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Swaply"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
+        <!-- Imagen del producto sin valor inicial -->
         <ImageView
             android:id="@+id/imgProducto"
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo_registrar"
+            android:src="@android:color/transparent"
             android:layout_marginBottom="16dp"
             android:contentDescription="Imagen del producto" />
 
+        <!-- Nombre -->
         <TextView
             android:id="@+id/tvNombreProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bicicleta de montaña"
+            android:text=""
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginBottom="8dp" />
 
+        <!-- Descripción -->
         <TextView
             android:id="@+id/tvDescripcionProducto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bicicleta en excelente estado, usada pocas veces, ideal para ciudad o montaña."
+            android:text=""
             android:textSize="16sp"
             android:gravity="center"
             android:layout_marginBottom="16dp" />
 
+        <!-- Categoría -->
         <TextView
             android:id="@+id/tvCategoriaProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Categoría: Deportes"
+            android:text=""
             android:textSize="15sp"
             android:textStyle="italic"
             android:textColor="@color/black"
@@ -63,6 +68,7 @@
 
         <!-- Texto de intercambio -->
         <TextView
+            android:id="@+id/tvIntercambioTexto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quiero intercambiarlo por:"

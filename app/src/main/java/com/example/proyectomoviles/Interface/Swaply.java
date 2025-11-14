@@ -4,11 +4,14 @@ import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
 import com.example.proyectomoviles.model.CategoriaResponse;
 import com.example.proyectomoviles.model.EliminarProductoRequest;
+import com.example.proyectomoviles.model.IniciarIntercambioRequest;
+import com.example.proyectomoviles.model.IniciarIntercambioResponse;
 import com.example.proyectomoviles.model.ProductoEntry;
 import com.example.proyectomoviles.model.PublicarRequest;
 import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
 import com.example.proyectomoviles.model.RptaGeneral;
+import com.example.proyectomoviles.model.RptaIntercambios;
 import com.example.proyectomoviles.model.RptaProducto;
 import com.example.proyectomoviles.model.RptaProductoDetalle;
 
@@ -45,5 +48,15 @@ public interface Swaply {
     @GET("api_detalle_producto/{id_producto}")
     Call<RptaProductoDetalle> detalleProducto(@Path("id_producto") int idProducto);
 
+    @POST("api_iniciar_intercambio")
+    Call<IniciarIntercambioResponse> iniciarIntercambio(@Header("Authorization") String authorization,  @Body IniciarIntercambioRequest request
+    );
 
+    @GET("api_listar_intercambios")
+    Call<RptaIntercambios> listarIntercambios(@Header("Authorization") String authorization);
+
+    @GET("api_historial_intercambios")
+    Call<RptaIntercambios> obtenerHistorial(
+            @Header("Authorization") String authorization
+    );
 }

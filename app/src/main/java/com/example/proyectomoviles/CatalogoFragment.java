@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -123,7 +124,15 @@ public class CatalogoFragment extends Fragment {
                     binding.recyclerViewProductos.setHasFixedSize(true);
 
                     // Crear adapter sin listener de clicks
-                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(listaProductos);
+                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(listaProductos, producto -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("producto", producto); // producto completo
+                        Navigation.findNavController(requireView())
+                                .navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
+                    });
+
+
+
 //                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(listaProductos, producto -> {
 //                        // Aquí manejas el clic
 //                        Bundle bundle = new Bundle();

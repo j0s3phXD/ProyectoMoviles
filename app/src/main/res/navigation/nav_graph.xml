@@ -29,7 +29,11 @@
         android:id="@+id/nav_explorar"
         android:name="com.example.proyectomoviles.CatalogoFragment"
         android:label="Explorar"
-        tools:layout="@layout/fragment_catalogo" />
+        tools:layout="@layout/fragment_catalogo">
+        <action
+            android:id="@+id/action_fragmentCatalogo_to_itemProductoPublico"
+            app:destination="@id/itemProductoPublico" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_detalle_producto"
@@ -45,9 +49,13 @@
 
     <fragment
         android:id="@+id/nav_chat"
-        android:name="com.example.proyectomoviles.ChatFragment"
+        android:name="com.example.proyectomoviles.ChatListFragment"
         android:label="Chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat_list" >
+        <action
+            android:id="@+id/action_chatList_to_chat"
+            app:destination="@id/chatFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_perfil"
@@ -63,6 +71,28 @@
         <action
             android:id="@+id/action_productos_to_publicar"
             app:destination="@id/nav_publicar" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/itemProductoPublico"
+        android:name="com.example.proyectomoviles.DetalleProductoFragment"
+        android:label="Detalle Producto"
+        tools:layout="@layout/fragment_detalle_producto"/>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.proyectomoviles.ChatFragment"
+        android:label="Chat">
+        <argument
+            android:name="id_intercambio"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+        <!-- Parámetro cuando vienes desde un producto -->
+        <argument
+            android:name="id_usuario_destino"
+            app:argType="integer"
+            android:defaultValue="-1" />
     </fragment>
 
 </navigation>

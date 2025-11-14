@@ -15,6 +15,8 @@ retrofit = "3.1.0-SNAPSHOT"
 retrofitVersion = "2.5.0"
 converterGson = "3.0.0"
 converterGsonVersion = "2.5.0"
+googleGmsGoogleServices = "4.4.4"
+firebaseDatabase = "22.0.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -33,7 +35,9 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-v250 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-gson-v250 = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }

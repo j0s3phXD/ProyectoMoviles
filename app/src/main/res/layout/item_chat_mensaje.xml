@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutMensaje"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <!-- Nombre del remitente (opcional) -->
+    <TextView
+        android:id="@+id/txtNombreRemitente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remitente"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <!-- Contenedor del mensaje -->
+    <LinearLayout
+        android:id="@+id/bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtMensaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hola, este es un mensaje de prueba"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txtHora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:30"
+            android:textSize="10sp"
+            android:textColor="#888888"
+            android:layout_gravity="end"
+            android:paddingTop="2dp"/>
+    </LinearLayout>
+
+</LinearLayout>
