@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvNombreProductoDestino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Producto destino"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona uno de tus productos:"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMisProductos"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/etMensaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Escribe un mensaje para el dueño"
+        android:minHeight="120dp"
+        android:padding="8dp"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/btnEnviarPropuesta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enviar propuesta" />
+
+</LinearLayout>

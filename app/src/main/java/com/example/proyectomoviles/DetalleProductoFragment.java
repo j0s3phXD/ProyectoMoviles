@@ -68,7 +68,20 @@ public class    DetalleProductoFragment extends Fragment {
                 if (productoActual.getCategoria() != null)
                     binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
 
-                binding.btnContactarVendedor.setOnClickListener(v -> iniciarIntercambio());
+                binding.btnContactarVendedor.setOnClickListener(v -> {
+                    if (productoActual == null) {
+                        Toast.makeText(getContext(), "Producto no cargado aún", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id_producto_solicitado", productoActual.getId_producto());
+                    bundle.putInt("id_usuario_destino", productoActual.getId_usuario());
+                    bundle.putSerializable("producto_destino", productoActual);
+
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_itemProductoPublico_to_proponerIntercambioFragment, bundle);
+                });
             }
         }
     }
@@ -180,8 +193,12 @@ public class    DetalleProductoFragment extends Fragment {
                     Toast.makeText(getContext(), rpta.getMessage(), Toast.LENGTH_SHORT).show();
 
                     Bundle bundle = new Bundle();
-                    bundle.putInt("id_usuario_destino", productoActual.getId_usuario()); // dueño del producto
-                    Navigation.findNavController(requireView()).navigate(R.id.chatFragment, bundle);
+                    bundle.putInt("id_producto_solicitado", productoActual.getId_producto());
+                    bundle.putInt("id_usuario_destino", productoActual.getId_usuario());
+                    bundle.putSerializable("producto_destino", productoActual);
+
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.action_itemProductoPublico_to_proponerIntercambioFragment, bundle);
 
                 }
             }

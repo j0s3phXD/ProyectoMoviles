@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:text="breyson@gmail.com"
+            android:text="diego@gmail.com"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:text="123456"
+            android:text="12345"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -35,27 +35,12 @@
             app:destination="@id/itemProductoPublico" />
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_detalle_producto"
-        android:name="com.example.proyectomoviles.DetalleProductoFragment"
-        android:label="Detalle del producto"
-        tools:layout="@layout/fragment_detalle_producto" />
 
     <fragment
     android:id="@+id/nav_publicar"
     android:name="com.example.proyectomoviles.PublicarFragment"
     android:label="Publicar Objeto"
     tools:layout="@layout/fragment_publicar" />
-
-    <fragment
-        android:id="@+id/nav_chat"
-        android:name="com.example.proyectomoviles.ChatListFragment"
-        android:label="Chat"
-        tools:layout="@layout/fragment_chat_list" >
-        <action
-            android:id="@+id/action_chatList_to_chat"
-            app:destination="@id/chatFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/nav_perfil"
@@ -77,22 +62,19 @@
         android:id="@+id/itemProductoPublico"
         android:name="com.example.proyectomoviles.DetalleProductoFragment"
         android:label="Detalle Producto"
-        tools:layout="@layout/fragment_detalle_producto"/>
+        tools:layout="@layout/fragment_detalle_producto">
+
+        <!-- ⬇️ NUEVA acción desde aquí hacia ProponerIntercambioFragment -->
+        <action
+            android:id="@+id/action_itemProductoPublico_to_proponerIntercambioFragment"
+            app:destination="@id/proponerIntercambioFragment" />
+    </fragment>
+
 
     <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.example.proyectomoviles.ChatFragment"
-        android:label="Chat">
-        <argument
-            android:name="id_intercambio"
-            app:argType="integer"
-            android:defaultValue="-1" />
+        android:id="@+id/proponerIntercambioFragment"
+        android:name="com.example.proyectomoviles.ProponerIntercambioFragment"
+        tools:layout="@layout/fragment_proponer_intercambio" />
 
-        <!-- Parámetro cuando vienes desde un producto -->
-        <argument
-            android:name="id_usuario_destino"
-            app:argType="integer"
-            android:defaultValue="-1" />
-    </fragment>
 
 </navigation>

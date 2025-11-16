@@ -59,4 +59,17 @@ public interface Swaply {
     Call<RptaIntercambios> obtenerHistorial(
             @Header("Authorization") String authorization
     );
+    @GET("api_productos_usuario/{id_usuario}")
+    Call<RptaProducto> productosPorUsuario(
+            @Header("Authorization") String authorization,
+            @Path("id_usuario") int idUsuario
+    );
+
+    @GET("api_mis_productos")
+    Call<RptaProducto> misProductos(
+            @Header("Authorization") String authorization
+    );
+
+
+
 }
