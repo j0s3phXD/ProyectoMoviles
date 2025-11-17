@@ -64,82 +64,52 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Confirmación para intercambio"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginBottom="10dp" />
-
         <LinearLayout
-            android:id="@+id/layoutArticulos"
+            android:id="@+id/layoutIntercambios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
-            <com.google.android.material.card.MaterialCardView
+            <!-- TÍTULO 1 -->
+            <TextView
+                android:id="@+id/tvMisIntercambiosTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="3dp"
-                android:padding="10dp">
+                android:text="Mis Intercambios"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="top">
+            <!-- LISTA 1 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMisIntercambios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingBottom="20dp"/>
 
-                    <!-- Imagen del artículo -->
-                    <ImageView
-                        android:id="@+id/imgArticulo"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:layout_marginEnd="10dp" />
+            <!-- TÍTULO 2 -->
+            <TextView
+                android:id="@+id/tvIntercambiosRecibidosTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Intercambios Recibidos"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"/>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txtTituloArticulo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bicicleta de montaña"
-                            android:textStyle="bold"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            android:layout_marginBottom="6dp"
-                            android:layout_marginTop="12dp"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/btnEditar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/Entregado"
-                                android:layout_marginEnd="8dp" />
-
-                            <Button
-                                android:id="@+id/btnEliminar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/Reportar"/>
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            <!-- LISTA 2 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvIntercambiosRecibidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"/>
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

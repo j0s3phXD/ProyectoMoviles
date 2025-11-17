@@ -70,6 +70,14 @@ public interface Swaply {
             @Header("Authorization") String authorization
     );
 
+    @GET("api_mis_intercambios")
+    Call<RptaIntercambios> obtenerMisIntercambios(
+            @Header("Authorization") String token
+    );
 
+    @GET("api_intercambios_recibidos")
+    Call<RptaIntercambios> obtenerIntercambiosRecibidos(
+            @Header("Authorization") String token
+    );
 
 }

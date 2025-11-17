@@ -1,76 +1,163 @@
 package com.example.proyectomoviles;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
+import com.example.proyectomoviles.model.IntercambioEntry;
+import com.example.proyectomoviles.model.RptaIntercambios;
+import com.example.proyectomoviles.Interface.Swaply;
+import com.google.gson.Gson;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PerfilFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class PerfilFragment extends Fragment {
 
     private FragmentPerfilBinding binding;
+    private IntercambiosRecibidosAdapter recibidosAdapter;
+    private IntercambiosEnviadosAdapter enviadosAdapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public PerfilFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PerfilFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PerfilFragment newInstance(String param1, String param2) {
-        PerfilFragment fragment = new PerfilFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private List<IntercambioEntry> listaEnviados = new ArrayList<>();
+    private List<IntercambioEntry> listaRecibidos = new ArrayList<>();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
 
-        binding.txtNombreUsuario.setText("Joseph Odar");
-        binding.ratingBar.setRating(4.8f);
+        configurarRecycler();
 
+        cargarIntercambiosEnviados();
+        cargarIntercambiosRecibidos();
 
         return binding.getRoot();
     }
+
+    private void configurarRecycler() {
+
+        // Recycler ENVIADOS
+        binding.rvMisIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
+        enviadosAdapter = new IntercambiosEnviadosAdapter(requireContext(), listaEnviados);
+        binding.rvMisIntercambios.setAdapter(enviadosAdapter);
+
+        // Recycler RECIBIDOS
+        binding.rvIntercambiosRecibidos.setLayoutManager(new LinearLayoutManager(getContext()));
+        recibidosAdapter = new IntercambiosRecibidosAdapter(
+                requireContext(),
+                listaRecibidos,
+                new IntercambiosRecibidosAdapter.OnIntercambioClick() {
+                    @Override
+                    public void onAceptar(IntercambioEntry intercambio) {
+                        Toast.makeText(getContext(), "ACEPTADO: " + intercambio.getId_intercambio(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRechazar(IntercambioEntry intercambio) {
+                        Toast.makeText(getContext(), "RECHAZADO: " + intercambio.getId_intercambio(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        binding.rvIntercambiosRecibidos.setAdapter(recibidosAdapter);
+    }
+
+    private void cargarIntercambiosEnviados() {
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authHeader = "JWT " + token;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+        Call<RptaIntercambios> call = api.obtenerMisIntercambios(authHeader);
+        call.enqueue(new Callback<RptaIntercambios>() {
+            @Override
+            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    listaEnviados.clear();
+                    listaEnviados.addAll(response.body().getData());
+                    enviadosAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "No se obtuvieron enviados", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cargarIntercambiosRecibidos() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authHeader = "JWT " + token;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+        Call<RptaIntercambios> call = api.obtenerIntercambiosRecibidos(authHeader);
+        call.enqueue(new Callback<RptaIntercambios>() {
+            @Override
+            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    listaRecibidos.clear();
+                    listaRecibidos.addAll(response.body().getData());
+                    recibidosAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "No se obtuvieron recibidos", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
+
