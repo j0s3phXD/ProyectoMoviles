@@ -3,6 +3,7 @@ package com.example.proyectomoviles.Interface;
 import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
 import com.example.proyectomoviles.model.CategoriaResponse;
+import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.EliminarProductoRequest;
 import com.example.proyectomoviles.model.IniciarIntercambioRequest;
 import com.example.proyectomoviles.model.IniciarIntercambioResponse;
@@ -79,5 +80,12 @@ public interface Swaply {
     Call<RptaIntercambios> obtenerIntercambiosRecibidos(
             @Header("Authorization") String token
     );
+
+    @POST("api_confirmar_intercambio")
+    Call<RptaGeneral> confirmarIntercambio(
+            @Header("Authorization") String token,
+            @Body ConfirmarIntercambioRequest request
+    );
+
 
 }

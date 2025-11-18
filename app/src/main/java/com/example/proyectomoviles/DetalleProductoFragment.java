@@ -65,14 +65,12 @@ public class    DetalleProductoFragment extends Fragment {
             if (productoActual != null) {
                 binding.tvNombreProducto.setText(productoActual.getTitulo());
                 binding.tvDescripcionProducto.setText(productoActual.getDescripcion());
-                if (productoActual.getCategoria() != null)
+
+                if (productoActual.getCategoria() != null) {
                     binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
+                }
 
                 binding.btnContactarVendedor.setOnClickListener(v -> {
-                    if (productoActual == null) {
-                        Toast.makeText(getContext(), "Producto no cargado aún", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("id_producto_solicitado", productoActual.getId_producto());
@@ -92,126 +90,5 @@ public class    DetalleProductoFragment extends Fragment {
         binding = FragmentDetalleProductoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
-    private void cargarDetalleProducto(int idProducto) {
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
-        Call<RptaProductoDetalle> call = api.detalleProducto(idProducto);
-
-        call.enqueue(new Callback<RptaProductoDetalle>() {
-            @Override
-            public void onResponse(Call<RptaProductoDetalle> call, Response<RptaProductoDetalle> response) {
-
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                RptaProductoDetalle rpta = response.body();
-                if (rpta != null && rpta.getCode() == 1) {
-
-                    ProductoEntry producto = rpta.getData();
-                    if (producto == null) {
-                        Toast.makeText(getContext(), "Producto no encontrado", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // --- SET DATA ---
-                    binding.tvNombreProducto.setText(producto.getTitulo());
-                    binding.tvDescripcionProducto.setText(producto.getDescripcion());
-
-                    // 💥 PREVENCIÓN DE NULL EN CATEGORÍA
-                    if (producto.getCategoria() != null) {
-                        binding.tvCategoriaProducto.setText(
-                                "Categoría: " + producto.getCategoria().getDes_categoria()
-                        );
-                    } else {
-                        binding.tvCategoriaProducto.setText("Categoría: No especificada");
-                    }
-
-                    // FOTO
-                    // if (producto.getFoto() != null && !producto.getFoto().isEmpty()) {
-                    //     Glide.with(requireContext())
-                    //          .load(producto.getFoto())
-                    //          .into(binding.imgProducto);
-                    // }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RptaProductoDetalle> call, Throwable t) {
-                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void iniciarIntercambio() {
-
-        if (productoActual == null) {
-            Toast.makeText(getContext(), "Producto no cargado aún", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Obtener token
-        SharedPreferences prefs = getContext().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
-        String token = prefs.getString("tokenJWT", null);
-        if (token == null) {
-            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String authHeader = "JWT " + token;
-
-        // Crear request con solo destino y producto
-        IniciarIntercambioRequest request = new IniciarIntercambioRequest(
-                productoActual.getId_usuario(),  // destino
-                productoActual.getId_producto()  // producto
-        );
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
-        Call<IniciarIntercambioResponse> call = api.iniciarIntercambio(authHeader, request);
-
-        call.enqueue(new Callback<IniciarIntercambioResponse>() {
-            @Override
-            public void onResponse(Call<IniciarIntercambioResponse> call, Response<IniciarIntercambioResponse> response) {
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                IniciarIntercambioResponse rpta = response.body();
-                if (rpta != null) {
-                    Toast.makeText(getContext(), rpta.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("id_producto_solicitado", productoActual.getId_producto());
-                    bundle.putInt("id_usuario_destino", productoActual.getId_usuario());
-                    bundle.putSerializable("producto_destino", productoActual);
-
-                    Navigation.findNavController(requireView())
-                            .navigate(R.id.action_itemProductoPublico_to_proponerIntercambioFragment, bundle);
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<IniciarIntercambioResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
-
 
 }

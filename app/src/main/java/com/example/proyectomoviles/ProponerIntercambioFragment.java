@@ -189,7 +189,12 @@ public class ProponerIntercambioFragment extends Fragment {
 
         // Tu backend solo recibe 2 campos (por ahora)
         IniciarIntercambioRequest request =
-                new IniciarIntercambioRequest(idUsuarioDestino, idProductoSolicitado);
+                new IniciarIntercambioRequest(
+                        idUsuarioDestino,
+                        idProductoSolicitado,
+                        idProductoOfrecidoSeleccionado   // ← TU PRODUCTO SELECCIONADO
+                );
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://swaply.pythonanywhere.com/")

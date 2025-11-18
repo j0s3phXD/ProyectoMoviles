@@ -44,10 +44,11 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
 
         IntercambioEntry item = lista.get(position);
 
-        holder.txtProductoSolicitado.setText("Te solicitaron: " + item.getProducto_solicitado());
-        holder.txtProductoOfrecido.setText("A cambio de: " + item.getProducto_ofrecido());
-        holder.txtNombreUsuario.setText("Usuario: " + item.getNombre_origen());
+        holder.txtProductoSolicitado.setText("Tu producto: " + item.getProducto_solicitado());
+        holder.txtProductoOfrecido.setText("Te ofrecen: " + item.getProducto_ofrecido());
+        holder.txtNombreUsuario.setText("Solicitante: " + item.getNombre_origen());
         holder.txtEstado.setText("Estado: " + item.getEstado());
+
 
         holder.btnAceptar.setOnClickListener(v -> listener.onAceptar(item));
         holder.btnRechazar.setOnClickListener(v -> listener.onRechazar(item));

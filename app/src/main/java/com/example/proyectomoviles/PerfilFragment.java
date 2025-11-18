@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
+import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.IntercambioEntry;
+import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.google.gson.Gson;
@@ -65,12 +67,12 @@ public class PerfilFragment extends Fragment {
                 new IntercambiosRecibidosAdapter.OnIntercambioClick() {
                     @Override
                     public void onAceptar(IntercambioEntry intercambio) {
-                        Toast.makeText(getContext(), "ACEPTADO: " + intercambio.getId_intercambio(), Toast.LENGTH_SHORT).show();
+                        confirmarIntercambio(intercambio.getId_intercambio(), "aceptado");
                     }
 
                     @Override
                     public void onRechazar(IntercambioEntry intercambio) {
-                        Toast.makeText(getContext(), "RECHAZADO: " + intercambio.getId_intercambio(), Toast.LENGTH_SHORT).show();
+                        confirmarIntercambio(intercambio.getId_intercambio(), "rechazado");
                     }
                 }
         );
@@ -152,6 +154,66 @@ public class PerfilFragment extends Fragment {
         });
     }
 
+    private void confirmarIntercambio(int idIntercambio, String estado) {
+
+        SharedPreferences prefs = getContext().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authHeader = "JWT " + token;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+
+        ConfirmarIntercambioRequest request =
+                new ConfirmarIntercambioRequest(idIntercambio, estado);
+
+        api.confirmarIntercambio(authHeader, request)
+                .enqueue(new Callback<RptaGeneral>() {
+                    @Override
+                    public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(getContext(),
+                                    "Error: " + response.code(),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        RptaGeneral rpta = response.body();
+
+                        if (rpta != null && rpta.getCode() == 1) {
+                            Toast.makeText(getContext(),
+                                    "Intercambio " + estado,
+                                    Toast.LENGTH_SHORT).show();
+
+                            // Recargar las listas
+                            cargarIntercambiosRecibidos();
+                            cargarIntercambiosEnviados();
+
+                        } else {
+                            Toast.makeText(getContext(),
+                                    rpta != null ? rpta.getMessage() : "Error desconocido",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RptaGeneral> call, Throwable t) {
+                        Toast.makeText(getContext(),
+                                "Error: " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
 
     @Override

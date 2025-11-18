@@ -14,83 +14,87 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <!-- IMAGEN -->
-        <ImageView
-            android:id="@+id/imgProductoIntercambio"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo_registrar"
-            android:layout_marginEnd="10dp"/>
-
-        <!-- DATOS -->
+        <!-- SECTION 1: FOTO + TEXTO -->
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtProductoSolicitado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Te solicitaron: Bicicleta"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@color/black"/>
+            <ImageView
+                android:id="@+id/imgProductoIntercambio"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_registrar"
+                android:layout_marginEnd="10dp"/>
 
-            <TextView
-                android:id="@+id/txtProductoOfrecido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A cambio de: Laptop"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
-
-            <TextView
-                android:id="@+id/txtNombreUsuario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Usuario: Juan Pérez"
-                android:textSize="13sp"
-                android:layout_marginTop="4dp"/>
-
-            <TextView
-                android:id="@+id/txtEstadoIntercambio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Estado: Pendiente"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/black"/>
-
-            <!-- BOTONES -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnAceptar"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/txtProductoSolicitado"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ACEPTAR"
-                    android:textColor="@android:color/white"/>
+                    android:text="Te solicitaron: Bicicleta"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"/>
 
-                <Button
-                    android:id="@+id/btnRechazar"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/txtProductoOfrecido"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="RECHAZAR"
-                    android:textColor="@android:color/white"/>
+                    android:text="A cambio de: Laptop"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/txtNombreUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario: Juan Pérez"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/txtEstadoIntercambio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estado: Pendiente"
+                    android:textStyle="bold"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/black"/>
             </LinearLayout>
+        </LinearLayout>
 
+        <!-- SECTION 2: BOTONES -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <Button
+                android:id="@+id/btnAceptar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ACEPTAR"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnRechazar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="RECHAZAR"
+                android:textColor="@android:color/white"/>
         </LinearLayout>
 
     </LinearLayout>
