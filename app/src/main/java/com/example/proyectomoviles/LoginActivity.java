@@ -15,6 +15,7 @@ import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityLoginBinding;
 import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
+import com.example.proyectomoviles.model.Usuario;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,25 +61,35 @@ public class LoginActivity extends AppCompatActivity {
         AuthRequest authRequest = new AuthRequest();
         authRequest.setUsername(binding.txtUsername.getText().toString());
         authRequest.setPassword(binding.txtPassword.getText().toString());
+
         Call<AuthResponse> call = swaply.obtenerToken(authRequest);
         call.enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 if(!response.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Código: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     AuthResponse authResponse = response.body();
-                    // Toast.makeText(LoginActivity.this, authResponse.getAccess_token(), Toast.LENGTH_LONG).show();
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("username", binding.txtUsername.getText().toString());
-                    editor.putString("tokenJWT", authResponse != null ? authResponse.getAccess_token() : "");
-                    editor.apply();
+                    if (authResponse != null) {
+                        Usuario usuario = authResponse.getUsuario(); // 👈 aquí viene tu usuario
 
-                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                    startActivity(intent);
+                        SharedPreferences sharedPreferences = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("username", binding.txtUsername.getText().toString());
+                        editor.putString("tokenJWT", authResponse != null ? authResponse.getAccess_token() : "");
+                        editor.apply();
+
+                        // ⭐ Guardamos el ID del usuario logueado
+                        if (usuario != null) {
+                            editor.putInt("id_usuario", usuario.getId_usuario());
+                        }
+
+                        editor.apply();
+
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
 
@@ -87,6 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
 }

@@ -13,8 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:orientation="vertical">
 
         <!-- Imagen del producto -->
         <ImageView
@@ -24,22 +23,47 @@
             android:scaleType="centerCrop"
             android:background="?attr/colorPrimary" />
 
-        <!-- Datos del producto -->
+        <!-- Contenido -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
 
-            <TextView
-                android:id="@+id/txtTitulo"
+            <!-- Fila: título y categoría -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Título del producto"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
+                <TextView
+                    android:id="@+id/txtTitulo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Título del producto"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <!-- "Chip" de categoría -->
+                <TextView
+                    android:id="@+id/txtCategoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:text="Categoría"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:backgroundTintMode="src_in"/>
+            </LinearLayout>
+
+            <!-- Descripción -->
             <TextView
                 android:id="@+id/txtDescripcion"
                 android:layout_width="match_parent"
@@ -47,8 +71,11 @@
                 android:text="Descripción breve"
                 android:textSize="14sp"
                 android:paddingTop="4dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:maxLines="2"
+                android:ellipsize="end" />
 
+            <!-- Condición -->
             <TextView
                 android:id="@+id/txtCondicion"
                 android:layout_width="match_parent"
@@ -57,6 +84,17 @@
                 android:textSize="13sp"
                 android:textColor="@color/black"
                 android:paddingTop="4dp" />
+
+            <!-- Usuario que publicó -->
+            <TextView
+                android:id="@+id/txtUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Publicado por: Usuario"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:paddingTop="4dp" />
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

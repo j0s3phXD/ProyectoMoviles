@@ -1,6 +1,8 @@
 package com.example.proyectomoviles;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import com.example.proyectomoviles.model.ProductoGridItemDecoration;
 import com.example.proyectomoviles.model.RptaProducto;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -52,6 +55,8 @@ public class CatalogoFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private int idUsuarioActual = -1;
+
 
     public CatalogoFragment() {
         // Required empty public constructor
@@ -81,6 +86,30 @@ public class CatalogoFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        try {
+            SharedPreferences prefs = requireActivity()
+                    .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+
+            String token = prefs.getString("tokenJWT", null);
+
+            if (token != null) {
+                String[] parts = token.split("\\.");
+                if (parts.length == 3) {
+                    byte[] payloadBytes =
+                            android.util.Base64.decode(parts[1],
+                                    android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
+                    String payloadJson = new String(payloadBytes, "UTF-8");
+
+                    org.json.JSONObject payload = new org.json.JSONObject(payloadJson);
+
+                    // 👇 ESTE ES TU id_usuario
+                    idUsuarioActual = payload.getInt("identity");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            idUsuarioActual = -1;
         }
     }
 
@@ -116,38 +145,41 @@ public class CatalogoFragment extends Fragment {
 
                 RptaProducto rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
+
                     List<ProductoEntry> listaProductos = rpta.getData();
+
+                    // ⭐⭐⭐ FILTRAR: SOLO PRODUCTOS DE OTROS USUARIOS ⭐⭐⭐
+                    List<ProductoEntry> productosDeOtros = new ArrayList<>();
+                    if (listaProductos != null) {
+                        for (ProductoEntry p : listaProductos) {
+                            if (p.getId_usuario() != idUsuarioActual) {
+                                productosDeOtros.add(p);
+                            }
+                        }
+                    }
 
                     // Configurar RecyclerView en grid
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
                     binding.recyclerViewProductos.setLayoutManager(gridLayoutManager);
                     binding.recyclerViewProductos.setHasFixedSize(true);
 
-                    // Crear adapter sin listener de clicks
-                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(listaProductos, producto -> {
+                    // Adapter usando SOLO los productos filtrados
+                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(productosDeOtros, producto -> {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("producto", producto); // producto completo
+                        bundle.putSerializable("producto", producto);
                         Navigation.findNavController(requireView())
                                 .navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
                     });
 
 
-
-//                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(listaProductos, producto -> {
-//                        // Aquí manejas el clic
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt("id_producto", producto.getId_producto()); // Asegúrate de tener getIdProducto()
-//
-//                        // Navegar al fragment de detalle
-//                        NavController navController = Navigation.findNavController(requireView());
-//                        navController.navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
-//                    });
                     binding.recyclerViewProductos.setAdapter(adapter);
 
                     // Agregar espaciado entre items
                     int largePadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing);
                     int smallPadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing_small);
-                    binding.recyclerViewProductos.addItemDecoration(new ProductoGridItemDecoration(largePadding, smallPadding));
+                    binding.recyclerViewProductos.addItemDecoration(
+                            new ProductoGridItemDecoration(largePadding, smallPadding)
+                    );
 
                 } else {
                     Toast.makeText(requireContext(), "No hay productos disponibles", Toast.LENGTH_SHORT).show();
@@ -160,6 +192,7 @@ public class CatalogoFragment extends Fragment {
             }
         });
     }
+
 
 
 }

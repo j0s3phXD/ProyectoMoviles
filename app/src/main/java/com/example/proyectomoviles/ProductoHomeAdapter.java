@@ -13,17 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectomoviles.model.ProductoEntry;
 import java.util.List;
 
-public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapter.ProductoViewHolder> {
+public class ProductoHomeAdapter
+        extends RecyclerView.Adapter<ProductoHomeAdapter.ProductoViewHolder> {
 
     private final List<ProductoEntry> listaProductos;
     private final OnItemClickListener listener;
 
-    // 👇 agregamos la interfaz para manejar el clic
     public interface OnItemClickListener {
         void onItemClick(ProductoEntry producto);
     }
 
-    public ProductoHomeAdapter(List<ProductoEntry> listaProductos, OnItemClickListener listener) {
+    public ProductoHomeAdapter(List<ProductoEntry> listaProductos,
+                               OnItemClickListener listener) {
         this.listaProductos = listaProductos;
         this.listener = listener;
     }
@@ -38,16 +39,25 @@ public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ProductoViewHolder holder, int position) {
-        ProductoEntry producto = listaProductos.get(position);
+        ProductoEntry p = listaProductos.get(position);
 
-        holder.txtTitulo.setText(producto.getTitulo());
-        holder.txtDescripcion.setText(producto.getDescripcion());
-        holder.txtCondicion.setText("Condición: " + producto.getCondicion());
+        holder.txtTitulo.setText(p.getTitulo());
+        holder.txtDescripcion.setText(p.getDescripcion());
+        holder.txtCondicion.setText("Condición: " + p.getCondicion());
 
-        // CLIC del item para ver DETALLE
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(producto));
+        // NUEVO → categoría
+        holder.txtCategoria.setText(p.getDes_categoria());
 
-        // (Opcional) cargar imagen con Glide
+        // NUEVO → nombre del dueño
+        holder.txtUsuario.setText("Publicado por: " + p.getNombre_usuario());
+
+        // IR A DETALLE
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(p));
+
+        // OPCIONAL → cargar imagen si agregas URLs
+        // Glide.with(holder.itemView.getContext())
+        //        .load(URL_IMAGEN)
+        //        .into(holder.imgProducto);
     }
 
     @Override
@@ -56,15 +66,23 @@ public class ProductoHomeAdapter extends RecyclerView.Adapter<ProductoHomeAdapte
     }
 
     public static class ProductoViewHolder extends RecyclerView.ViewHolder {
+
         ImageView imgProducto;
-        TextView txtTitulo, txtDescripcion, txtCondicion;
+        TextView txtTitulo, txtDescripcion, txtCondicion, txtCategoria, txtUsuario;
 
         public ProductoViewHolder(@NonNull View itemView) {
             super(itemView);
+
             imgProducto = itemView.findViewById(R.id.imgProducto);
             txtTitulo = itemView.findViewById(R.id.txtTitulo);
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);
             txtCondicion = itemView.findViewById(R.id.txtCondicion);
+
+            // NUEVO → para categoría
+            txtCategoria = itemView.findViewById(R.id.txtCategoria);
+
+            // NUEVO → dueño del producto
+            txtUsuario = itemView.findViewById(R.id.txtUsuario);
         }
     }
 }
