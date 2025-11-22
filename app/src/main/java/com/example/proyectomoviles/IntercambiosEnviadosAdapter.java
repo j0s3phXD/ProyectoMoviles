@@ -1,16 +1,19 @@
 package com.example.proyectomoviles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.proyectomoviles.R;
+
 import com.example.proyectomoviles.model.IntercambioEntry;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,6 +44,25 @@ public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<Intercambi
         holder.txtProductoOfrecido.setText("Ofreciste: " + item.getProducto_ofrecido());
         holder.txtNombreUsuario.setText("Para: " + item.getNombre_destino());
         holder.txtEstado.setText("Estado: " + item.getEstado());
+
+        // Imagen del producto solicitado
+        if (item.getImagen_solicitado() != null && !item.getImagen_solicitado().isEmpty()) {
+            Picasso.get().load(item.getImagen_solicitado()).into(holder.imgProducto);
+        }
+
+        // Mostrar botón solo si el estado es "Aceptado"
+        if (item.getEstado().equalsIgnoreCase("Aceptado")) {
+            holder.btnComprobante.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnComprobante.setVisibility(View.GONE);
+        }
+
+        // Acción del comprobante
+        holder.btnComprobante.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ComprobanteActivity.class);
+            intent.putExtra("intercambio", item);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -48,19 +70,22 @@ public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<Intercambi
         return lista.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgProducto;
         TextView txtProductoSolicitado, txtProductoOfrecido, txtNombreUsuario, txtEstado;
+        Button btnComprobante;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             imgProducto = itemView.findViewById(R.id.imgProductoIntercambio);
             txtProductoSolicitado = itemView.findViewById(R.id.txtProductoSolicitado);
             txtProductoOfrecido = itemView.findViewById(R.id.txtProductoOfrecido);
             txtNombreUsuario = itemView.findViewById(R.id.txtNombreUsuario);
             txtEstado = itemView.findViewById(R.id.txtEstadoIntercambio);
+
+            btnComprobante = itemView.findViewById(R.id.btnComprobante);
         }
     }
 }
-

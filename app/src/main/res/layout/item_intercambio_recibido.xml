@@ -95,6 +95,18 @@
                 android:layout_marginStart="8dp"
                 android:text="RECHAZAR"
                 android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ver comprobante"
+                android:padding="8dp"
+                android:background="@color/purple_500"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="10dp"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </LinearLayout>

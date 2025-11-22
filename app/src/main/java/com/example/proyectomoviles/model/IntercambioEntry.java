@@ -1,6 +1,9 @@
 package com.example.proyectomoviles.model;
 
-public class IntercambioEntry {
+import java.io.Serializable;
+
+public class IntercambioEntry implements Serializable {
+
     private int id_intercambio;
     private int id_usuario_origen;
     private int id_usuario_destino;

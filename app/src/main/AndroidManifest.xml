@@ -15,6 +15,9 @@
             android:name=".RegistroUsuarioActivity"
             android:exported="false" />
         <activity
+            android:name=".ComprobanteActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
