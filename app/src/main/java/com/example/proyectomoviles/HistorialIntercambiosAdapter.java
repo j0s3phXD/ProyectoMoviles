@@ -1,9 +1,12 @@
 package com.example.proyectomoviles;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,7 +54,39 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             Picasso.get().load(item.getImagen_solicitado()).into(holder.imgProducto);
         }
 
+        // CLICK para abrir Chat
         holder.itemView.setOnClickListener(v -> listener.onHistorialClick(item));
+
+        // ======================================================
+        //  LÓGICA PARA CALIFICAR: quién califica a quién
+        // ======================================================
+        SharedPreferences prefs = context.getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        int idUsuarioActual = prefs.getInt("idUsuario", -1); // Asegúrate que lo guardas al logear
+
+        int idAutor, idRecibe;
+
+        if (idUsuarioActual == item.getId_usuario_origen()) {
+            // Yo soy el ORIGEN → califico al DESTINO
+            idAutor = item.getId_usuario_origen();
+            idRecibe = item.getId_usuario_destino();
+        } else {
+            // Yo soy el DESTINO → califico al ORIGEN
+            idAutor = item.getId_usuario_destino();
+            idRecibe = item.getId_usuario_origen();
+        }
+
+        // ======================================================
+        //  Botón CALIFICAR → abre pantalla
+        // ======================================================
+        holder.btnCalificar.setOnClickListener(v -> {
+
+            Intent intent = new Intent(context, CalificarActivity.class);
+            intent.putExtra("id_usuario_recibe", idRecibe);
+            intent.putExtra("id_usuario_autor", idAutor);
+            intent.putExtra("id_intercambio", item.getId_intercambio());
+
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -63,6 +98,7 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
 
         ImageView imgProducto;
         TextView txtProductoSolicitado, txtProductoOfrecido, txtNombreUsuario;
+        Button btnCalificar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,6 +107,8 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             txtProductoSolicitado = itemView.findViewById(R.id.txtProductoSolicitado);
             txtProductoOfrecido = itemView.findViewById(R.id.txtProductoOfrecido);
             txtNombreUsuario = itemView.findViewById(R.id.txtNombreUsuario);
+
+            btnCalificar = itemView.findViewById(R.id.btnCalificar); // NUEVO
         }
     }
 }

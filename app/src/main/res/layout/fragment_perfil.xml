@@ -47,7 +47,7 @@
                     android:id="@+id/txtNombreUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Joseph Odar"
+                    android:text=""
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -58,12 +58,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
-                    android:rating="4.5"
                     android:stepSize="0.5"
-                    android:isIndicator="true" />
+                    android:isIndicator="true"
+                    android:rating="0" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Sección Intercambios -->
         <LinearLayout
             android:id="@+id/layoutIntercambios"
             android:layout_width="match_parent"
@@ -80,16 +81,15 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
-            <!-- LISTA 1 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMisIntercambios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp" />
 
             <!-- TÍTULO 2 -->
             <TextView
@@ -100,16 +100,15 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
-            <!-- LISTA 2 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvIntercambiosRecibidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"/>
-            
+                android:overScrollMode="never" />
+
             <!-- TÍTULO 3 -->
             <TextView
                 android:id="@+id/tvHistorialIntercambiosTitulo"
@@ -119,15 +118,14 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
-            <!-- LISTA 3 -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHistorialIntercambios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"/>
+                android:overScrollMode="never" />
 
         </LinearLayout>
 
