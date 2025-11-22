@@ -53,4 +53,7 @@ dependencies {
     implementation(libs.retrofit.v250)
     implementation(libs.converter.gson.v250)
     implementation(libs.picasso)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+
 }
