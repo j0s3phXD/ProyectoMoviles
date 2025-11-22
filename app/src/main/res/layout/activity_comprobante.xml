@@ -91,6 +91,16 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btnDescargarPdf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descargar comprobante en PDF"
+            android:padding="10dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/purple_500"
+            android:textColor="@android:color/white" />
+
 
     </LinearLayout>
 </ScrollView>
