@@ -72,7 +72,6 @@ public class ComprobanteActivity extends AppCompatActivity {
     }
 
     private void configurarBotonPDF() {
-        // YA NO SE PIDEN PERMISOS ANTIGUOS
         binding.btnDescargarPdf.setOnClickListener(v -> generarPDF());
     }
 
@@ -157,7 +156,7 @@ public class ComprobanteActivity extends AppCompatActivity {
 
         pdf.finishPage(page);
 
-        // ======= Guardar PDF (MediaStore, Android 10+) ==========
+        // ======= Guardar PDF ==========
         String fileName = "comprobante_intercambio_" + intercambio.getId_intercambio() + ".pdf";
         Uri uri;
 

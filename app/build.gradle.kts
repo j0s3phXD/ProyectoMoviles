@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -55,5 +54,4 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
-
 }

@@ -118,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
                             rvMensajes.scrollToPosition(listaMensajes.size() - 1);
                         }
                     } else {
-                        // Error lógico del servidor (ej: sin permisos)
+                        // Error lógico del servidor
                         Toast.makeText(ChatActivity.this, "Error al cargar: " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
