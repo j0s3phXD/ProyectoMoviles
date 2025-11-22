@@ -109,6 +109,26 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"/>
+            
+            <!-- TÍTULO 3 -->
+            <TextView
+                android:id="@+id/tvHistorialIntercambiosTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Historial de Intercambios"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"/>
+
+            <!-- LISTA 3 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHistorialIntercambios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"/>
+
         </LinearLayout>
 
     </LinearLayout>

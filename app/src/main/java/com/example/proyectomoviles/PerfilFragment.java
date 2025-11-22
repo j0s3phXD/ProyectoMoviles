@@ -1,6 +1,7 @@
 package com.example.proyectomoviles;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,9 +36,11 @@ public class PerfilFragment extends Fragment {
     private FragmentPerfilBinding binding;
     private IntercambiosRecibidosAdapter recibidosAdapter;
     private IntercambiosEnviadosAdapter enviadosAdapter;
+    private HistorialIntercambiosAdapter historialAdapter;
 
     private List<IntercambioEntry> listaEnviados = new ArrayList<>();
     private List<IntercambioEntry> listaRecibidos = new ArrayList<>();
+    private List<IntercambioEntry> listaHistorial = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +52,7 @@ public class PerfilFragment extends Fragment {
 
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();
+        cargarHistorialIntercambios();
 
         return binding.getRoot();
     }
@@ -75,6 +80,17 @@ public class PerfilFragment extends Fragment {
                 }
         );
         binding.rvIntercambiosRecibidos.setAdapter(recibidosAdapter);
+
+        binding.rvHistorialIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
+        historialAdapter = new HistorialIntercambiosAdapter(requireContext(), listaHistorial, new HistorialIntercambiosAdapter.OnHistorialIntercambioClick() {
+            @Override
+            public void onHistorialClick(IntercambioEntry intercambio) {
+                Intent intent = new Intent(getActivity(), ChatActivity.class);
+                intent.putExtra("id_intercambio", intercambio.getId_intercambio());
+                startActivity(intent);
+            }
+        });
+        binding.rvHistorialIntercambios.setAdapter(historialAdapter);
     }
 
     private void cargarIntercambiosEnviados() {
@@ -151,6 +167,45 @@ public class PerfilFragment extends Fragment {
             }
         });
     }
+    private void cargarHistorialIntercambios() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String authHeader = "JWT " + token;
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://swaply.pythonanywhere.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Swaply api = retrofit.create(Swaply.class);
+        Call<RptaIntercambios> call = api.obtenerHistorial(authHeader);
+        call.enqueue(new Callback<RptaIntercambios>() {
+            @Override
+            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    listaHistorial.clear();
+                    List<IntercambioEntry> aceptados = response.body().getData().stream()
+                            .filter(i -> "aceptado".equalsIgnoreCase(i.getEstado()))
+                            .collect(Collectors.toList());
+                    listaHistorial.addAll(aceptados);
+                    historialAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "No se obtuvo historial", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void confirmarIntercambio(int idIntercambio, String estado) {
 
@@ -196,6 +251,7 @@ public class PerfilFragment extends Fragment {
                             // Recargar las listas
                             cargarIntercambiosRecibidos();
                             cargarIntercambiosEnviados();
+                            cargarHistorialIntercambios();
 
                         } else {
                             Toast.makeText(getContext(),
@@ -220,4 +276,3 @@ public class PerfilFragment extends Fragment {
         binding = null;
     }
 }
-

@@ -5,6 +5,7 @@ import com.example.proyectomoviles.model.AuthResponse;
 import com.example.proyectomoviles.model.CategoriaResponse;
 import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.EliminarProductoRequest;
+import com.example.proyectomoviles.model.EnviarMensajeRequest;
 import com.example.proyectomoviles.model.IniciarIntercambioRequest;
 import com.example.proyectomoviles.model.IniciarIntercambioResponse;
 import com.example.proyectomoviles.model.ProductoEntry;
@@ -13,6 +14,7 @@ import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
+import com.example.proyectomoviles.model.RptaMensajes;
 import com.example.proyectomoviles.model.RptaProducto;
 import com.example.proyectomoviles.model.RptaProductoDetalle;
 
@@ -27,7 +29,6 @@ public interface Swaply {
 
     @POST("auth")
     Call<AuthResponse> obtenerToken(@Body AuthRequest authRequest);
-
     @POST("api_registrar_usuario")
     Call<RegistroResponse> registrarUsuario(@Body RegistroRequest registroRequest);
 
@@ -46,24 +47,12 @@ public interface Swaply {
     @POST("api_editar_producto")
     Call<RptaGeneral> editarProducto(@Header("Authorization") String authorization, @Body PublicarRequest editarRequest);
 
-    @GET("api_detalle_producto/{id_producto}")
-    Call<RptaProductoDetalle> detalleProducto(@Path("id_producto") int idProducto);
-
     @POST("api_iniciar_intercambio")
     Call<IniciarIntercambioResponse> iniciarIntercambio(@Header("Authorization") String authorization,  @Body IniciarIntercambioRequest request
     );
-
-    @GET("api_listar_intercambios")
-    Call<RptaIntercambios> listarIntercambios(@Header("Authorization") String authorization);
-
     @GET("api_historial_intercambios")
     Call<RptaIntercambios> obtenerHistorial(
             @Header("Authorization") String authorization
-    );
-    @GET("api_productos_usuario/{id_usuario}")
-    Call<RptaProducto> productosPorUsuario(
-            @Header("Authorization") String authorization,
-            @Path("id_usuario") int idUsuario
     );
 
     @GET("api_mis_productos")
@@ -87,5 +76,16 @@ public interface Swaply {
             @Body ConfirmarIntercambioRequest request
     );
 
+    @POST("api_enviar_mensaje")
+    Call<RptaGeneral> enviarMensaje(
+            @Header("Authorization") String authorization,
+            @Body EnviarMensajeRequest request
+    );
+
+    @GET("api_mensajes/{id_intercambio}")
+    Call<RptaMensajes> obtenerMensajes(
+            @Header("Authorization") String authorization,
+            @Path("id_intercambio") int idIntercambio
+    );
 
 }

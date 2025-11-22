@@ -15,7 +15,6 @@ import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityLoginBinding;
 import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
-import com.example.proyectomoviles.model.Usuario;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,23 +71,19 @@ public class LoginActivity extends AppCompatActivity {
                     AuthResponse authResponse = response.body();
 
                     if (authResponse != null) {
-                        Usuario usuario = authResponse.getUsuario(); // 👈 aquí viene tu usuario
-
                         SharedPreferences sharedPreferences = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("username", binding.txtUsername.getText().toString());
-                        editor.putString("tokenJWT", authResponse != null ? authResponse.getAccess_token() : "");
-                        editor.apply();
-
-                        // ⭐ Guardamos el ID del usuario logueado
-                        if (usuario != null) {
-                            editor.putInt("id_usuario", usuario.getId_usuario());
-                        }
-
+                        editor.putString("tokenJWT", authResponse.getAccess_token());
+                        editor.putInt("idUsuario", authResponse.getId_usuario());
                         editor.apply();
 
                         Intent intent = new Intent(getBaseContext(), MainActivity.class);
                         startActivity(intent);
+                        finish(); // Finalizar LoginActivity para que el usuario no pueda volver atrás
+
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Respuesta de autenticación inválida", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

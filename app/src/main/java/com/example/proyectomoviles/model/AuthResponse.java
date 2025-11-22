@@ -2,13 +2,13 @@ package com.example.proyectomoviles.model;
 
 public class AuthResponse {
     private String access_token;
-    private Usuario usuario;
+    private int id_usuario;
 
     public String getAccess_token() {
         return access_token;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public int getId_usuario() {
+        return id_usuario;
     }
 }
