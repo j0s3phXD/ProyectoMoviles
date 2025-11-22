@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,10 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentCatalogoBinding;
+import com.example.proyectomoviles.model.CategoriaSeccion;
 import com.example.proyectomoviles.model.ProductoEntry;
-import com.example.proyectomoviles.model.ProductoGridItemDecoration;
 import com.example.proyectomoviles.model.RptaProducto;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -28,8 +29,10 @@ import com.google.android.material.chip.ChipGroup;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -41,13 +44,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CatalogoFragment extends Fragment {
 
     private FragmentCatalogoBinding binding;
-
-    private ProductoHomeAdapter adapter;
-
-    // Lista completa (productos de otros usuarios)
+    private CategoriaSeccionAdapter seccionAdapter;
     private final List<ProductoEntry> listaOriginal = new ArrayList<>();
-
-    // Filtros actuales
     private String currentQuery = "";
     private String categoriaSeleccionada = "Todos";
 
@@ -77,7 +75,6 @@ public class CatalogoFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // Obtener idUsuarioActual desde el JWT
         try {
             SharedPreferences prefs = requireActivity()
                     .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
@@ -107,24 +104,18 @@ public class CatalogoFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentCatalogoBinding.inflate(inflater, container, false);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
-        binding.recyclerViewProductos.setLayoutManager(gridLayoutManager);
+        LinearLayoutManager lmVertical = new LinearLayoutManager(requireContext());
+        binding.recyclerViewProductos.setLayoutManager(lmVertical);
         binding.recyclerViewProductos.setHasFixedSize(true);
 
-        adapter = new ProductoHomeAdapter(new ArrayList<>(), producto -> {
+        seccionAdapter = new CategoriaSeccionAdapter(new ArrayList<>(), producto -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("producto", producto);
             Navigation.findNavController(requireView())
                     .navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
         });
 
-        binding.recyclerViewProductos.setAdapter(adapter);
-
-        int largePadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing);
-        int smallPadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing_small);
-        binding.recyclerViewProductos.addItemDecoration(
-                new ProductoGridItemDecoration(largePadding, smallPadding)
-        );
+        binding.recyclerViewProductos.setAdapter(seccionAdapter);
 
         configurarBuscador();
 
@@ -132,6 +123,8 @@ public class CatalogoFragment extends Fragment {
 
         return binding.getRoot();
     }
+
+    // ------- BÚSQUEDA -------
 
     private void configurarBuscador() {
         binding.etBuscar.addTextChangedListener(new TextWatcher() {
@@ -147,6 +140,8 @@ public class CatalogoFragment extends Fragment {
         });
     }
 
+    // ------- CHIPS DE CATEGORÍA -------
+
     private void configurarChipsCategorias() {
         ChipGroup chipGroup = binding.chipGroupCategorias;
         chipGroup.removeAllViews();
@@ -156,7 +151,7 @@ public class CatalogoFragment extends Fragment {
         chipTodos.setTag("Todos");
         chipGroup.addView(chipTodos);
 
-        // Categorías únicas (en el orden que llegan)
+        // Categorías únicas
         Set<String> categorias = new LinkedHashSet<>();
         for (ProductoEntry p : listaOriginal) {
             if (p.getDes_categoria() != null && !p.getDes_categoria().trim().isEmpty()) {
@@ -170,10 +165,8 @@ public class CatalogoFragment extends Fragment {
             chipGroup.addView(chip);
         }
 
-        // Listener de selección
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == View.NO_ID) {
-                // Si se deselecciona todo, volvemos a "Todos"
                 categoriaSeleccionada = "Todos";
                 chipTodos.setChecked(true);
             } else {
@@ -196,6 +189,8 @@ public class CatalogoFragment extends Fragment {
         chip.setId(View.generateViewId());
         return chip;
     }
+
+    // ------- APLICAR FILTROS (TEXTO + CATEGORÍA) Y AGRUPAR -------
 
     private void aplicarFiltros() {
         String query = currentQuery.toLowerCase().trim();
@@ -221,16 +216,32 @@ public class CatalogoFragment extends Fragment {
             }
         }
 
-        adapter.updateList(filtrados);
+        // Agrupar filtrados por categoría → secciones
+        Map<String, List<ProductoEntry>> mapa = new LinkedHashMap<>();
+
+        for (ProductoEntry p : filtrados) {
+            String cat = (p.getDes_categoria() != null && !p.getDes_categoria().isEmpty())
+                    ? p.getDes_categoria()
+                    : "Otros";
+
+            if (!mapa.containsKey(cat)) {
+                mapa.put(cat, new ArrayList<>());
+            }
+            mapa.get(cat).add(p);
+        }
+
+        List<CategoriaSeccion> secciones = new ArrayList<>();
+        for (Map.Entry<String, List<ProductoEntry>> entry : mapa.entrySet()) {
+            secciones.add(new CategoriaSeccion(entry.getKey(), entry.getValue()));
+        }
+
+        seccionAdapter.updateList(secciones);
     }
 
-    private void cargarProductos() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    // ------- CARGAR PRODUCTOS DESDE API -------
 
-        Swaply api = retrofit.create(Swaply.class);
+    private void cargarProductos() {
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaProducto> call = api.listarProductos();
 
         call.enqueue(new Callback<RptaProducto>() {

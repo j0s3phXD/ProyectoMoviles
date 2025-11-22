@@ -11,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityLoginBinding;
 import com.example.proyectomoviles.model.AuthRequest;
@@ -52,11 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getToken(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Swaply swaply = retrofit.create(Swaply.class);
+        Swaply swaply = RetrofitClient.getApiService();
         AuthRequest authRequest = new AuthRequest();
         authRequest.setUsername(binding.txtUsername.getText().toString());
         authRequest.setPassword(binding.txtPassword.getText().toString());

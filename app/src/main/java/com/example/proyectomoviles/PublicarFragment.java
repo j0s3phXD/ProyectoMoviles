@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPublicarBinding;
 import com.example.proyectomoviles.model.CategoriaRequest;
@@ -42,9 +43,8 @@ public class PublicarFragment extends Fragment {
     private FragmentPublicarBinding binding;
     private boolean modoEdicion = false;
     private int idProductoEditar = -1;
-
+    private String condicionSeleccionada = null;
     private List<CategoriaRequest> listaCategorias = new ArrayList<>();
-
     private int idCategoriaSeleccionada = 0;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -131,16 +131,22 @@ public class PublicarFragment extends Fragment {
                 publicarObjeto("JWT " + token);
             }
         });
+        if (modoEdicion && condicionSeleccionada != null) {
+            binding.spinnerUso.post(() -> {
+                for (int i = 0; i < binding.spinnerUso.getCount(); i++) {
+                    String item = binding.spinnerUso.getItemAtPosition(i).toString();
+                    if (item.equalsIgnoreCase(condicionSeleccionada)) {
+                        binding.spinnerUso.setSelection(i);
+                        break;
+                    }
+                }
+            });
+        }
     }
 
 
     private void cargarCategorias() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply swaply = retrofit.create(Swaply.class);
+        Swaply swaply = RetrofitClient.getApiService();
 
         Call<CategoriaResponse> call = swaply.listarCategorias();
 
@@ -203,11 +209,7 @@ public class PublicarFragment extends Fragment {
         int idCategoria = categoriaSeleccionada.getId_categoria();
 
         PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaGeneral> call = api.publicarObjeto(token, request);
         call.enqueue(new Callback<RptaGeneral>() {
             @Override
@@ -221,12 +223,7 @@ public class PublicarFragment extends Fragment {
                 if (rpta != null && rpta.getCode() == 1) {
                     Toast.makeText(getActivity(), rpta.getMessage(), Toast.LENGTH_LONG).show();
 
-                    // Limpiar campos
-                    binding.editTitulo.setText("");
-                    binding.editDescripcion.setText("");
-                    binding.editIntercambio.setText("");
-                    binding.spinnerCategoria.setSelection(0);
-                    binding.spinnerUso.setSelection(0);
+                    requireActivity().onBackPressed();
                 } else {
                     Toast.makeText(getActivity(), (rpta != null ? rpta.getMessage() : "Error desconocido"), Toast.LENGTH_LONG).show();
                 }
@@ -244,11 +241,15 @@ public class PublicarFragment extends Fragment {
         binding.editDescripcion.setText(producto.getDescripcion());
         binding.editIntercambio.setText(producto.getIntercambio_deseado());
 
-        if (producto.getCategoria() != null) {
-            idCategoriaSeleccionada = producto.getCategoria().getId_categoria();
+        if (producto.getId_categoria() != 0) {
+            idCategoriaSeleccionada = producto.getId_categoria();
             Log.d("EDITAR_PRODUCTO", "Categoría cargada: " + idCategoriaSeleccionada);
         } else {
             Log.d("EDITAR_PRODUCTO", "El producto no tiene categoría asociada");
+        }
+        if (producto.getCondicion() != null) {
+            condicionSeleccionada = producto.getCondicion();
+            Log.d("EDITAR_PRODUCTO", "Condición cargada: " + condicionSeleccionada);
         }
     }
 
@@ -270,12 +271,7 @@ public class PublicarFragment extends Fragment {
         PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
         request.setId_producto(idProducto);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaGeneral> call = api.editarProducto(token, request);
 
         call.enqueue(new Callback<RptaGeneral>() {

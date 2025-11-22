@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityRegistroUsuarioBinding;
 import com.example.proyectomoviles.model.RegistroRequest;
@@ -55,12 +56,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
 
         RegistroRequest registroRequest = new RegistroRequest(nombre, apellido, email, password);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/") // tu dominio en PythonAnywhere
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
 
         Call<RegistroResponse> call = api.registrarUsuario(registroRequest);
         call.enqueue(new Callback<RegistroResponse>() {

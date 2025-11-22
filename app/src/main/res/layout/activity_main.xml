@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Contenedor donde se mostrarán los Fragments -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +20,6 @@
             app:navGraph="@navigation/nav_graph"
             app:defaultNavHost="true" />
 
-        <!-- Barra inferior alineada debajo del contenedor -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"

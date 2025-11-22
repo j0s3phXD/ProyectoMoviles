@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
 import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.IntercambioEntry;
@@ -105,12 +106,7 @@ public class PerfilFragment extends Fragment {
 
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaIntercambios> call = api.obtenerMisIntercambios(authHeader);
         call.enqueue(new Callback<RptaIntercambios>() {
             @Override
@@ -142,12 +138,7 @@ public class PerfilFragment extends Fragment {
 
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaIntercambios> call = api.obtenerIntercambiosRecibidos(authHeader);
         call.enqueue(new Callback<RptaIntercambios>() {
             @Override
@@ -219,12 +210,7 @@ public class PerfilFragment extends Fragment {
 
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
 
         ConfirmarIntercambioRequest request =
                 new ConfirmarIntercambioRequest(idIntercambio, estado);

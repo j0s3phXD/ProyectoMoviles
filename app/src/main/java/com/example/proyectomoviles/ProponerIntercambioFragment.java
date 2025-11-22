@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.model.IniciarIntercambioRequest;
 import com.example.proyectomoviles.model.IniciarIntercambioResponse;
@@ -99,12 +100,7 @@ public class ProponerIntercambioFragment extends Fragment {
 
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
 
         Call<RptaProducto> call = api.misProductos(authHeader);
 
@@ -190,12 +186,7 @@ public class ProponerIntercambioFragment extends Fragment {
                 );
 
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
 
         Call<IniciarIntercambioResponse> call = api.iniciarIntercambio(authHeader, request);
 

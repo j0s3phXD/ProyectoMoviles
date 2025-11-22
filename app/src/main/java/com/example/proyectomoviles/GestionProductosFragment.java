@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentGestionProductosBinding;
 import com.example.proyectomoviles.model.EliminarProductoRequest;
@@ -108,12 +109,7 @@ public class GestionProductosFragment extends Fragment {
             return;
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
 
         Call<RptaProducto> call = api.misProductos("JWT " + token);
 
@@ -182,12 +178,7 @@ public class GestionProductosFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("tokenJWT", "");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         EliminarProductoRequest request = new EliminarProductoRequest(idProducto);
 
         Call<RptaGeneral> call = api.eliminarProducto("JWT " + token, request);
