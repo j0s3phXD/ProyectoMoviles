@@ -13,7 +13,6 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
-        <!-- Título de la app (si lo necesitas) -->
         <TextView
             android:id="@+id/tvTituloApp"
             android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- Imagen del producto sin valor inicial -->
         <ImageView
             android:id="@+id/imgProducto"
             android:layout_width="250dp"

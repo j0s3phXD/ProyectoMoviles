@@ -30,38 +30,31 @@
             android:orientation="vertical"
             android:padding="12dp">
 
-            <!-- Fila: título y categoría -->
-            <LinearLayout
+            <!-- TÍTULO -->
+            <TextView
+                android:id="@+id/txtTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:text="Título del producto"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:id="@+id/txtTitulo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Título del producto"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
-
-                <!-- "Chip" de categoría -->
-                <TextView
-                    android:id="@+id/txtCategoria"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:text="Categoría"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"
-                    android:backgroundTintMode="src_in"/>
-            </LinearLayout>
+            <!-- CHIP DE CATEGORÍA ABAJO DEL TÍTULO -->
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="Categoría"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:background="@drawable/chip_categoria"
+                android:maxLines="1"/>
 
             <!-- Descripción -->
             <TextView
@@ -85,7 +78,7 @@
                 android:textColor="@color/black"
                 android:paddingTop="4dp" />
 
-            <!-- Usuario que publicó -->
+            <!-- Usuario -->
             <TextView
                 android:id="@+id/txtUsuario"
                 android:layout_width="match_parent"

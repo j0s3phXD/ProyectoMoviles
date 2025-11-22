@@ -1,6 +1,5 @@
 package com.example.proyectomoviles;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,12 +7,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +19,18 @@ import android.widget.Toast;
 
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentCatalogoBinding;
-import com.example.proyectomoviles.databinding.FragmentGestionProductosBinding;
 import com.example.proyectomoviles.model.ProductoEntry;
 import com.example.proyectomoviles.model.ProductoGridItemDecoration;
 import com.example.proyectomoviles.model.RptaProducto;
-import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,41 +38,28 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CatalogoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CatalogoFragment extends Fragment {
 
     private FragmentCatalogoBinding binding;
-    private ProductoAdapter adapter;
-    private List<ProductoEntry> listaProductos;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private ProductoHomeAdapter adapter;
+
+    // Lista completa (productos de otros usuarios)
+    private final List<ProductoEntry> listaOriginal = new ArrayList<>();
+
+    // Filtros actuales
+    private String currentQuery = "";
+    private String categoriaSeleccionada = "Todos";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private int idUsuarioActual = -1;
 
+    public CatalogoFragment() {}
 
-    public CatalogoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CatalogoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CatalogoFragment newInstance(String param1, String param2) {
         CatalogoFragment fragment = new CatalogoFragment();
         Bundle args = new Bundle();
@@ -87,6 +76,8 @@ public class CatalogoFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // Obtener idUsuarioActual desde el JWT
         try {
             SharedPreferences prefs = requireActivity()
                     .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
@@ -101,10 +92,8 @@ public class CatalogoFragment extends Fragment {
                                     android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
                     String payloadJson = new String(payloadBytes, "UTF-8");
 
-                    org.json.JSONObject payload = new org.json.JSONObject(payloadJson);
-
-                    // 👇 ESTE ES TU id_usuario
-                    idUsuarioActual = payload.getInt("identity");
+                    JSONObject payload = new JSONObject(payloadJson);
+                    idUsuarioActual = payload.getInt("identity"); // id_usuario
                 }
             }
         } catch (Exception e) {
@@ -117,13 +106,122 @@ public class CatalogoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentCatalogoBinding.inflate(inflater, container, false);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
+        binding.recyclerViewProductos.setLayoutManager(gridLayoutManager);
+        binding.recyclerViewProductos.setHasFixedSize(true);
+
+        adapter = new ProductoHomeAdapter(new ArrayList<>(), producto -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("producto", producto);
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
+        });
+
+        binding.recyclerViewProductos.setAdapter(adapter);
+
+        int largePadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing);
+        int smallPadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing_small);
+        binding.recyclerViewProductos.addItemDecoration(
+                new ProductoGridItemDecoration(largePadding, smallPadding)
+        );
+
+        configurarBuscador();
+
         cargarProductos();
-//        binding.btnRegistrar.setOnClickListener(v -> {
-//            NavController navController = Navigation.findNavController(requireView());
-//            navController.navigate(R.id.action_productos_to_publicar);
-//        });
 
         return binding.getRoot();
+    }
+
+    private void configurarBuscador() {
+        binding.etBuscar.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                currentQuery = s.toString();
+                aplicarFiltros();
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+    }
+
+    private void configurarChipsCategorias() {
+        ChipGroup chipGroup = binding.chipGroupCategorias;
+        chipGroup.removeAllViews();
+
+        Chip chipTodos = crearChip("Todos");
+        chipTodos.setChecked(true);
+        chipTodos.setTag("Todos");
+        chipGroup.addView(chipTodos);
+
+        // Categorías únicas (en el orden que llegan)
+        Set<String> categorias = new LinkedHashSet<>();
+        for (ProductoEntry p : listaOriginal) {
+            if (p.getDes_categoria() != null && !p.getDes_categoria().trim().isEmpty()) {
+                categorias.add(p.getDes_categoria());
+            }
+        }
+
+        for (String cat : categorias) {
+            Chip chip = crearChip(cat);
+            chip.setTag(cat);
+            chipGroup.addView(chip);
+        }
+
+        // Listener de selección
+        chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == View.NO_ID) {
+                // Si se deselecciona todo, volvemos a "Todos"
+                categoriaSeleccionada = "Todos";
+                chipTodos.setChecked(true);
+            } else {
+                Chip chipSeleccionado = group.findViewById(checkedId);
+                if (chipSeleccionado != null && chipSeleccionado.getTag() != null) {
+                    categoriaSeleccionada = chipSeleccionado.getTag().toString();
+                } else {
+                    categoriaSeleccionada = "Todos";
+                }
+            }
+            aplicarFiltros();
+        });
+    }
+
+    private Chip crearChip(String texto) {
+        Chip chip = new Chip(requireContext());
+        chip.setText(texto);
+        chip.setCheckable(true);
+        chip.setClickable(true);
+        chip.setId(View.generateViewId());
+        return chip;
+    }
+
+    private void aplicarFiltros() {
+        String query = currentQuery.toLowerCase().trim();
+        String categoria = categoriaSeleccionada;
+
+        List<ProductoEntry> filtrados = new ArrayList<>();
+
+        for (ProductoEntry p : listaOriginal) {
+            boolean coincideTexto =
+                    query.isEmpty()
+                            || p.getTitulo().toLowerCase().contains(query)
+                            || (p.getDescripcion() != null && p.getDescripcion().toLowerCase().contains(query))
+                            || (p.getDes_categoria() != null && p.getDes_categoria().toLowerCase().contains(query));
+
+            boolean coincideCategoria =
+                    categoria == null
+                            || categoria.equals("Todos")
+                            || (p.getDes_categoria() != null
+                            && p.getDes_categoria().equalsIgnoreCase(categoria));
+
+            if (coincideTexto && coincideCategoria) {
+                filtrados.add(p);
+            }
+        }
+
+        adapter.updateList(filtrados);
     }
 
     private void cargarProductos() {
@@ -148,7 +246,7 @@ public class CatalogoFragment extends Fragment {
 
                     List<ProductoEntry> listaProductos = rpta.getData();
 
-                    // ⭐⭐⭐ FILTRAR: SOLO PRODUCTOS DE OTROS USUARIOS ⭐⭐⭐
+                    // Solo productos de otros usuarios
                     List<ProductoEntry> productosDeOtros = new ArrayList<>();
                     if (listaProductos != null) {
                         for (ProductoEntry p : listaProductos) {
@@ -158,28 +256,12 @@ public class CatalogoFragment extends Fragment {
                         }
                     }
 
-                    // Configurar RecyclerView en grid
-                    GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
-                    binding.recyclerViewProductos.setLayoutManager(gridLayoutManager);
-                    binding.recyclerViewProductos.setHasFixedSize(true);
+                    listaOriginal.clear();
+                    listaOriginal.addAll(productosDeOtros);
 
-                    // Adapter usando SOLO los productos filtrados
-                    ProductoHomeAdapter adapter = new ProductoHomeAdapter(productosDeOtros, producto -> {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("producto", producto);
-                        Navigation.findNavController(requireView())
-                                .navigate(R.id.action_fragmentCatalogo_to_itemProductoPublico, bundle);
-                    });
+                    configurarChipsCategorias();
 
-
-                    binding.recyclerViewProductos.setAdapter(adapter);
-
-                    // Agregar espaciado entre items
-                    int largePadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing);
-                    int smallPadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing_small);
-                    binding.recyclerViewProductos.addItemDecoration(
-                            new ProductoGridItemDecoration(largePadding, smallPadding)
-                    );
+                    aplicarFiltros();
 
                 } else {
                     Toast.makeText(requireContext(), "No hay productos disponibles", Toast.LENGTH_SHORT).show();
@@ -192,7 +274,4 @@ public class CatalogoFragment extends Fragment {
             }
         });
     }
-
-
-
 }

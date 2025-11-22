@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductoHomeAdapter
         extends RecyclerView.Adapter<ProductoHomeAdapter.ProductoViewHolder> {
 
-    private final List<ProductoEntry> listaProductos;
+    private List<ProductoEntry> listaProductos;
     private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -27,6 +27,11 @@ public class ProductoHomeAdapter
                                OnItemClickListener listener) {
         this.listaProductos = listaProductos;
         this.listener = listener;
+    }
+
+    public void updateList(List<ProductoEntry> nuevaLista) {
+        this.listaProductos = nuevaLista;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,19 +50,11 @@ public class ProductoHomeAdapter
         holder.txtDescripcion.setText(p.getDescripcion());
         holder.txtCondicion.setText("Condición: " + p.getCondicion());
 
-        // NUEVO → categoría
         holder.txtCategoria.setText(p.getDes_categoria());
 
-        // NUEVO → nombre del dueño
         holder.txtUsuario.setText("Publicado por: " + p.getNombre_usuario());
 
-        // IR A DETALLE
         holder.itemView.setOnClickListener(v -> listener.onItemClick(p));
-
-        // OPCIONAL → cargar imagen si agregas URLs
-        // Glide.with(holder.itemView.getContext())
-        //        .load(URL_IMAGEN)
-        //        .into(holder.imgProducto);
     }
 
     @Override
@@ -78,10 +75,8 @@ public class ProductoHomeAdapter
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);
             txtCondicion = itemView.findViewById(R.id.txtCondicion);
 
-            // NUEVO → para categoría
             txtCategoria = itemView.findViewById(R.id.txtCategoria);
 
-            // NUEVO → dueño del producto
             txtUsuario = itemView.findViewById(R.id.txtUsuario);
         }
     }

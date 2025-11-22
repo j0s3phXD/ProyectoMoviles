@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- SECTION 1: FOTO + TEXTO -->
+        <!-- FOTO + TEXTO -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- SECTION 2: BOTONES -->
+        <!-- BOTONES -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -98,13 +98,24 @@ public class GestionProductosFragment extends Fragment {
     }
 
     private void cargarProductos() {
+
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("tokenJWT", "");
+
+        if (token.isEmpty()) {
+            Toast.makeText(getActivity(), "No se encontró token de sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/") // tu URL base
+                .baseUrl("https://swaply.pythonanywhere.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         Swaply api = retrofit.create(Swaply.class);
-        Call<RptaProducto> call = api.listarProductos(); // endpoint GET
+
+        Call<RptaProducto> call = api.misProductos("JWT " + token);
 
         call.enqueue(new Callback<RptaProducto>() {
             @Override
@@ -121,11 +132,11 @@ public class GestionProductosFragment extends Fragment {
                     // Configurar RecyclerView
                     binding.recyclerProductos.setHasFixedSize(true);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-                    binding.recyclerProductos.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                    binding.recyclerProductos.setLayoutManager(gridLayoutManager);
                     binding.recyclerProductos.setClipToPadding(false);
                     binding.recyclerProductos.setPadding(8, 8, 8, 8);
 
-
+                    // Usa tu ProductoAdapter como ya lo tenías
                     ProductoAdapter adapter = new ProductoAdapter(listaProductos, new ProductoAdapter.OnItemClickListener() {
                         @Override
                         public void onEditarClick(ProductoEntry producto) {
@@ -151,10 +162,12 @@ public class GestionProductosFragment extends Fragment {
 
                     int largePadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing);
                     int smallPadding = getResources().getDimensionPixelSize(R.dimen.producto_grid_spacing_small);
-                    binding.recyclerProductos.addItemDecoration(new ProductoGridItemDecoration(largePadding, smallPadding));
+                    binding.recyclerProductos.addItemDecoration(
+                            new ProductoGridItemDecoration(largePadding, smallPadding)
+                    );
 
                 } else {
-                    Toast.makeText(getActivity(), "No hay productos disponibles", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No tienes productos registrados", Toast.LENGTH_SHORT).show();
                 }
             }
 
