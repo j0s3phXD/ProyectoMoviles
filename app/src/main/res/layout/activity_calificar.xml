@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/txtTituloCalificar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calificar usuario"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- RatingBar -->
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Comentario -->
+    <EditText
+        android:id="@+id/txtComentario"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="Escribe un comentario (opcional)"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        android:gravity="top"
+        android:textSize="16sp"
+        android:layout_marginBottom="25dp"/>
+
+    <!-- Botón Enviar -->
+    <Button
+        android:id="@+id/btnEnviarRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enviar calificación"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

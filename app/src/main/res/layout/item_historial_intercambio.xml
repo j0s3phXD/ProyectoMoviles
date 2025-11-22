@@ -14,49 +14,68 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgProductoIntercambio"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo_registrar"
-            android:layout_marginEnd="10dp"/>
-
+        <!-- Contenido superior -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-            <TextView
-                android:id="@+id/txtProductoSolicitado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tu producto: Bicicleta"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@color/black"/>
+            <ImageView
+                android:id="@+id/imgProductoIntercambio"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_registrar"
+                android:layout_marginEnd="10dp"/>
 
-            <TextView
-                android:id="@+id/txtProductoOfrecido"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Producto del otro usuario: Laptop"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtNombreUsuario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Usuario: Juan Pérez"
-                android:textSize="13sp"
-                android:layout_marginTop="4dp"/>
+                <TextView
+                    android:id="@+id/txtProductoSolicitado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tu producto: Bicicleta"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/txtProductoOfrecido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Producto del otro usuario: Laptop"
+                    android:textSize="14sp"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/txtNombreUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario: Juan Pérez"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
 
         </LinearLayout>
+
+        <!-- BOTÓN CALIFICAR -->
+        <Button
+            android:id="@+id/btnCalificar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calificar usuario"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/purple_500"
+            android:padding="10dp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

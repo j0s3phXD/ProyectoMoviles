@@ -2,6 +2,7 @@ package com.example.proyectomoviles.Interface;
 
 import com.example.proyectomoviles.model.AuthRequest;
 import com.example.proyectomoviles.model.AuthResponse;
+import com.example.proyectomoviles.model.CalificacionRequest;
 import com.example.proyectomoviles.model.CategoriaResponse;
 import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.EliminarProductoRequest;
@@ -12,11 +13,13 @@ import com.example.proyectomoviles.model.ProductoEntry;
 import com.example.proyectomoviles.model.PublicarRequest;
 import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
+import com.example.proyectomoviles.model.RptaCalificacionPromedio;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
 import com.example.proyectomoviles.model.RptaMensajes;
 import com.example.proyectomoviles.model.RptaProducto;
 import com.example.proyectomoviles.model.RptaProductoDetalle;
+import com.example.proyectomoviles.model.UsuarioResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -87,5 +90,14 @@ public interface Swaply {
             @Header("Authorization") String authorization,
             @Path("id_intercambio") int idIntercambio
     );
+    @POST("api/calificar")
+    Call<RptaGeneral> enviarCalificacion(@Body CalificacionRequest request);
+
+    @GET("api/calificaciones/promedio/{id_usuario}")
+    Call<RptaCalificacionPromedio> obtenerPromedio(@Path("id_usuario") int idUsuario);
+
+
+    @GET("api_usuario/{id}")
+    Call<UsuarioResponse> obtenerUsuario(@Path("id") int idUsuario);
 
 }
