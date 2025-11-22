@@ -34,7 +34,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProponerIntercambioFragment extends Fragment {
 
-    // Datos que vienen desde el DetalleProductoFragment
     private int idProductoSolicitado;
     private int idUsuarioDestino;
 
@@ -64,7 +63,6 @@ public class ProponerIntercambioFragment extends Fragment {
 
         rvMisProductos.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Recuperamos datos que vienen desde DetalleProductoFragment
         if (getArguments() != null) {
             idProductoSolicitado = getArguments().getInt("id_producto_solicitado", -1);
             idUsuarioDestino = getArguments().getInt("id_usuario_destino", -1);
@@ -79,10 +77,8 @@ public class ProponerIntercambioFragment extends Fragment {
             }
         }
 
-        // Cargar mis productos desde la API
         cargarMisProductos();
 
-        // Enviar propuesta
         btnEnviar.setOnClickListener(v -> enviarPropuesta());
 
         return view;
@@ -110,7 +106,6 @@ public class ProponerIntercambioFragment extends Fragment {
 
         Swaply api = retrofit.create(Swaply.class);
 
-        // 👇 nuevo endpoint que usa current_identity.id
         Call<RptaProducto> call = api.misProductos(authHeader);
 
         call.enqueue(new Callback<RptaProducto>() {
@@ -187,12 +182,11 @@ public class ProponerIntercambioFragment extends Fragment {
 
         String authHeader = "JWT " + token;
 
-        // Tu backend solo recibe 2 campos (por ahora)
         IniciarIntercambioRequest request =
                 new IniciarIntercambioRequest(
                         idUsuarioDestino,
                         idProductoSolicitado,
-                        idProductoOfrecidoSeleccionado   // ← TU PRODUCTO SELECCIONADO
+                        idProductoOfrecidoSeleccionado
                 );
 
 

@@ -69,7 +69,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
 
-        // Vincula los datos y los clics
         public void bind(final ProductoEntry producto, final OnItemClickListener listener) {
             txtTitulo.setText(producto.getTitulo());
             txtDescripcion.setText(producto.getDescripcion());

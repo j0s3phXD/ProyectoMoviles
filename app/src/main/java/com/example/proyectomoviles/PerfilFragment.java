@@ -54,12 +54,10 @@ public class PerfilFragment extends Fragment {
 
     private void configurarRecycler() {
 
-        // Recycler ENVIADOS
         binding.rvMisIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
         enviadosAdapter = new IntercambiosEnviadosAdapter(requireContext(), listaEnviados);
         binding.rvMisIntercambios.setAdapter(enviadosAdapter);
 
-        // Recycler RECIBIDOS
         binding.rvIntercambiosRecibidos.setLayoutManager(new LinearLayoutManager(getContext()));
         recibidosAdapter = new IntercambiosRecibidosAdapter(
                 requireContext(),
