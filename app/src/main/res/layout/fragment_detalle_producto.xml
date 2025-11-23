@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/background_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,45 +13,40 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
+        <!-- Título de la app-->
         <TextView
             android:id="@+id/tvTituloApp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textColor="@color/black"
-            android:textSize="28sp"
+            android:textColor="@color/text_primary"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="12dp" />
 
+        <!-- Foto del producto -->
         <ImageView
             android:id="@+id/imgProducto"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            android:src="@android:color/transparent"
             android:layout_marginBottom="16dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@android:color/transparent"
             android:contentDescription="Imagen del producto" />
 
-        <!-- Nombre -->
+
+        <!-- Nombre del producto -->
         <TextView
             android:id="@+id/tvNombreProducto"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Descripción -->
-        <TextView
-            android:id="@+id/tvDescripcionProducto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="16sp"
+            android:textColor="@color/text_primary"
             android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="4dp" />
 
         <!-- Categoría -->
         <TextView
@@ -59,20 +54,64 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textStyle="italic"
-            android:textColor="@color/black"
-            android:layout_marginBottom="24dp" />
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="16dp" />
 
-        <!-- Texto de intercambio -->
-        <TextView
-            android:id="@+id/tvIntercambioTexto"
-            android:layout_width="wrap_content"
+        <!-- CARD: Descripción -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Quiero intercambiarlo por:"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="12dp" />
+            android:orientation="vertical"
+            android:background="@drawable/card_detalle_seccion"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvDescripcionProducto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <!-- CARD: Busco a cambio -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_detalle_seccion"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Busco a cambio"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvIntercambioTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
 
         <!-- Botón para contactar al vendedor -->
         <Button
@@ -81,7 +120,8 @@
             android:layout_height="wrap_content"
             android:text="Comunicarte con el vendedor"
             android:textAllCaps="false"
-            android:textColor="@android:color/white"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"
             android:padding="12dp"
             android:layout_marginBottom="24dp" />
     </LinearLayout>

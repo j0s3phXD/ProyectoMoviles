@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.model.EnviarMensajeRequest;
 import com.example.proyectomoviles.model.Mensaje;
@@ -98,12 +99,7 @@ public class ChatActivity extends AppCompatActivity {
 
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         Call<RptaMensajes> call = api.obtenerMensajes(authHeader, idIntercambio);
 
         call.enqueue(new Callback<RptaMensajes>() {
@@ -148,12 +144,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         String authHeader = "JWT " + token;
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://swaply.pythonanywhere.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Swaply api = retrofit.create(Swaply.class);
+        Swaply api = RetrofitClient.getApiService();
         EnviarMensajeRequest request = new EnviarMensajeRequest(idIntercambio, textoMensaje);
         Call<RptaGeneral> call = api.enviarMensaje(authHeader, request);
 

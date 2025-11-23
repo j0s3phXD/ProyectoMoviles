@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.model.ProductoEntry;
 import com.google.android.material.button.MaterialButton;
 
@@ -20,7 +22,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
     private final List<ProductoEntry> listaProductos;
     private final OnItemClickListener listener;
 
-    // Constructor
     public ProductoAdapter(List<ProductoEntry> listaProductos, OnItemClickListener listener) {
         this.listaProductos = listaProductos;
         this.listener = listener;
@@ -51,7 +52,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         void onEliminarClick(ProductoEntry producto);
     }
 
-    // ViewHolder
     public static class ProductoViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgProducto;
@@ -73,6 +73,22 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             txtTitulo.setText(producto.getTitulo());
             txtDescripcion.setText(producto.getDescripcion());
             txtCondicion.setText("Condición: " + producto.getCondicion());
+
+            // CARGAR FOTO DEL PRODUCTO
+            String nombreFoto = producto.getFoto();
+            if (nombreFoto != null && !nombreFoto.isEmpty()) {
+                String urlFoto = RetrofitClient.BASE_URL
+                        + "uploads/productos/"
+                        + nombreFoto;
+
+                Glide.with(itemView.getContext())
+                        .load(urlFoto)
+                        .centerCrop()
+                        .into(imgProducto);
+            } else {
+                // Si no hay foto, opcionalmente dejas limpio o pones un placeholder
+                imgProducto.setImageResource(0);
+            }
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(producto));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(producto));

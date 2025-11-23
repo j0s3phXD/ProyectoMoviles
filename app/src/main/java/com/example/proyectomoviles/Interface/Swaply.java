@@ -21,11 +21,15 @@ import com.example.proyectomoviles.model.RptaProducto;
 import com.example.proyectomoviles.model.RptaProductoDetalle;
 import com.example.proyectomoviles.model.UsuarioResponse;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface Swaply {
@@ -34,22 +38,16 @@ public interface Swaply {
     Call<AuthResponse> obtenerToken(@Body AuthRequest authRequest);
     @POST("api_registrar_usuario")
     Call<RegistroResponse> registrarUsuario(@Body RegistroRequest registroRequest);
-
     @POST("api_registrar_producto")
     Call<RptaGeneral> publicarObjeto(@Header("Authorization") String authorization, @Body PublicarRequest publicarRequest);
-
     @GET("api_listarcategoria")
     Call<CategoriaResponse> listarCategorias();
-
     @GET("api_listar_productos")
     Call<RptaProducto> listarProductos();
-
     @POST("api_eliminar_producto")
     Call<RptaGeneral> eliminarProducto(@Header("Authorization") String authorization, @Body EliminarProductoRequest eliminarRequest);
-
     @POST("api_editar_producto")
     Call<RptaGeneral> editarProducto(@Header("Authorization") String authorization, @Body PublicarRequest editarRequest);
-
     @POST("api_iniciar_intercambio")
     Call<IniciarIntercambioResponse> iniciarIntercambio(@Header("Authorization") String authorization,  @Body IniciarIntercambioRequest request
     );
@@ -57,34 +55,28 @@ public interface Swaply {
     Call<RptaIntercambios> obtenerHistorial(
             @Header("Authorization") String authorization
     );
-
     @GET("api_mis_productos")
     Call<RptaProducto> misProductos(
             @Header("Authorization") String authorization
     );
-
     @GET("api_mis_intercambios")
     Call<RptaIntercambios> obtenerMisIntercambios(
             @Header("Authorization") String token
     );
-
     @GET("api_intercambios_recibidos")
     Call<RptaIntercambios> obtenerIntercambiosRecibidos(
             @Header("Authorization") String token
     );
-
     @POST("api_confirmar_intercambio")
     Call<RptaGeneral> confirmarIntercambio(
             @Header("Authorization") String token,
             @Body ConfirmarIntercambioRequest request
     );
-
     @POST("api_enviar_mensaje")
     Call<RptaGeneral> enviarMensaje(
             @Header("Authorization") String authorization,
             @Body EnviarMensajeRequest request
     );
-
     @GET("api_mensajes/{id_intercambio}")
     Call<RptaMensajes> obtenerMensajes(
             @Header("Authorization") String authorization,
@@ -92,12 +84,32 @@ public interface Swaply {
     );
     @POST("api/calificar")
     Call<RptaGeneral> enviarCalificacion(@Body CalificacionRequest request);
-
     @GET("api/calificaciones/promedio/{id_usuario}")
     Call<RptaCalificacionPromedio> obtenerPromedio(@Path("id_usuario") int idUsuario);
-
-
     @GET("api_usuario/{id}")
     Call<UsuarioResponse> obtenerUsuario(@Path("id") int idUsuario);
+    @Multipart
+    @POST("/api_registrar_producto")
+    Call<RptaGeneral> publicarProductoConFoto(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part foto,
+            @Part("titulo") RequestBody titulo,
+            @Part("descripcion") RequestBody descripcion,
+            @Part("condicion") RequestBody condicion,
+            @Part("id_categoria") RequestBody idCategoria,
+            @Part("intercambio_deseado") RequestBody intercambio
+    );
+    @Multipart
+    @POST("api_editar_producto_foto")
+    Call<RptaGeneral> editarProductoConFoto(
+            @Header("Authorization") String token,
+            @Part("id_producto") RequestBody idProducto,
+            @Part("titulo") RequestBody titulo,
+            @Part("descripcion") RequestBody descripcion,
+            @Part("condicion") RequestBody condicion,
+            @Part("id_categoria") RequestBody idCategoria,
+            @Part("intercambio_deseado") RequestBody intercambio,
+            @Part MultipartBody.Part foto
+    );
 
 }

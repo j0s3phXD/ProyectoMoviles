@@ -48,22 +48,55 @@
                 android:textSize="16sp"
                 android:paddingBottom="8dp" />
 
+            <!-- CUADRO DE CARGA AJUSTADO Y CENTRADO -->
             <FrameLayout
                 android:id="@+id/frameAgregarFoto"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@drawable/agregar_foto"
+                android:layout_height="180dp"
+                android:background="@drawable/logo_cuadro_de_carga"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginBottom="16dp"
+                android:padding="16dp"
                 android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Toca para añadir fotos"
-                    android:textColor="@color/text_secondary" />
+                <!-- Contenido cuando NO hay imagen -->
+                <LinearLayout
+                    android:id="@+id/layoutUploadContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/ivUploadIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/logo_carga"
+                        app:tint="@color/secondary"/>
+
+                    <TextView
+                        android:id="@+id/textAgregarFoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Haz clic para subir imágenes"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:paddingTop="10dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Imagen cuando el usuario selecciona algo -->
+                <ImageView
+                    android:id="@+id/ivFotoProducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:visibility="gone"
+                    android:background="@android:color/transparent" />
             </FrameLayout>
 
             <!-- Subtítulo -->

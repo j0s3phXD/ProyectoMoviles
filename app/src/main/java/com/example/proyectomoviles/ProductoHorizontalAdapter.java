@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.model.ProductoEntry;
 
 import java.util.List;
@@ -56,6 +58,22 @@ public class ProductoHorizontalAdapter extends RecyclerView.Adapter<ProductoHori
             holder.txtCategoria.setVisibility(View.GONE);
         }
 
+        // CARGAR FOTO DEL PRODUCTO
+        String nombreFoto = producto.getFoto();
+        if (nombreFoto != null && !nombreFoto.isEmpty()) {
+            String urlFoto = RetrofitClient.BASE_URL
+                    + "uploads/productos/"
+                    + nombreFoto;
+
+            Glide.with(holder.itemView.getContext())
+                    .load(urlFoto)
+                    .centerCrop()
+                    .into(holder.imgProducto);
+        } else {
+            // si no tiene foto, limpiamos o puedes poner un placeholder
+            holder.imgProducto.setImageResource(0);
+        }
+
         holder.itemView.setOnClickListener(v -> listener.onItemClick(producto));
     }
 
@@ -75,7 +93,7 @@ public class ProductoHorizontalAdapter extends RecyclerView.Adapter<ProductoHori
             txtTitulo      = itemView.findViewById(R.id.txtTitulo);
             txtDescripcion = itemView.findViewById(R.id.txtDescripcion);
             txtCondicion   = itemView.findViewById(R.id.txtCondicion);
-            txtCategoria   = itemView.findViewById(R.id.txtCategoria); // 👈 importante
+            txtCategoria   = itemView.findViewById(R.id.txtCategoria);
         }
     }
 }

@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentDetalleProductoBinding;
 import com.example.proyectomoviles.model.IniciarIntercambioRequest;
@@ -63,6 +65,8 @@ public class    DetalleProductoFragment extends Fragment {
             productoActual = (ProductoEntry) getArguments().getSerializable("producto");
 
             if (productoActual != null) {
+
+                // ------- CAMPOS DE TEXTO -------
                 binding.tvNombreProducto.setText(productoActual.getTitulo());
                 binding.tvDescripcionProducto.setText(productoActual.getDescripcion());
 
@@ -70,6 +74,25 @@ public class    DetalleProductoFragment extends Fragment {
                     binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
                 }
 
+                binding.tvIntercambioTexto.setText(productoActual.getIntercambio_deseado());
+
+                // ------- IMAGEN DEL PRODUCTO -------
+                if (productoActual.getFoto() != null && !productoActual.getFoto().isEmpty()) {
+
+                    String urlImagen = RetrofitClient.BASE_URL
+                            + "uploads/productos/"
+                            + productoActual.getFoto();
+
+                    Glide.with(this)
+                            .load(urlImagen)
+                            .into(binding.imgProducto);
+
+                } else {
+                    // Si no tiene foto, muestra un placeholder simple
+                    binding.imgProducto.setImageResource(android.R.color.darker_gray);
+                }
+
+                // ------- BOTÓN CONTACTAR -------
                 binding.btnContactarVendedor.setOnClickListener(v -> {
 
                     Bundle bundle = new Bundle();
