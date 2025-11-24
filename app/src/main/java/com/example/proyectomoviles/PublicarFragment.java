@@ -50,10 +50,8 @@ public class PublicarFragment extends Fragment {
     private List<CategoriaRequest> listaCategorias = new ArrayList<>();
     private int idCategoriaSeleccionada = 0;
 
-    // 🔥 URI de la imagen seleccionada
     private Uri imagenSeleccionadaUri;
 
-    // 🔥 Launcher para abrir la galería
     private ActivityResultLauncher<String> seleccionarImagenLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.GetContent(),
@@ -120,9 +118,9 @@ public class PublicarFragment extends Fragment {
             }
 
             if (modoEdicion) {
-                editarProducto("JWT " + token, idProductoEditar);
+                editarProducto(token, idProductoEditar);
             } else {
-                publicarObjeto("JWT " + token);
+                publicarObjeto(token);
             }
         });
 
@@ -208,19 +206,16 @@ public class PublicarFragment extends Fragment {
             return;
         }
 
-        // Crear Multipart para la imagen
         MultipartBody.Part fotoPart = crearMultipart(archivoImagen);
 
-        //  Crear los demás campos como RequestBody
         RequestBody rbTitulo = RequestBody.create(MediaType.parse("text/plain"), titulo);
         RequestBody rbDescripcion = RequestBody.create(MediaType.parse("text/plain"), descripcion);
         RequestBody rbCondicion = RequestBody.create(MediaType.parse("text/plain"), condicion);
         RequestBody rbCategoria = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(idCategoria));
         RequestBody rbIntercambio = RequestBody.create(MediaType.parse("text/plain"), intercambio);
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
         Call<RptaGeneral> call = api.publicarProductoConFoto(
-                token,
                 fotoPart,
                 rbTitulo,
                 rbDescripcion,
@@ -301,13 +296,13 @@ public class PublicarFragment extends Fragment {
         int idCategoria = categoriaSeleccionada.getId_categoria();
         Log.d("EDITAR_PRODUCTO", "id_categoria=" + idCategoria + ", titulo=" + titulo);
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
 
         if (imagenSeleccionadaUri == null) {
             PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
             request.setId_producto(idProducto);
 
-            Call<RptaGeneral> call = api.editarProducto(token, request);
+            Call<RptaGeneral> call = api.editarProducto(request);
 
             call.enqueue(new Callback<RptaGeneral>() {
                 @Override
@@ -356,7 +351,6 @@ public class PublicarFragment extends Fragment {
                     MediaType.parse("text/plain"), intercambio);
 
             Call<RptaGeneral> call = api.editarProductoConFoto(
-                    token,
                     rbIdProducto,
                     rbTitulo,
                     rbDescripcion,
@@ -396,10 +390,8 @@ public class PublicarFragment extends Fragment {
             Context context = getContext();
             if (context == null) return null;
 
-            // Abrir inputStream desde el uri
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
 
-            // Crear archivo temporal
             String nombreArchivo = "foto_" + System.currentTimeMillis() + ".jpg";
             archivoTemp = new File(context.getCacheDir(), nombreArchivo);
 

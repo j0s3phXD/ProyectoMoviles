@@ -55,7 +55,6 @@ public class GestionProductosFragment extends Fragment {
     private String mParam2;
 
     public GestionProductosFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -109,9 +108,9 @@ public class GestionProductosFragment extends Fragment {
             return;
         }
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
 
-        Call<RptaProducto> call = api.misProductos("JWT " + token);
+        Call<RptaProducto> call = api.misProductos();
 
         call.enqueue(new Callback<RptaProducto>() {
             @Override
@@ -132,7 +131,6 @@ public class GestionProductosFragment extends Fragment {
                     binding.recyclerProductos.setClipToPadding(false);
                     binding.recyclerProductos.setPadding(8, 8, 8, 8);
 
-                    // Usa tu ProductoAdapter como ya lo tenías
                     ProductoAdapter adapter = new ProductoAdapter(listaProductos, new ProductoAdapter.OnItemClickListener() {
                         @Override
                         public void onEditarClick(ProductoEntry producto) {
@@ -173,40 +171,42 @@ public class GestionProductosFragment extends Fragment {
             }
         });
     }
-
     private void eliminarProducto(int idProducto) {
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("tokenJWT", "");
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
+
         EliminarProductoRequest request = new EliminarProductoRequest(idProducto);
 
-        Call<RptaGeneral> call = api.eliminarProducto("JWT " + token, request);
+        Call<RptaGeneral> call = api.eliminarProducto(request);
 
         call.enqueue(new Callback<RptaGeneral>() {
             @Override
             public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+
                 if (!response.isSuccessful()) {
                     Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 RptaGeneral rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
+
                     Toast.makeText(getActivity(), "Producto eliminado", Toast.LENGTH_SHORT).show();
-                    cargarProductos(); // recargar la lista
+
+                    cargarProductos(); // Recargar la lista
                 } else {
-                    Toast.makeText(getActivity(), rpta != null ? rpta.getMessage() : "Error desconocido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),
+                            rpta != null ? rpta.getMessage() : "Error desconocido",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<RptaGeneral> call, Throwable t) {
                 Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 
 }

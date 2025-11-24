@@ -42,26 +42,37 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogin.setOnClickListener(v -> getToken());
-        binding.btnResgistrar.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegistroUsuarioActivity.class));
-        });
+
+        binding.btnResgistrar.setOnClickListener(v ->
+                startActivity(new Intent(this, RegistroUsuarioActivity.class))
+        );
     }
 
     private void getToken() {
 
-        Swaply api = RetrofitClient.getApiService();
-        AuthRequest authRequest = new AuthRequest();
+        String email = binding.txtUsername.getText().toString().trim();
+        String password = binding.txtPassword.getText().toString().trim();
 
-        // Tu backend usa "username", pero realmente es el email
-        authRequest.setUsername(binding.txtUsername.getText().toString().trim());
-        authRequest.setPassword(binding.txtPassword.getText().toString().trim());
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Ingresa tu correo y contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Cliente SIN token (login)
+        Swaply api = RetrofitClient.getApiService();
+
+        AuthRequest authRequest = new AuthRequest(email, password);
 
         api.obtenerToken(authRequest).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
 
                 if (!response.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    if (response.code() == 401) {
+                        Toast.makeText(LoginActivity.this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
                     return;
                 }
 
@@ -71,21 +82,18 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Guardamos token e ID
                 SharedPreferences sp = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
                 SharedPreferences.Editor ed = sp.edit();
-
                 ed.putString("tokenJWT", auth.getAccess_token());
                 ed.putInt("idUsuario", auth.getId_usuario());
                 ed.apply();
 
-                // Cargar info de usuario
                 cargarInfoUsuario(auth.getId_usuario());
             }
 
             @Override
             public void onFailure(Call<AuthResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -100,30 +108,35 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!response.isSuccessful() || response.body() == null) {
                     Toast.makeText(LoginActivity.this, "No se pudo cargar información del usuario", Toast.LENGTH_SHORT).show();
+                    irAlHome(); // igual lo mandamos al home
                     return;
                 }
 
                 Usuario u = response.body().getUsuario();
-                if (u == null) return;
+                if (u != null) {
+                    SharedPreferences sp = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
+                    SharedPreferences.Editor ed = sp.edit();
 
-                // Guardamos los datos del usuario
-                SharedPreferences sp = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
-                SharedPreferences.Editor ed = sp.edit();
+                    ed.putString("nombreUsuario", u.getNombre());
+                    ed.putString("apellidoUsuario", u.getApellido());
+                    ed.putString("emailUsuario", u.getEmail());
+                    ed.apply();
+                }
 
-                ed.putString("nombreUsuario", u.getNombre());
-                ed.putString("apellidoUsuario", u.getApellido());
-                ed.putString("emailUsuario", u.getEmail());
-                ed.apply();
-
-                // Ir al home
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                irAlHome();
             }
 
             @Override
             public void onFailure(Call<UsuarioResponse> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Error cargando usuario: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                irAlHome();
             }
         });
+    }
+
+    private void irAlHome() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

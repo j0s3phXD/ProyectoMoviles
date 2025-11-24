@@ -97,10 +97,8 @@ public class ChatActivity extends AppCompatActivity {
         String token = prefs.getString("tokenJWT", null);
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
-        Swaply api = RetrofitClient.getApiService();
-        Call<RptaMensajes> call = api.obtenerMensajes(authHeader, idIntercambio);
+        Swaply api = RetrofitClient.getApiService(token);
+        Call<RptaMensajes> call = api.obtenerMensajes(idIntercambio);
 
         call.enqueue(new Callback<RptaMensajes>() {
             @Override
@@ -114,18 +112,15 @@ public class ChatActivity extends AppCompatActivity {
                             rvMensajes.scrollToPosition(listaMensajes.size() - 1);
                         }
                     } else {
-                        // Error lógico del servidor
                         Toast.makeText(ChatActivity.this, "Error al cargar: " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Error de red o HTTP
                     Toast.makeText(ChatActivity.this, "Error de red: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RptaMensajes> call, Throwable t) {
-                // Error de conexión o conversión
                 Toast.makeText(ChatActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("ChatActivity", "onFailure: ", t);
             }
@@ -142,11 +137,10 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, "Debes iniciar sesión para enviar mensajes", Toast.LENGTH_SHORT).show();
             return;
         }
-        String authHeader = "JWT " + token;
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
         EnviarMensajeRequest request = new EnviarMensajeRequest(idIntercambio, textoMensaje);
-        Call<RptaGeneral> call = api.enviarMensaje(authHeader, request);
+        Call<RptaGeneral> call = api.enviarMensaje(request);
 
         call.enqueue(new Callback<RptaGeneral>() {
             @Override

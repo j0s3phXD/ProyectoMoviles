@@ -113,6 +113,49 @@
                 android:layout_marginTop="8dp" />
         </LinearLayout>
 
+        <!-- CARD: Ofrecido por -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_detalle_seccion"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ofrecido por"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary" />
+
+            <!-- Fila con avatar (futuro) + nombre -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+                <!--
+                Aquí más adelante puedes poner un avatar:
+                <ImageView
+                    android:id="@+id/ivAvatarUsuario"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_avatar_placeholder"
+                    android:layout_marginEnd="8dp" />
+                -->
+                <TextView
+                    android:id="@+id/tvNombreUsuario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+        </LinearLayout>
+
         <!-- Botón para contactar al vendedor -->
         <Button
             android:id="@+id/btnContactarVendedor"

@@ -49,13 +49,11 @@ public class PerfilFragment extends Fragment {
 
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
 
-        // ✔ Obtener datos del usuario logeado
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         idUsuarioActual = prefs.getInt("idUsuario", -1);
         String nombre = prefs.getString("nombreUsuario", "Usuario");
         String apellido = prefs.getString("apellidoUsuario", "");
 
-        // ✔ Log de depuración
         Log.e("PERFIL_DEBUG", "ID USUARIO ACTUAL = " + idUsuarioActual);
 
         if (idUsuarioActual <= 0) {
@@ -63,16 +61,12 @@ public class PerfilFragment extends Fragment {
             return binding.getRoot();
         }
 
-        // ✔ Mostrar nombre correctamente
         binding.txtNombreUsuario.setText(nombre + " " + apellido);
 
-        // ✔ Configurar recicladores
         configurarRecycler();
 
-        // ✔ Cargar calificación real
         cargarPromedioCalificacion(idUsuarioActual);
 
-        // ✔ Cargar listas del usuario
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();
         cargarHistorialIntercambios();
@@ -113,10 +107,6 @@ public class PerfilFragment extends Fragment {
 
         binding.rvHistorialIntercambios.setAdapter(historialAdapter);
     }
-
-    // ============================================================
-    // 🔵 Cargar promedio de calificación
-    // ============================================================
     private void cargarPromedioCalificacion(int idUsuario) {
 
         Swaply api = RetrofitClient.getApiService();
@@ -154,10 +144,8 @@ public class PerfilFragment extends Fragment {
 
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
-        Swaply api = RetrofitClient.getApiService();
-        api.obtenerMisIntercambios(authHeader).enqueue(new Callback<RptaIntercambios>() {
+        Swaply api = RetrofitClient.getApiService(token);
+        api.obtenerMisIntercambios().enqueue(new Callback<RptaIntercambios>() {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
@@ -181,10 +169,9 @@ public class PerfilFragment extends Fragment {
 
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
 
-        Swaply api = RetrofitClient.getApiService();
-        api.obtenerIntercambiosRecibidos(authHeader).enqueue(new Callback<RptaIntercambios>() {
+        Swaply api = RetrofitClient.getApiService(token);
+        api.obtenerIntercambiosRecibidos().enqueue(new Callback<RptaIntercambios>() {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
@@ -202,16 +189,13 @@ public class PerfilFragment extends Fragment {
     }
 
     private void cargarHistorialIntercambios() {
-
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
 
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
-        Swaply api = RetrofitClient.getApiService();
-        api.obtenerHistorial(authHeader).enqueue(new Callback<RptaIntercambios>() {
+        Swaply api = RetrofitClient.getApiService(token);
+        api.obtenerHistorial().enqueue(new Callback<RptaIntercambios>() {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
@@ -242,13 +226,11 @@ public class PerfilFragment extends Fragment {
 
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
         ConfirmarIntercambioRequest request =
                 new ConfirmarIntercambioRequest(idIntercambio, estado);
 
-        api.confirmarIntercambio(authHeader, request).enqueue(new Callback<RptaGeneral>() {
+        api.confirmarIntercambio(request).enqueue(new Callback<RptaGeneral>() {
             @Override
             public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
 

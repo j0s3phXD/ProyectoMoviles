@@ -46,7 +46,6 @@ public class    DetalleProductoFragment extends Fragment {
 
 
     public DetalleProductoFragment() {
-        // Required empty public constructor
     }
 
     public static DetalleProductoFragment newInstance(int idProducto) {
@@ -69,12 +68,18 @@ public class    DetalleProductoFragment extends Fragment {
                 // ------- CAMPOS DE TEXTO -------
                 binding.tvNombreProducto.setText(productoActual.getTitulo());
                 binding.tvDescripcionProducto.setText(productoActual.getDescripcion());
+                binding.tvIntercambioTexto.setText(productoActual.getIntercambio_deseado());
 
                 if (productoActual.getCategoria() != null) {
                     binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
                 }
 
-                binding.tvIntercambioTexto.setText(productoActual.getIntercambio_deseado());
+                // ------- CAMPOS DE OFRECIDO POR -------
+                if (productoActual.getNombre_usuario() != null) {
+                    binding.tvNombreUsuario.setText(productoActual.getNombre_usuario());
+                } else {
+                    binding.tvNombreUsuario.setText("Usuario desconocido");
+                }
 
                 // ------- IMAGEN DEL PRODUCTO -------
                 if (productoActual.getFoto() != null && !productoActual.getFoto().isEmpty()) {
@@ -88,7 +93,6 @@ public class    DetalleProductoFragment extends Fragment {
                             .into(binding.imgProducto);
 
                 } else {
-                    // Si no tiene foto, muestra un placeholder simple
                     binding.imgProducto.setImageResource(android.R.color.darker_gray);
                 }
 

@@ -98,11 +98,9 @@ public class ProponerIntercambioFragment extends Fragment {
             return;
         }
 
-        String authHeader = "JWT " + token;
+        Swaply api = RetrofitClient.getApiService(token);
 
-        Swaply api = RetrofitClient.getApiService();
-
-        Call<RptaProducto> call = api.misProductos(authHeader);
+        Call<RptaProducto> call = api.misProductos();
 
         call.enqueue(new Callback<RptaProducto>() {
             @Override
@@ -176,8 +174,6 @@ public class ProponerIntercambioFragment extends Fragment {
             return;
         }
 
-        String authHeader = "JWT " + token;
-
         IniciarIntercambioRequest request =
                 new IniciarIntercambioRequest(
                         idUsuarioDestino,
@@ -186,9 +182,9 @@ public class ProponerIntercambioFragment extends Fragment {
                 );
 
 
-        Swaply api = RetrofitClient.getApiService();
+        Swaply api = RetrofitClient.getApiService(token);
 
-        Call<IniciarIntercambioResponse> call = api.iniciarIntercambio(authHeader, request);
+        Call<IniciarIntercambioResponse> call = api.iniciarIntercambio(request);
 
         call.enqueue(new Callback<IniciarIntercambioResponse>() {
             @Override
