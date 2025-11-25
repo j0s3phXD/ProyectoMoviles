@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
+import com.example.proyectomoviles.model.CalificacionEntry;
 import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.IntercambioEntry;
 import com.example.proyectomoviles.model.RptaCalificacionPromedio;
+import com.example.proyectomoviles.model.RptaCalificaciones;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
 
@@ -40,42 +42,33 @@ public class PerfilFragment extends Fragment {
     private List<IntercambioEntry> listaEnviados = new ArrayList<>();
     private List<IntercambioEntry> listaRecibidos = new ArrayList<>();
     private List<IntercambioEntry> listaHistorial = new ArrayList<>();
+    private List<CalificacionEntry> misCalificaciones = new ArrayList<>();
 
     private int idUsuarioActual;
 
+    private boolean historialCargado = false;
+    private boolean calificacionesCargadas = false;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentPerfilBinding.inflate(inflater, container, false);
 
-        // ✔ Obtener datos del usuario logeado
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         idUsuarioActual = prefs.getInt("idUsuario", -1);
+
         String nombre = prefs.getString("nombreUsuario", "Usuario");
         String apellido = prefs.getString("apellidoUsuario", "");
 
-        // ✔ Log de depuración
-        Log.e("PERFIL_DEBUG", "ID USUARIO ACTUAL = " + idUsuarioActual);
-
-        if (idUsuarioActual <= 0) {
-            Toast.makeText(getContext(), "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
-            return binding.getRoot();
-        }
-
-        // ✔ Mostrar nombre correctamente
         binding.txtNombreUsuario.setText(nombre + " " + apellido);
 
-        // ✔ Configurar recicladores
         configurarRecycler();
 
-        // ✔ Cargar calificación real
         cargarPromedioCalificacion(idUsuarioActual);
-
-        // ✔ Cargar listas del usuario
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();
         cargarHistorialIntercambios();
+        cargarMisCalificaciones();
 
         return binding.getRoot();
     }
@@ -104,60 +97,116 @@ public class PerfilFragment extends Fragment {
         );
         binding.rvIntercambiosRecibidos.setAdapter(recibidosAdapter);
 
+        // SOLO configuramos el Layout, NO creamos todavía el adapter.
         binding.rvHistorialIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
-        historialAdapter = new HistorialIntercambiosAdapter(requireContext(), listaHistorial, intercambio -> {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra("id_intercambio", intercambio.getId_intercambio());
-            startActivity(intent);
+    }
+
+    // ============================================================
+    // Cargar promedio
+    // ============================================================
+    private void cargarPromedioCalificacion(int idUsuario) {
+        Swaply api = RetrofitClient.getApiService();
+
+        api.obtenerPromedio(idUsuario).enqueue(new Callback<RptaCalificacionPromedio>() {
+            @Override
+            public void onResponse(Call<RptaCalificacionPromedio> call, Response<RptaCalificacionPromedio> response) {
+                if (!response.isSuccessful() || response.body() == null) return;
+                if (response.body().getCode() == 1) {
+                    binding.ratingBar.setRating(response.body().getPromedio());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaCalificacionPromedio> call, Throwable t) { }
         });
+    }
+
+    // ============================================================
+    // Cargar calificaciones hechas por el usuario
+    // ============================================================
+    private void cargarMisCalificaciones() {
+
+        Swaply api = RetrofitClient.getApiService();
+
+        api.obtenerCalificacionesPorAutor(idUsuarioActual).enqueue(new Callback<RptaCalificaciones>() {
+            @Override
+            public void onResponse(Call<RptaCalificaciones> call, Response<RptaCalificaciones> response) {
+
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    misCalificaciones.clear();
+                    misCalificaciones.addAll(response.body().getData());
+                }
+
+                calificacionesCargadas = true;
+                intentarCrearAdapterHistorial();
+            }
+
+            @Override
+            public void onFailure(Call<RptaCalificaciones> call, Throwable t) { }
+        });
+    }
+
+    private void intentarCrearAdapterHistorial() {
+
+        if (!historialCargado || !calificacionesCargadas) return;
+
+        historialAdapter = new HistorialIntercambiosAdapter(
+                requireContext(),
+                listaHistorial,
+                misCalificaciones,
+                intercambio -> {
+                    Intent intent = new Intent(getActivity(), ChatActivity.class);
+                    intent.putExtra("id_intercambio", intercambio.getId_intercambio());
+                    startActivity(intent);
+                }
+        );
 
         binding.rvHistorialIntercambios.setAdapter(historialAdapter);
     }
 
     // ============================================================
-    // 🔵 Cargar promedio de calificación
+    // Cargar historial de intercambios
     // ============================================================
-    private void cargarPromedioCalificacion(int idUsuario) {
-
-        Swaply api = RetrofitClient.getApiService();
-
-        api.obtenerPromedio(idUsuario).enqueue(new Callback<RptaCalificacionPromedio>() {
-            @Override
-            public void onResponse(Call<RptaCalificacionPromedio> call,
-                                   Response<RptaCalificacionPromedio> response) {
-
-                if (!response.isSuccessful() || response.body() == null) {
-                    Log.e("PERFIL_DEBUG", "Error: promedio sin respuesta");
-                    return;
-                }
-
-                RptaCalificacionPromedio rpta = response.body();
-
-                Log.e("PERFIL_DEBUG", "PROMEDIO OBTENIDO = " + rpta.getPromedio());
-
-                if (rpta.getCode() == 1) {
-                    binding.ratingBar.setRating(rpta.getPromedio());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RptaCalificacionPromedio> call, Throwable t) {
-                Log.e("PERFIL_DEBUG", "Fallo al cargar promedio: " + t.getMessage());
-            }
-        });
-    }
-
-    private void cargarIntercambiosEnviados() {
+    private void cargarHistorialIntercambios() {
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
-
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
+        Swaply api = RetrofitClient.getApiService();
+        api.obtenerHistorial("JWT " + token).enqueue(new Callback<RptaIntercambios>() {
+            @Override
+            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    listaHistorial.clear();
+
+                    listaHistorial.addAll(
+                            response.body().getData().stream()
+                                    .filter(i -> "aceptado".equalsIgnoreCase(i.getEstado()))
+                                    .collect(Collectors.toList())
+                    );
+                }
+
+                historialCargado = true;
+                intentarCrearAdapterHistorial();
+            }
+
+            @Override
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
+        });
+    }
+
+    // ============================================================
+    // Cargar intercambios enviados / recibidos
+    // ============================================================
+    private void cargarIntercambiosEnviados() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+        if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService();
-        api.obtenerMisIntercambios(authHeader).enqueue(new Callback<RptaIntercambios>() {
+        api.obtenerMisIntercambios("JWT " + token).enqueue(new Callback<RptaIntercambios>() {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
@@ -169,22 +218,17 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
-            }
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
         });
     }
 
     private void cargarIntercambiosRecibidos() {
-
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
-
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
         Swaply api = RetrofitClient.getApiService();
-        api.obtenerIntercambiosRecibidos(authHeader).enqueue(new Callback<RptaIntercambios>() {
+        api.obtenerIntercambiosRecibidos("JWT " + token).enqueue(new Callback<RptaIntercambios>() {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
@@ -192,41 +236,6 @@ public class PerfilFragment extends Fragment {
                     listaRecibidos.clear();
                     listaRecibidos.addAll(response.body().getData());
                     recibidosAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
-            }
-        });
-    }
-
-    private void cargarHistorialIntercambios() {
-
-        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
-        String token = prefs.getString("tokenJWT", null);
-
-        if (token == null) return;
-
-        String authHeader = "JWT " + token;
-
-        Swaply api = RetrofitClient.getApiService();
-        api.obtenerHistorial(authHeader).enqueue(new Callback<RptaIntercambios>() {
-            @Override
-            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
-
-                if (!response.isSuccessful() || response.body() == null) return;
-
-                if (response.body().getCode() == 1) {
-                    listaHistorial.clear();
-
-                    List<IntercambioEntry> aceptados =
-                            response.body().getData().stream()
-                                    .filter(i -> "aceptado".equalsIgnoreCase(i.getEstado()))
-                                    .collect(Collectors.toList());
-
-                    listaHistorial.addAll(aceptados);
-                    historialAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -239,25 +248,21 @@ public class PerfilFragment extends Fragment {
 
         SharedPreferences prefs = getContext().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
-
         if (token == null) return;
 
-        String authHeader = "JWT " + token;
-
         Swaply api = RetrofitClient.getApiService();
-        ConfirmarIntercambioRequest request =
-                new ConfirmarIntercambioRequest(idIntercambio, estado);
+        ConfirmarIntercambioRequest request = new ConfirmarIntercambioRequest(idIntercambio, estado);
 
-        api.confirmarIntercambio(authHeader, request).enqueue(new Callback<RptaGeneral>() {
+        api.confirmarIntercambio("JWT " + token, request).enqueue(new Callback<RptaGeneral>() {
             @Override
             public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
 
-                if (!response.isSuccessful() || response.body() == null) return;
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
 
-                if (response.body().getCode() == 1) {
                     Toast.makeText(getContext(), "Intercambio " + estado, Toast.LENGTH_SHORT).show();
-                    cargarIntercambiosRecibidos();
+
                     cargarIntercambiosEnviados();
+                    cargarIntercambiosRecibidos();
                     cargarHistorialIntercambios();
                 }
             }
@@ -272,4 +277,14 @@ public class PerfilFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // ✔ Recargar al volver de la pantalla de Calificar
+        cargarMisCalificaciones();
+        cargarHistorialIntercambios();
+    }
+
 }

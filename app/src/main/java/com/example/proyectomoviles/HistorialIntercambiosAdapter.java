@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.proyectomoviles.model.CalificacionEntry;
 import com.example.proyectomoviles.model.IntercambioEntry;
 import com.squareup.picasso.Picasso;
 
@@ -25,13 +26,25 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
     }
 
     private Context context;
-    private List<IntercambioEntry> lista;
+    private List<IntercambioEntry> listaIntercambios;
+    private List<CalificacionEntry> listaCalificaciones; // NUEVO
     private OnHistorialIntercambioClick listener;
 
-    public HistorialIntercambiosAdapter(Context context, List<IntercambioEntry> lista, OnHistorialIntercambioClick listener) {
+    public HistorialIntercambiosAdapter(Context context,
+                                        List<IntercambioEntry> listaIntercambios,
+                                        List<CalificacionEntry> listaCalificaciones,
+                                        OnHistorialIntercambioClick listener) {
+
         this.context = context;
-        this.lista = lista;
+        this.listaIntercambios = listaIntercambios;
+        this.listaCalificaciones = listaCalificaciones;
         this.listener = listener;
+    }
+
+    // Permite actualizar las calificaciones cargadas luego en PerfilFragment
+    public void updateCalificaciones(List<CalificacionEntry> nuevas) {
+        this.listaCalificaciones = nuevas;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -44,7 +57,7 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        IntercambioEntry item = lista.get(position);
+        IntercambioEntry item = listaIntercambios.get(position);
 
         holder.txtProductoSolicitado.setText("Tu producto: " + item.getProducto_solicitado());
         holder.txtProductoOfrecido.setText("Producto del otro usuario: " + item.getProducto_ofrecido());
@@ -54,29 +67,55 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             Picasso.get().load(item.getImagen_solicitado()).into(holder.imgProducto);
         }
 
-        // CLICK para abrir Chat
+        // CLICK para abrir chat o vista detalle
         holder.itemView.setOnClickListener(v -> listener.onHistorialClick(item));
 
         // ======================================================
-        //  LÓGICA PARA CALIFICAR: quién califica a quién
+        //  IDENTIFICAR QUIÉN CALIFICA A QUIÉN
         // ======================================================
         SharedPreferences prefs = context.getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
-        int idUsuarioActual = prefs.getInt("idUsuario", -1); // Asegúrate que lo guardas al logear
+        int idUsuarioActual = prefs.getInt("idUsuario", -1);
 
-        int idAutor, idRecibe;
-
+        int idAutor;
+        int idRecibe;
         if (idUsuarioActual == item.getId_usuario_origen()) {
-            // Yo soy el ORIGEN → califico al DESTINO
             idAutor = item.getId_usuario_origen();
             idRecibe = item.getId_usuario_destino();
         } else {
-            // Yo soy el DESTINO → califico al ORIGEN
             idAutor = item.getId_usuario_destino();
             idRecibe = item.getId_usuario_origen();
         }
 
         // ======================================================
-        //  Botón CALIFICAR → abre pantalla
+        //  VERIFICAR SI YA CALIFICÓ ESTE INTERCAMBIO
+        // ======================================================
+        boolean yaCalificado = false;
+
+        if (listaCalificaciones != null) {
+            for (CalificacionEntry c : listaCalificaciones) {
+                if (c.getId_intercambio() == item.getId_intercambio()
+                        && c.getId_autor() == idAutor) {
+
+                    yaCalificado = true;
+                    break;
+                }
+            }
+        }
+
+        // ======================================================
+        //  DESHABILITAR BOTÓN SI YA CALIFICÓ
+        // ======================================================
+        if (yaCalificado) {
+            holder.btnCalificar.setEnabled(false);
+            holder.btnCalificar.setText("Ya calificado");
+            holder.btnCalificar.setBackgroundColor(0xFFBBBBBB);
+        } else {
+            holder.btnCalificar.setEnabled(true);
+            holder.btnCalificar.setText("Calificar");
+        }
+
+        // ======================================================
+        //  ACCIÓN DEL BOTÓN CALIFICAR
         // ======================================================
         holder.btnCalificar.setOnClickListener(v -> {
 
@@ -91,7 +130,7 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
 
     @Override
     public int getItemCount() {
-        return lista.size();
+        return listaIntercambios.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -108,7 +147,7 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             txtProductoOfrecido = itemView.findViewById(R.id.txtProductoOfrecido);
             txtNombreUsuario = itemView.findViewById(R.id.txtNombreUsuario);
 
-            btnCalificar = itemView.findViewById(R.id.btnCalificar); // NUEVO
+            btnCalificar = itemView.findViewById(R.id.btnCalificar);
         }
     }
 }
