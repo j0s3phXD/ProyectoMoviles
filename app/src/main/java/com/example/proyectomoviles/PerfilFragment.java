@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
+import com.example.proyectomoviles.model.CalificacionEntry;
 import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.IntercambioEntry;
 import com.example.proyectomoviles.model.RptaCalificacionPromedio;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
+import com.example.proyectomoviles.model.RptaCalificaciones;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class PerfilFragment extends Fragment {
     private List<IntercambioEntry> listaEnviados = new ArrayList<>();
     private List<IntercambioEntry> listaRecibidos = new ArrayList<>();
     private List<IntercambioEntry> listaHistorial = new ArrayList<>();
+    private List<CalificacionEntry> listaCalificaciones = new ArrayList<>();
 
     private int idUsuarioActual;
 
@@ -54,8 +57,6 @@ public class PerfilFragment extends Fragment {
         String nombre = prefs.getString("nombreUsuario", "Usuario");
         String apellido = prefs.getString("apellidoUsuario", "");
 
-        Log.e("PERFIL_DEBUG", "ID USUARIO ACTUAL = " + idUsuarioActual);
-
         if (idUsuarioActual <= 0) {
             Toast.makeText(getContext(), "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
             return binding.getRoot();
@@ -66,10 +67,11 @@ public class PerfilFragment extends Fragment {
         configurarRecycler();
 
         cargarPromedioCalificacion(idUsuarioActual);
-
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();
         cargarHistorialIntercambios();
+
+        cargarCalificacionesHechas(idUsuarioActual);
 
         return binding.getRoot();
     }
@@ -99,14 +101,49 @@ public class PerfilFragment extends Fragment {
         binding.rvIntercambiosRecibidos.setAdapter(recibidosAdapter);
 
         binding.rvHistorialIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
-        historialAdapter = new HistorialIntercambiosAdapter(requireContext(), listaHistorial, intercambio -> {
-            Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra("id_intercambio", intercambio.getId_intercambio());
-            startActivity(intent);
-        });
+
+        historialAdapter = new HistorialIntercambiosAdapter(
+                requireContext(),
+                listaHistorial,
+                listaCalificaciones,
+                intercambio -> {
+                    Intent intent = new Intent(getActivity(), ChatActivity.class);
+                    intent.putExtra("id_intercambio", intercambio.getId_intercambio());
+                    startActivity(intent);
+                }
+        );
 
         binding.rvHistorialIntercambios.setAdapter(historialAdapter);
     }
+
+    private void cargarCalificacionesHechas(int idUsuario) {
+
+        Swaply api = RetrofitClient.getApiService();
+
+        api.obtenerCalificacionesPorAutor(idUsuario).enqueue(new Callback<RptaCalificaciones>() {
+            @Override
+            public void onResponse(Call<RptaCalificaciones> call, Response<RptaCalificaciones> response) {
+
+                if (response.body() != null && response.body().getCode() == 1) {
+
+                    listaCalificaciones.clear();
+                    listaCalificaciones.addAll(response.body().getData());
+
+                    Log.d("PERFIL", "Calificaciones cargadas = " + listaCalificaciones.size());
+
+                    // 🔥 Actualizar adapter
+                    historialAdapter.updateCalificaciones(listaCalificaciones);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaCalificaciones> call, Throwable t) {
+                Log.e("PERFIL", "Error cargando calificaciones: " + t.getMessage());
+            }
+        });
+    }
+
+
     private void cargarPromedioCalificacion(int idUsuario) {
 
         Swaply api = RetrofitClient.getApiService();
@@ -116,24 +153,15 @@ public class PerfilFragment extends Fragment {
             public void onResponse(Call<RptaCalificacionPromedio> call,
                                    Response<RptaCalificacionPromedio> response) {
 
-                if (!response.isSuccessful() || response.body() == null) {
-                    Log.e("PERFIL_DEBUG", "Error: promedio sin respuesta");
-                    return;
-                }
+                if (!response.isSuccessful() || response.body() == null) return;
 
-                RptaCalificacionPromedio rpta = response.body();
-
-                Log.e("PERFIL_DEBUG", "PROMEDIO OBTENIDO = " + rpta.getPromedio());
-
-                if (rpta.getCode() == 1) {
-                    binding.ratingBar.setRating(rpta.getPromedio());
+                if (response.body().getCode() == 1) {
+                    binding.ratingBar.setRating(response.body().getPromedio());
                 }
             }
 
             @Override
-            public void onFailure(Call<RptaCalificacionPromedio> call, Throwable t) {
-                Log.e("PERFIL_DEBUG", "Fallo al cargar promedio: " + t.getMessage());
-            }
+            public void onFailure(Call<RptaCalificacionPromedio> call, Throwable t) { }
         });
     }
 
@@ -157,8 +185,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
-            }
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
         });
     }
 
@@ -168,7 +195,6 @@ public class PerfilFragment extends Fragment {
         String token = prefs.getString("tokenJWT", null);
 
         if (token == null) return;
-
 
         Swaply api = RetrofitClient.getApiService(token);
         api.obtenerIntercambiosRecibidos().enqueue(new Callback<RptaIntercambios>() {
@@ -183,12 +209,12 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) {
-            }
+            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
         });
     }
 
     private void cargarHistorialIntercambios() {
+
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
 
@@ -199,15 +225,14 @@ public class PerfilFragment extends Fragment {
             @Override
             public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
 
-                if (!response.isSuccessful() || response.body() == null) return;
+                if (response.body() == null) return;
 
                 if (response.body().getCode() == 1) {
                     listaHistorial.clear();
 
-                    List<IntercambioEntry> aceptados =
-                            response.body().getData().stream()
-                                    .filter(i -> "aceptado".equalsIgnoreCase(i.getEstado()))
-                                    .collect(Collectors.toList());
+                    List<IntercambioEntry> aceptados = response.body().getData().stream()
+                            .filter(i -> "aceptado".equalsIgnoreCase(i.getEstado()))
+                            .collect(Collectors.toList());
 
                     listaHistorial.addAll(aceptados);
                     historialAdapter.notifyDataSetChanged();
@@ -227,20 +252,20 @@ public class PerfilFragment extends Fragment {
         if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService(token);
-        ConfirmarIntercambioRequest request =
-                new ConfirmarIntercambioRequest(idIntercambio, estado);
+        ConfirmarIntercambioRequest request = new ConfirmarIntercambioRequest(idIntercambio, estado);
 
         api.confirmarIntercambio(request).enqueue(new Callback<RptaGeneral>() {
             @Override
             public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
 
-                if (!response.isSuccessful() || response.body() == null) return;
+                if (response.body() != null && response.body().getCode() == 1) {
 
-                if (response.body().getCode() == 1) {
                     Toast.makeText(getContext(), "Intercambio " + estado, Toast.LENGTH_SHORT).show();
+
                     cargarIntercambiosRecibidos();
                     cargarIntercambiosEnviados();
                     cargarHistorialIntercambios();
+                    cargarCalificacionesHechas(idUsuarioActual); // refrescar calificaciones
                 }
             }
 

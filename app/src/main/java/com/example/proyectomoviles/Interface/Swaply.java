@@ -39,7 +39,7 @@ public interface Swaply {
     @POST("api_registrar_usuario")
     Call<RegistroResponse> registrarUsuario(@Body RegistroRequest registroRequest);
     @POST("api_registrar_producto")
-    Call<RptaGeneral> publicarObjeto(@Body PublicarRequest publicarRequest);
+    Call<RptaGeneral> publicarProductoJson(@Body PublicarRequest publicarRequest);
     @GET("api_listarcategoria")
     Call<CategoriaResponse> listarCategorias();
     @GET("api_listar_productos")
@@ -99,7 +99,6 @@ public interface Swaply {
     Call<RptaCalificacionPromedio> obtenerPromedio(@Path("id_usuario") int idUsuario);
     @GET("api_usuario/{id}")
     Call<UsuarioResponse> obtenerUsuario(@Path("id") int idUsuario);
-
     @GET("api/calificaciones/autor/{id_autor}")
     Call<RptaCalificaciones> obtenerCalificacionesPorAutor(@Path("id_autor") int idAutor);
 
