@@ -3,7 +3,6 @@ package com.example.proyectomoviles;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,6 +16,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.databinding.ActivityComprobanteBinding;
 import com.example.proyectomoviles.model.IntercambioEntry;
 import com.squareup.picasso.Picasso;
@@ -48,22 +49,40 @@ public class ComprobanteActivity extends AppCompatActivity {
 
     private void cargarDatosEnPantalla() {
 
-        // Datos básicos
         binding.txtId.setText("ID: " + intercambio.getId_intercambio());
         binding.txtEstado.setText("Estado: " + intercambio.getEstado());
         binding.txtUsuarioOrigen.setText("Solicitante: " + intercambio.getNombre_origen());
         binding.txtUsuarioDestino.setText("Dueño del producto: " + intercambio.getNombre_destino());
 
+        String baseUrlImagenes = com.example.proyectomoviles.Interface.RetrofitClient.BASE_URL
+                + "uploads/productos/";
+
         // Producto solicitado
         binding.txtProductoSolicitado.setText(intercambio.getProducto_solicitado());
-        if (intercambio.getImagen_solicitado() != null && !intercambio.getImagen_solicitado().isEmpty()) {
-            Picasso.get().load(intercambio.getImagen_solicitado()).into(binding.imgSolicitado);
+        if (intercambio.getImagen_solicitado() != null
+                && !intercambio.getImagen_solicitado().isEmpty()) {
+
+            String urlSolicitado = baseUrlImagenes + intercambio.getImagen_solicitado();
+
+            Glide.with(this)
+                    .load(urlSolicitado)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(binding.imgSolicitado);
         }
 
         // Producto ofrecido
         binding.txtProductoOfrecido.setText(intercambio.getProducto_ofrecido());
-        if (intercambio.getImagen_ofrecido() != null && !intercambio.getImagen_ofrecido().isEmpty()) {
-            Picasso.get().load(intercambio.getImagen_ofrecido()).into(binding.imgOfrecido);
+        if (intercambio.getImagen_ofrecido() != null
+                && !intercambio.getImagen_ofrecido().isEmpty()) {
+
+            String urlOfrecido = baseUrlImagenes + intercambio.getImagen_ofrecido();
+
+            Glide.with(this)
+                    .load(urlOfrecido)
+                    .placeholder(R.drawable.image_placeholder)
+                    .error(R.drawable.image_placeholder)
+                    .into(binding.imgOfrecido);
         }
 
         // Código único

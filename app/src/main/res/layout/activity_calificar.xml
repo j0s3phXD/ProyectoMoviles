@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center_horizontal"
-    android:background="@android:color/white"
+    android:background="@color/background_light"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,8 +15,8 @@
         android:text="Calificar usuario"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginBottom="20dp"/>
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="20dp" />
 
     <!-- RatingBar -->
     <RatingBar
@@ -26,7 +26,7 @@
         android:numStars="5"
         android:stepSize="1"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp" />
 
     <!-- Comentario -->
     <EditText
@@ -35,10 +35,12 @@
         android:layout_height="120dp"
         android:hint="Escribe un comentario (opcional)"
         android:padding="12dp"
-        android:background="@android:drawable/edit_text"
+        android:background="@color/background_card"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:gravity="top"
         android:textSize="16sp"
-        android:layout_marginBottom="25dp"/>
+        android:layout_marginBottom="25dp" />
 
     <!-- Botón Enviar -->
     <Button
@@ -49,7 +51,7 @@
         android:textAllCaps="false"
         android:textSize="18sp"
         android:padding="12dp"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white" />
+        android:backgroundTint="@color/primary"
+        android:textColor="@color/white" />
 
 </LinearLayout>
