@@ -60,7 +60,12 @@
                     android:numStars="5"
                     android:stepSize="0.5"
                     android:isIndicator="true"
-                    android:rating="0" />
+                    android:rating="0"
+
+                    android:progressTint="#FFC107"
+                    android:secondaryProgressTint="#FFD54F"
+                    android:progressBackgroundTint="#C0C0C0" />
+
             </LinearLayout>
         </LinearLayout>
 

@@ -13,6 +13,7 @@ import com.example.proyectomoviles.model.PublicarRequest;
 import com.example.proyectomoviles.model.RegistroRequest;
 import com.example.proyectomoviles.model.RegistroResponse;
 import com.example.proyectomoviles.model.RptaCalificacionPromedio;
+import com.example.proyectomoviles.model.RptaCalificaciones;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
 import com.example.proyectomoviles.model.RptaMensajes;
@@ -98,5 +99,8 @@ public interface Swaply {
     Call<RptaCalificacionPromedio> obtenerPromedio(@Path("id_usuario") int idUsuario);
     @GET("api_usuario/{id}")
     Call<UsuarioResponse> obtenerUsuario(@Path("id") int idUsuario);
+
+    @GET("api/calificaciones/autor/{id_autor}")
+    Call<RptaCalificaciones> obtenerCalificacionesPorAutor(@Path("id_autor") int idAutor);
 
 }
