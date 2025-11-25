@@ -279,4 +279,17 @@ public class PerfilFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Recargar todo cuando el usuario vuelve al perfil
+        cargarPromedioCalificacion(idUsuarioActual);
+        cargarIntercambiosEnviados();
+        cargarIntercambiosRecibidos();
+        cargarHistorialIntercambios();
+        cargarCalificacionesHechas(idUsuarioActual);
+    }
+
 }
