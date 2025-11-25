@@ -46,7 +46,7 @@ public class ComprobanteActivity extends AppCompatActivity {
         cargarDatosEnPantalla();
         configurarBotonPDF();
     }
-//
+
     private void cargarDatosEnPantalla() {
 
         binding.txtId.setText("ID: " + intercambio.getId_intercambio());
