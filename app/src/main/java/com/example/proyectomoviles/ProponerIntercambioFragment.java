@@ -15,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.model.IniciarIntercambioRequest;
@@ -72,10 +74,47 @@ public class ProponerIntercambioFragment extends Fragment {
                     (ProductoEntry) getArguments().getSerializable("producto_destino");
 
             if (productoDestino != null) {
+
                 tvNombreProductoDestino.setText(productoDestino.getTitulo());
+
+                // === CATEGORÍA: intentamos primero con el objeto, luego con des_categoria ===
+                TextView tvCategoria = view.findViewById(R.id.tvCategoriaDestino);
+                String textoCategoria = null;
+
+                if (productoDestino.getCategoria() != null &&
+                        productoDestino.getCategoria().getDes_categoria() != null) {
+                    textoCategoria = productoDestino.getCategoria().getDes_categoria();
+                } else if (productoDestino.getDes_categoria() != null) {
+                    textoCategoria = productoDestino.getDes_categoria();
+                }
+
+                if (textoCategoria != null && !textoCategoria.isEmpty()) {
+                    tvCategoria.setText(textoCategoria);
+                }
+
+                // Nombre del dueño
+                TextView tvDueno = view.findViewById(R.id.tvDuenoDestino);
+                tvDueno.setText("De " + productoDestino.getNombre_usuario());
+
+                // Imagen del producto destino
+                ImageView imgDestino = view.findViewById(R.id.imgProductoDestino);
+
+                if (productoDestino.getFoto() != null && !productoDestino.getFoto().isEmpty()) {
+                    String urlImagen = RetrofitClient.BASE_URL
+                            + "uploads/productos/"
+                            + productoDestino.getFoto();
+
+                    Glide.with(this)
+                            .load(urlImagen)
+                            .centerCrop()
+                            .into(imgDestino);
+                }
+
             } else {
                 tvNombreProductoDestino.setText("Producto seleccionado");
             }
+
+
         }
 
         cargarMisProductos();

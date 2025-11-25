@@ -3,12 +3,16 @@ package com.example.proyectomoviles;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.model.ProductoEntry;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -31,32 +35,39 @@ public class MisProductosAdapter extends RecyclerView.Adapter<MisProductosAdapte
     @Override
     public MisProductosAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_activated_1, parent, false);
+                .inflate(R.layout.item_mi_producto, parent, false);
         return new MisProductosAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MisProductosAdapter.ViewHolder holder, int position) {
-        if (position == RecyclerView.NO_POSITION) return;
-
         ProductoEntry p = productos.get(position);
-        holder.text1.setText(p.getTitulo());
 
-        holder.itemView.setActivated(selected == position);
+        holder.tvNombre.setText(p.getTitulo());
+
+        // Cargar foto desde servidor
+        String urlFoto = RetrofitClient.BASE_URL + "uploads/productos/" + p.getFoto();
+        Glide.with(holder.itemView.getContext())
+                .load(urlFoto)
+                .placeholder(R.drawable.image_placeholder) // opcional
+                .error(R.drawable.image_placeholder)
+                .centerCrop()
+                .into(holder.imgProducto);
+
+        // Selección visual
+        holder.cardView.setStrokeWidth(selected == position ? 6 : 0);
+        holder.cardView.setStrokeColor(
+                holder.itemView.getResources().getColor(R.color.purple_500)
+        );
 
         holder.itemView.setOnClickListener(v -> {
             int prev = selected;
             selected = holder.getAdapterPosition();
-            if (selected == RecyclerView.NO_POSITION) return;
 
-            if (prev != -1) {
-                notifyItemChanged(prev);
-            }
+            notifyItemChanged(prev);
             notifyItemChanged(selected);
 
-            if (listener != null) {
-                listener.onClick(p);
-            }
+            if (listener != null) listener.onClick(p);
         });
     }
 
@@ -66,11 +77,17 @@ public class MisProductosAdapter extends RecyclerView.Adapter<MisProductosAdapte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView text1;
+
+        MaterialCardView cardView;
+        ImageView imgProducto;
+        TextView tvNombre;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            text1 = itemView.findViewById(android.R.id.text1);
+
+            cardView = itemView.findViewById(R.id.cardMiProducto);
+            imgProducto = itemView.findViewById(R.id.imgMiProducto);
+            tvNombre = itemView.findViewById(R.id.tvNombreMiProducto);
         }
     }
 }
