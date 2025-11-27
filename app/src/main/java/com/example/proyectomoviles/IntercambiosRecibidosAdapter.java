@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.model.IntercambioEntry;
 import com.squareup.picasso.Picasso;
 
@@ -52,9 +53,22 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
         holder.txtEstado.setText("Estado: " + item.getEstado());
 
         // Imagen del producto solicitado
-        if (item.getImagen_solicitado() != null && !item.getImagen_solicitado().isEmpty()) {
-            Picasso.get().load(item.getImagen_solicitado()).into(holder.imgProducto);
+        String urlImagen = item.getImagen_solicitado();
+        if (urlImagen != null && !urlImagen.isEmpty()) {
+
+            if (!urlImagen.startsWith("http")) {
+                urlImagen = RetrofitClient.BASE_URL + "uploads/productos/" + urlImagen;
+            }
+
+            Picasso.get()
+                    .load(urlImagen)
+                    .placeholder(R.drawable.logo_registrar)
+                    .error(R.drawable.logo_registrar)
+                    .into(holder.imgProducto);
+        } else {
+            holder.imgProducto.setImageResource(R.drawable.logo_registrar);
         }
+
 
         // Mostrar u ocultar botones según estado
         if (item.getEstado().equalsIgnoreCase("Pendiente")) {

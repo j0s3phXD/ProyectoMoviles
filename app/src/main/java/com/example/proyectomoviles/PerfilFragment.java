@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
@@ -23,6 +24,7 @@ import com.example.proyectomoviles.model.RptaCalificacionPromedio;
 import com.example.proyectomoviles.model.RptaGeneral;
 import com.example.proyectomoviles.model.RptaIntercambios;
 import com.example.proyectomoviles.model.RptaCalificaciones;
+import com.example.proyectomoviles.model.RptaProducto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,41 @@ public class PerfilFragment extends Fragment {
 
     private int idUsuarioActual;
 
+    private void mostrarAvatar(String nombre, String apellido, String nombreArchivoFoto) {
+        String iniciales = obtenerIniciales(nombre, apellido);
+        binding.tvInicialesPerfil.setText(iniciales);
+
+        if (nombreArchivoFoto == null || nombreArchivoFoto.trim().isEmpty()) {
+            binding.imgPerfil.setImageDrawable(null);
+            binding.imgPerfil.setVisibility(View.GONE);          // ocultar imagen
+            binding.tvInicialesPerfil.setVisibility(View.VISIBLE); // mostrar iniciales
+            return;
+        }
+
+        String urlFoto = RetrofitClient.BASE_URL + "uploads/usuarios/" + nombreArchivoFoto;
+
+        Glide.with(this)
+                .load(urlFoto)
+                .centerCrop()
+                .into(binding.imgPerfil);
+
+        binding.imgPerfil.setVisibility(View.VISIBLE);
+        binding.tvInicialesPerfil.setVisibility(View.GONE);
+    }
+
+    private String obtenerIniciales(String nombre, String apellido) {
+        String n = nombre != null ? nombre.trim() : "";
+        String a = apellido != null ? apellido.trim() : "";
+
+        StringBuilder sb = new StringBuilder();
+        if (!n.isEmpty()) sb.append(n.charAt(0));
+        if (!a.isEmpty()) sb.append(a.charAt(0));
+
+        if (sb.length() == 0) return "?";
+        return sb.toString().toUpperCase();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +94,8 @@ public class PerfilFragment extends Fragment {
         String nombre = prefs.getString("nombreUsuario", "Usuario");
         String apellido = prefs.getString("apellidoUsuario", "");
 
+        String nombreArchivoFoto = prefs.getString("fotoUsuario", null);
+
         if (idUsuarioActual <= 0) {
             Toast.makeText(getContext(), "Error obteniendo usuario", Toast.LENGTH_SHORT).show();
             return binding.getRoot();
@@ -64,14 +103,19 @@ public class PerfilFragment extends Fragment {
 
         binding.txtNombreUsuario.setText(nombre + " " + apellido);
 
+        //(iniciales + posible foto)
+        mostrarAvatar(nombre, apellido, nombreArchivoFoto);
+
         configurarRecycler();
+
 
         cargarPromedioCalificacion(idUsuarioActual);
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();
         cargarHistorialIntercambios();
-
         cargarCalificacionesHechas(idUsuarioActual);
+
+        cargarContadorProductos();
 
         return binding.getRoot();
     }
@@ -131,7 +175,6 @@ public class PerfilFragment extends Fragment {
 
                     Log.d("PERFIL", "Calificaciones cargadas = " + listaCalificaciones.size());
 
-                    // 🔥 Actualizar adapter
                     historialAdapter.updateCalificaciones(listaCalificaciones);
                 }
             }
@@ -236,6 +279,8 @@ public class PerfilFragment extends Fragment {
 
                     listaHistorial.addAll(aceptados);
                     historialAdapter.notifyDataSetChanged();
+
+                    binding.tvContadorIntercambios.setText(String.valueOf(listaHistorial.size()));
                 }
             }
 
@@ -265,7 +310,7 @@ public class PerfilFragment extends Fragment {
                     cargarIntercambiosRecibidos();
                     cargarIntercambiosEnviados();
                     cargarHistorialIntercambios();
-                    cargarCalificacionesHechas(idUsuarioActual); // refrescar calificaciones
+                    cargarCalificacionesHechas(idUsuarioActual);
                 }
             }
 
@@ -274,6 +319,31 @@ public class PerfilFragment extends Fragment {
         });
     }
 
+    private void cargarContadorProductos() {
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) return;
+
+        Swaply api = RetrofitClient.getApiService(token);
+
+        api.misProductos().enqueue(new Callback<RptaProducto>() {
+            @Override
+            public void onResponse(Call<RptaProducto> call, Response<RptaProducto> response) {
+
+                if (!response.isSuccessful() || response.body() == null) return;
+
+                if (response.body().getCode() == 1 && response.body().getData() != null) {
+                    int total = response.body().getData().size();
+                    binding.tvContadorProductos.setText(String.valueOf(total));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RptaProducto> call, Throwable t) { }
+        });
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -290,6 +360,7 @@ public class PerfilFragment extends Fragment {
         cargarIntercambiosRecibidos();
         cargarHistorialIntercambios();
         cargarCalificacionesHechas(idUsuarioActual);
+        cargarContadorProductos();
     }
 
 }
