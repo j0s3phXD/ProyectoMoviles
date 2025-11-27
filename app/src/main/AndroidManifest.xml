@@ -11,8 +11,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProyectoMoviles"
-        >
+        android:theme="@style/Theme.ProyectoMoviles">
+
+        <!-- 1. Nueva Splash Activity como pantalla de inicio -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"> <!-- Opcional: para ocultar la barra de título -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
@@ -25,16 +36,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!-- 2. LoginActivity ya no es la pantalla de inicio -->
         <activity
             android:name=".LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ProyectoMoviles">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".CalificarActivity"
             android:exported="false"/>
