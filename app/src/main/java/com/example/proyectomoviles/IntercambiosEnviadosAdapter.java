@@ -17,6 +17,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import com.example.proyectomoviles.Interface.RetrofitClient;
+import com.squareup.picasso.Picasso;
+
 public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<IntercambiosEnviadosAdapter.ViewHolder> {
 
     private Context context;
@@ -46,9 +49,22 @@ public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<Intercambi
         holder.txtEstado.setText("Estado: " + item.getEstado());
 
         // Imagen del producto solicitado
-        if (item.getImagen_solicitado() != null && !item.getImagen_solicitado().isEmpty()) {
-            Picasso.get().load(item.getImagen_solicitado()).into(holder.imgProducto);
+        String urlImagen = item.getImagen_solicitado();
+        if (urlImagen != null && !urlImagen.isEmpty()) {
+
+            if (!urlImagen.startsWith("http")) {
+                urlImagen = RetrofitClient.BASE_URL + "uploads/productos/" + urlImagen;
+            }
+
+            Picasso.get()
+                    .load(urlImagen)
+                    .placeholder(R.drawable.logo_registrar)
+                    .error(R.drawable.logo_registrar)
+                    .into(holder.imgProducto);
+        } else {
+            holder.imgProducto.setImageResource(R.drawable.logo_registrar);
         }
+
 
         // Mostrar botón solo si el estado es "Aceptado"
         if (item.getEstado().equalsIgnoreCase("Aceptado")) {

@@ -28,14 +28,40 @@
             android:gravity="center_vertical"
             android:paddingBottom="16dp">
 
-            <!-- Foto de perfil -->
-            <ImageView
-                android:id="@+id/imgPerfil"
-                android:src="@drawable/logo_registrar"
+            <!-- Avatar: foto o iniciales -->
+            <FrameLayout
+                android:id="@+id/avatarContainer"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp">
+
+                <!-- Círculo de color para iniciales -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/logo_avatar_circle" />
+
+                <!-- Iniciales (cuando NO hay foto) -->
+                <TextView
+                    android:id="@+id/tvInicialesPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="AB"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+
+                <!-- Foto real del usuario -->
+                <ImageView
+                    android:id="@+id/imgPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo_registrar"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
             <!-- Nombre y estrellas -->
             <LinearLayout
@@ -67,6 +93,67 @@
                     android:progressBackgroundTint="#C0C0C0" />
 
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutCounters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+            <!-- Productos publicados -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvContadorProductos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Productos publicados"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
+            <!-- Intercambios completados -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvContadorIntercambios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Intercambios completados"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- Sección Intercambios -->

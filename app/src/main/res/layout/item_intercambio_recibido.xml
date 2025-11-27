@@ -28,6 +28,7 @@
                 android:layout_height="70dp"
                 android:layout_marginEnd="12dp"
                 android:scaleType="centerCrop"
+                android:background="@drawable/logo_registrar"
                 android:src="@drawable/logo_registrar"/>
 
             <LinearLayout
@@ -100,7 +101,6 @@
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:backgroundTint="@color/primary"/>
-
         </LinearLayout>
 
         <Button
