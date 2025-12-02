@@ -45,6 +45,7 @@
         <activity
             android:name=".CalificarActivity"
             android:exported="false"/>
+        <activity android:name=".RecuperarPasswordActivity" />
 
     </application>
 

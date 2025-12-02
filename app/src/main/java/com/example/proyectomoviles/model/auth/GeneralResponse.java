@@ -1,4 +1,4 @@
-package com.example.proyectomoviles.model;
+package com.example.proyectomoviles.model.auth;
 
 public class GeneralResponse {
     private int code;

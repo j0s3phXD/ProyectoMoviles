@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -9,7 +10,6 @@
     android:padding="24dp"
     tools:context=".RegistroUsuarioActivity">
 
-    <!-- Título -->
     <TextView
         android:id="@+id/txtTituloRegistro"
         android:layout_width="wrap_content"
@@ -21,7 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Nombre -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILNombre"
         android:layout_width="0dp"
@@ -40,7 +39,6 @@
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Apellidos -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILApellidos"
         android:layout_width="0dp"
@@ -59,7 +57,6 @@
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Email -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILEmail"
         android:layout_width="0dp"
@@ -78,7 +75,27 @@
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Password -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtILTelefono"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Teléfono"
+        app:prefixText="+51 "
+        app:startIconDrawable="@android:drawable/ic_menu_call"
+        app:layout_constraintTop_toBottomOf="@+id/txtILEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="9"
+            android:inputType="phone" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILPassword"
         android:layout_width="0dp"
@@ -87,7 +104,7 @@
         android:hint="Contraseña"
         app:startIconDrawable="@drawable/logo_lock"
         app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@+id/txtILEmail"
+        app:layout_constraintTop_toBottomOf="@+id/txtILTelefono"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -98,7 +115,25 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Botón Registrar -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ilConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Confirmar Contraseña"
+        app:passwordToggleEnabled="true"
+        app:startIconDrawable="@drawable/logo_lock"
+        app:layout_constraintTop_toBottomOf="@+id/txtILPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegistrar"
         android:layout_width="0dp"
@@ -109,11 +144,8 @@
         android:layout_marginBottom="16dp"
         app:backgroundTint="@color/primary"
         android:textColor="@android:color/white"
-
-        app:layout_constraintTop_toBottomOf="@+id/txtILPassword"
+        app:layout_constraintTop_toBottomOf="@+id/ilConfirmPassword"
         app:layout_constraintStart_toStartOf="@+id/txtILPassword"
-        app:layout_constraintEnd_toEndOf="@+id/txtILPassword"
-        />
-
+        app:layout_constraintEnd_toEndOf="@+id/txtILPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

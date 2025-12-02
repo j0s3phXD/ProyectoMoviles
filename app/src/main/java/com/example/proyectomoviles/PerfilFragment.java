@@ -21,7 +21,7 @@ import com.example.proyectomoviles.model.calificacion.CalificacionEntry;
 import com.example.proyectomoviles.model.intercambio.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.intercambio.IntercambioEntry;
 import com.example.proyectomoviles.model.calificacion.CalificacionPromedioResponse;
-import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.auth.GeneralResponse;
 import com.example.proyectomoviles.model.intercambio.IntercambiosResponse;
 import com.example.proyectomoviles.model.calificacion.CalificacionesResponse;
 import com.example.proyectomoviles.model.producto.ProductoResponse;
