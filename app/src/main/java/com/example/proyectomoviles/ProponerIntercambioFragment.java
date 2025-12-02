@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,11 @@ public class ProponerIntercambioFragment extends Fragment {
         rvMisProductos = view.findViewById(R.id.rvMisProductos);
         etMensaje = view.findViewById(R.id.etMensaje);
         btnEnviar = view.findViewById(R.id.btnEnviarPropuesta);
+
+        ImageButton btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
 
         rvMisProductos.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -241,7 +247,9 @@ public class ProponerIntercambioFragment extends Fragment {
                     Toast.makeText(getContext(), rpta.getMessage(), Toast.LENGTH_SHORT).show();
                     // volver atrás
                     if (getView() != null) {
-                        Navigation.findNavController(getView()).popBackStack();
+                        Navigation.findNavController(getView())
+                                .popBackStack(R.id.nav_explorar, false);
+
                     }
                 } else {
                     Toast.makeText(getContext(),

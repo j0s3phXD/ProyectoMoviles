@@ -9,6 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="start"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/logo_back"
+            android:contentDescription="Volver" />
+
         <!-- Título principal -->
         <TextView
             android:id="@+id/tvTituloPantalla"
@@ -19,7 +29,6 @@
             android:textSize="22sp"
             android:layout_marginBottom="12dp" />
 
-        <!-- Subtítulo -->
         <TextView
             android:id="@+id/tvSubtituloPantalla"
             android:layout_width="wrap_content"
@@ -28,7 +37,6 @@
             android:textSize="14sp"
             android:layout_marginBottom="16dp" />
 
-        <!-- CARD: Producto destino (el que quieres conseguir) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardProductoDestino"
             android:layout_width="match_parent"
@@ -58,7 +66,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <!-- Mantenemos el id que ya usabas -->
                     <TextView
                         android:id="@+id/tvNombreProductoDestino"
                         android:layout_width="wrap_content"
@@ -96,7 +103,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Título lista de tus productos -->
         <TextView
             android:id="@+id/tvTituloMisProductos"
             android:layout_width="wrap_content"
@@ -106,7 +112,6 @@
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Recycler con tus productos (mostraremos imagen+texto en el item) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMisProductos"
             android:layout_width="match_parent"
@@ -132,7 +137,6 @@
             android:textSize="12sp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Mantenemos el id etMensaje para tu código -->
         <EditText
             android:id="@+id/etMensaje"
             android:layout_width="match_parent"
@@ -143,7 +147,6 @@
             android:padding="8dp"
             android:layout_marginBottom="24dp" />
 
-        <!-- Botón Enviar propuesta (mismo id) -->
         <Button
             android:id="@+id/btnEnviarPropuesta"
             android:layout_width="match_parent"

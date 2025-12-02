@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,6 +105,10 @@ public class PublicarFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("tokenJWT", "");
+
+        binding.btnRegresar.setOnClickListener(v -> {
+            Navigation.findNavController(v).popBackStack();
+        });
 
         cargarCategorias();
 

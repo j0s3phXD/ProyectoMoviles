@@ -7,7 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Título -->
+    <ImageButton
+        android:id="@+id/btnBackCalificar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:layout_gravity="start"
+        android:contentDescription="Volver atrás"
+        android:src="@drawable/logo_back" />
+
     <TextView
         android:id="@+id/txtTituloCalificar"
         android:layout_width="wrap_content"
@@ -18,7 +26,6 @@
         android:textColor="@color/text_primary"
         android:layout_marginBottom="20dp" />
 
-    <!-- RatingBar -->
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
@@ -28,7 +35,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp" />
 
-    <!-- Comentario -->
     <EditText
         android:id="@+id/txtComentario"
         android:layout_width="match_parent"
@@ -42,7 +48,6 @@
         android:textSize="16sp"
         android:layout_marginBottom="25dp" />
 
-    <!-- Botón Enviar -->
     <Button
         android:id="@+id/btnEnviarRating"
         android:layout_width="match_parent"

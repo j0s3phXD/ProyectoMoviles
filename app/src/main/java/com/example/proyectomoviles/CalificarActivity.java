@@ -3,6 +3,7 @@ package com.example.proyectomoviles;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class CalificarActivity extends AppCompatActivity {
     private int idUsuarioRecibe;   // usuario al que califico
     private int idUsuarioAutor;    // yo (quien envía)
     private int idIntercambio;     // intercambio relacionado
+    private ImageButton btnBackCalificar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,9 @@ public class CalificarActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         txtComentario = findViewById(R.id.txtComentario);
         btnEnviar = findViewById(R.id.btnEnviarRating);
+
+        btnBackCalificar = findViewById(R.id.btnBackCalificar);
+        btnBackCalificar.setOnClickListener(v -> finish());
 
         // Obtener datos enviados desde el adaptador
         idUsuarioRecibe = getIntent().getIntExtra("id_usuario_recibe", -1);

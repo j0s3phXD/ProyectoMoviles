@@ -9,14 +9,12 @@
     android:paddingBottom="100dp"
     android:background="@color/background_light">
 
-    <!-- Contenedor para centrar la tarjeta -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-        <!-- Tarjeta principal del formulario -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +23,15 @@
             android:elevation="4dp"
             android:padding="16dp"
             android:layout_margin="8dp">
+
+            <ImageButton
+                android:id="@+id/btnRegresar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/logo_back"
+                android:contentDescription="Regresar" />
 
             <!-- Título principal -->
             <TextView
@@ -48,7 +55,6 @@
                 android:textSize="16sp"
                 android:paddingBottom="8dp" />
 
-            <!-- CUADRO DE CARGA AJUSTADO Y CENTRADO -->
             <FrameLayout
                 android:id="@+id/frameAgregarFoto"
                 android:layout_width="match_parent"
@@ -61,7 +67,6 @@
                 android:padding="16dp"
                 android:gravity="center">
 
-                <!-- Contenido cuando NO hay imagen -->
                 <LinearLayout
                     android:id="@+id/layoutUploadContent"
                     android:layout_width="match_parent"

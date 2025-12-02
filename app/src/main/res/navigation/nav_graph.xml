@@ -43,7 +43,6 @@
         android:label="Detalle Producto"
         tools:layout="@layout/fragment_detalle_producto">
 
-        <!-- ⬇️ NUEVA acción desde aquí hacia ProponerIntercambioFragment -->
         <action
             android:id="@+id/action_itemProductoPublico_to_proponerIntercambioFragment"
             app:destination="@id/proponerIntercambioFragment" />

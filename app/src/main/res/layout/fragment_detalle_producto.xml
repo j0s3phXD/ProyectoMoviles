@@ -13,6 +13,16 @@
         android:padding="16dp"
         android:gravity="center_horizontal">
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:src="@drawable/logo_back"
+            android:contentDescription="Regresar"
+            android:layout_gravity="start"/>
+
         <!-- Título de la app-->
         <TextView
             android:id="@+id/tvTituloApp"

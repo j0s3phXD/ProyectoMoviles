@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/btnBackComprobante"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/logo_back"
+            android:contentDescription="Volver" />
+
         <TextView
             android:text="COMPROBANTE DE INTERCAMBIO"
             android:textSize="22sp"
