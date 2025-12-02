@@ -46,7 +46,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
         return listaProductos != null ? listaProductos.size() : 0;
     }
 
-    // Interfaz para manejar clics en editar y eliminar
     public interface OnItemClickListener {
         void onEditarClick(ProductoEntry producto);
         void onEliminarClick(ProductoEntry producto);
