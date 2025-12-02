@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
-import com.example.proyectomoviles.model.IntercambioEntry;
-import com.squareup.picasso.Picasso;
+import com.example.proyectomoviles.model.intercambio.IntercambioEntry;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
                 urlImagen = RetrofitClient.BASE_URL + "uploads/productos/" + urlImagen;
             }
 
-            Picasso.get()
+            Glide.with(context)
                     .load(urlImagen)
                     .placeholder(R.drawable.logo_registrar)
                     .error(R.drawable.logo_registrar)

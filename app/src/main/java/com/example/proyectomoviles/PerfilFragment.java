@@ -17,14 +17,14 @@ import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPerfilBinding;
-import com.example.proyectomoviles.model.CalificacionEntry;
-import com.example.proyectomoviles.model.ConfirmarIntercambioRequest;
-import com.example.proyectomoviles.model.IntercambioEntry;
-import com.example.proyectomoviles.model.RptaCalificacionPromedio;
-import com.example.proyectomoviles.model.RptaGeneral;
-import com.example.proyectomoviles.model.RptaIntercambios;
-import com.example.proyectomoviles.model.RptaCalificaciones;
-import com.example.proyectomoviles.model.RptaProducto;
+import com.example.proyectomoviles.model.calificacion.CalificacionEntry;
+import com.example.proyectomoviles.model.intercambio.ConfirmarIntercambioRequest;
+import com.example.proyectomoviles.model.intercambio.IntercambioEntry;
+import com.example.proyectomoviles.model.calificacion.CalificacionPromedioResponse;
+import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.intercambio.IntercambiosResponse;
+import com.example.proyectomoviles.model.calificacion.CalificacionesResponse;
+import com.example.proyectomoviles.model.producto.ProductoResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,9 +164,9 @@ public class PerfilFragment extends Fragment {
 
         Swaply api = RetrofitClient.getApiService();
 
-        api.obtenerCalificacionesPorAutor(idUsuario).enqueue(new Callback<RptaCalificaciones>() {
+        api.obtenerCalificacionesPorAutor(idUsuario).enqueue(new Callback<CalificacionesResponse>() {
             @Override
-            public void onResponse(Call<RptaCalificaciones> call, Response<RptaCalificaciones> response) {
+            public void onResponse(Call<CalificacionesResponse> call, Response<CalificacionesResponse> response) {
 
                 if (response.body() != null && response.body().getCode() == 1) {
 
@@ -180,7 +180,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaCalificaciones> call, Throwable t) {
+            public void onFailure(Call<CalificacionesResponse> call, Throwable t) {
                 Log.e("PERFIL", "Error cargando calificaciones: " + t.getMessage());
             }
         });
@@ -191,10 +191,10 @@ public class PerfilFragment extends Fragment {
 
         Swaply api = RetrofitClient.getApiService();
 
-        api.obtenerPromedio(idUsuario).enqueue(new Callback<RptaCalificacionPromedio>() {
+        api.obtenerPromedio(idUsuario).enqueue(new Callback<CalificacionPromedioResponse>() {
             @Override
-            public void onResponse(Call<RptaCalificacionPromedio> call,
-                                   Response<RptaCalificacionPromedio> response) {
+            public void onResponse(Call<CalificacionPromedioResponse> call,
+                                   Response<CalificacionPromedioResponse> response) {
 
                 if (!response.isSuccessful() || response.body() == null) return;
 
@@ -204,7 +204,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaCalificacionPromedio> call, Throwable t) { }
+            public void onFailure(Call<CalificacionPromedioResponse> call, Throwable t) { }
         });
     }
 
@@ -216,9 +216,9 @@ public class PerfilFragment extends Fragment {
         if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService(token);
-        api.obtenerMisIntercambios().enqueue(new Callback<RptaIntercambios>() {
+        api.obtenerMisIntercambios().enqueue(new Callback<IntercambiosResponse>() {
             @Override
-            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+            public void onResponse(Call<IntercambiosResponse> call, Response<IntercambiosResponse> response) {
 
                 if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
                     listaEnviados.clear();
@@ -228,7 +228,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
+            public void onFailure(Call<IntercambiosResponse> call, Throwable t) { }
         });
     }
 
@@ -240,9 +240,9 @@ public class PerfilFragment extends Fragment {
         if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService(token);
-        api.obtenerIntercambiosRecibidos().enqueue(new Callback<RptaIntercambios>() {
+        api.obtenerIntercambiosRecibidos().enqueue(new Callback<IntercambiosResponse>() {
             @Override
-            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+            public void onResponse(Call<IntercambiosResponse> call, Response<IntercambiosResponse> response) {
 
                 if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
                     listaRecibidos.clear();
@@ -252,7 +252,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
+            public void onFailure(Call<IntercambiosResponse> call, Throwable t) { }
         });
     }
 
@@ -264,9 +264,9 @@ public class PerfilFragment extends Fragment {
         if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService(token);
-        api.obtenerHistorial().enqueue(new Callback<RptaIntercambios>() {
+        api.obtenerHistorial().enqueue(new Callback<IntercambiosResponse>() {
             @Override
-            public void onResponse(Call<RptaIntercambios> call, Response<RptaIntercambios> response) {
+            public void onResponse(Call<IntercambiosResponse> call, Response<IntercambiosResponse> response) {
 
                 if (response.body() == null) return;
 
@@ -285,7 +285,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaIntercambios> call, Throwable t) { }
+            public void onFailure(Call<IntercambiosResponse> call, Throwable t) { }
         });
     }
 
@@ -299,9 +299,9 @@ public class PerfilFragment extends Fragment {
         Swaply api = RetrofitClient.getApiService(token);
         ConfirmarIntercambioRequest request = new ConfirmarIntercambioRequest(idIntercambio, estado);
 
-        api.confirmarIntercambio(request).enqueue(new Callback<RptaGeneral>() {
+        api.confirmarIntercambio(request).enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
 
                 if (response.body() != null && response.body().getCode() == 1) {
 
@@ -315,7 +315,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaGeneral> call, Throwable t) { }
+            public void onFailure(Call<GeneralResponse> call, Throwable t) { }
         });
     }
 
@@ -328,9 +328,9 @@ public class PerfilFragment extends Fragment {
 
         Swaply api = RetrofitClient.getApiService(token);
 
-        api.misProductos().enqueue(new Callback<RptaProducto>() {
+        api.misProductos().enqueue(new Callback<ProductoResponse>() {
             @Override
-            public void onResponse(Call<RptaProducto> call, Response<RptaProducto> response) {
+            public void onResponse(Call<ProductoResponse> call, Response<ProductoResponse> response) {
 
                 if (!response.isSuccessful() || response.body() == null) return;
 
@@ -341,7 +341,7 @@ public class PerfilFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaProducto> call, Throwable t) { }
+            public void onFailure(Call<ProductoResponse> call, Throwable t) { }
         });
     }
     @Override

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
-import com.example.proyectomoviles.model.EnviarMensajeRequest;
-import com.example.proyectomoviles.model.Mensaje;
-import com.example.proyectomoviles.model.RptaGeneral;
-import com.example.proyectomoviles.model.RptaMensajes;
+import com.example.proyectomoviles.model.mensaje.EnviarMensajeRequest;
+import com.example.proyectomoviles.model.mensaje.Mensaje;
+import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.mensaje.MensajesResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +27,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -98,11 +95,11 @@ public class ChatActivity extends AppCompatActivity {
         if (token == null) return;
 
         Swaply api = RetrofitClient.getApiService(token);
-        Call<RptaMensajes> call = api.obtenerMensajes(idIntercambio);
+        Call<MensajesResponse> call = api.obtenerMensajes(idIntercambio);
 
-        call.enqueue(new Callback<RptaMensajes>() {
+        call.enqueue(new Callback<MensajesResponse>() {
             @Override
-            public void onResponse(Call<RptaMensajes> call, Response<RptaMensajes> response) {
+            public void onResponse(Call<MensajesResponse> call, Response<MensajesResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getCode() == 1) {
                         listaMensajes.clear();
@@ -120,7 +117,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RptaMensajes> call, Throwable t) {
+            public void onFailure(Call<MensajesResponse> call, Throwable t) {
                 Toast.makeText(ChatActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("ChatActivity", "onFailure: ", t);
             }
@@ -140,11 +137,11 @@ public class ChatActivity extends AppCompatActivity {
 
         Swaply api = RetrofitClient.getApiService(token);
         EnviarMensajeRequest request = new EnviarMensajeRequest(idIntercambio, textoMensaje);
-        Call<RptaGeneral> call = api.enviarMensaje(request);
+        Call<GeneralResponse> call = api.enviarMensaje(request);
 
-        call.enqueue(new Callback<RptaGeneral>() {
+        call.enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
                     etMensaje.setText("");
                     new Handler(Looper.getMainLooper()).postDelayed(() -> cargarMensajes(), 500);
@@ -154,7 +151,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
                 Toast.makeText(ChatActivity.this, "Error de envío: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

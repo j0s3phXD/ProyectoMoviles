@@ -20,9 +20,9 @@ import android.widget.Toast;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentCatalogoBinding;
-import com.example.proyectomoviles.model.CategoriaSeccion;
-import com.example.proyectomoviles.model.ProductoEntry;
-import com.example.proyectomoviles.model.RptaProducto;
+import com.example.proyectomoviles.model.categoria.CategoriaSeccion;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
+import com.example.proyectomoviles.model.producto.ProductoResponse;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -38,8 +38,6 @@ import java.util.Set;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CatalogoFragment extends Fragment {
 
@@ -242,17 +240,17 @@ public class CatalogoFragment extends Fragment {
 
     private void cargarProductos() {
         Swaply api = RetrofitClient.getApiService();
-        Call<RptaProducto> call = api.listarProductos();
+        Call<ProductoResponse> call = api.listarProductos();
 
-        call.enqueue(new Callback<RptaProducto>() {
+        call.enqueue(new Callback<ProductoResponse>() {
             @Override
-            public void onResponse(Call<RptaProducto> call, Response<RptaProducto> response) {
+            public void onResponse(Call<ProductoResponse> call, Response<ProductoResponse> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(requireContext(), "Código: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                RptaProducto rpta = response.body();
+                ProductoResponse rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
 
                     List<ProductoEntry> listaProductos = rpta.getData();
@@ -280,7 +278,7 @@ public class CatalogoFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaProducto> call, Throwable t) {
+            public void onFailure(Call<ProductoResponse> call, Throwable t) {
                 Toast.makeText(requireContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

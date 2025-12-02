@@ -12,13 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.proyectomoviles.model.IntercambioEntry;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.example.proyectomoviles.model.intercambio.IntercambioEntry;
 
 import java.util.List;
 
 import com.example.proyectomoviles.Interface.RetrofitClient;
-import com.squareup.picasso.Picasso;
 
 public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<IntercambiosEnviadosAdapter.ViewHolder> {
 
@@ -56,7 +55,7 @@ public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<Intercambi
                 urlImagen = RetrofitClient.BASE_URL + "uploads/productos/" + urlImagen;
             }
 
-            Picasso.get()
+            Glide.with(context)
                     .load(urlImagen)
                     .placeholder(R.drawable.logo_registrar)
                     .error(R.drawable.logo_registrar)

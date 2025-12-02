@@ -13,14 +13,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityRegistroUsuarioBinding;
-import com.example.proyectomoviles.model.RegistroRequest;
-import com.example.proyectomoviles.model.RegistroResponse;
+import com.example.proyectomoviles.model.auth.RegistroRequest;
+import com.example.proyectomoviles.model.auth.RegistroResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistroUsuarioActivity extends AppCompatActivity {
 

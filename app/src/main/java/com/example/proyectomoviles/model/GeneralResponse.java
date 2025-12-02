@@ -1,0 +1,19 @@
+package com.example.proyectomoviles.model;
+
+public class GeneralResponse {
+    private int code;
+    private Object data;
+    private String message;
+
+    public int getCode() {
+        return code;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

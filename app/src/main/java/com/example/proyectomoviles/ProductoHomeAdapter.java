@@ -1,6 +1,5 @@
 package com.example.proyectomoviles;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.proyectomoviles.model.ProductoEntry;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
 import java.util.List;
 
 public class ProductoHomeAdapter

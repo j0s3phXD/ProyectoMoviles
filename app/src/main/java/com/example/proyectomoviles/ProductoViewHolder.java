@@ -7,8 +7,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.proyectomoviles.R;
-
 public class ProductoViewHolder extends RecyclerView.ViewHolder {
     public ImageView imgProducto;
     public TextView txtTitulo, txtDescripcion, txtCondicion;

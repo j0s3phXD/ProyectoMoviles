@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.proyectomoviles.model.Mensaje;
+import com.example.proyectomoviles.model.mensaje.Mensaje;
 
 import java.util.List;
 

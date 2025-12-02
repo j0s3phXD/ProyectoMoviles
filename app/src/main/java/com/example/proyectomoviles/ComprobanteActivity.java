@@ -17,10 +17,8 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.databinding.ActivityComprobanteBinding;
-import com.example.proyectomoviles.model.IntercambioEntry;
-import com.squareup.picasso.Picasso;
+import com.example.proyectomoviles.model.intercambio.IntercambioEntry;
 
 import java.io.File;
 import java.io.OutputStream;

@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
-import com.example.proyectomoviles.model.CalificacionRequest;
-import com.example.proyectomoviles.model.RptaGeneral;
+import com.example.proyectomoviles.model.calificacion.CalificacionRequest;
+import com.example.proyectomoviles.model.GeneralResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,9 +72,9 @@ public class CalificarActivity extends AppCompatActivity {
 
         Swaply api = RetrofitClient.getApiService();
 
-        api.enviarCalificacion(req).enqueue(new Callback<RptaGeneral>() {
+        api.enviarCalificacion(req).enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
 
                 btnEnviar.setEnabled(true);
 
@@ -85,7 +85,7 @@ public class CalificarActivity extends AppCompatActivity {
                     return;
                 }
 
-                RptaGeneral rpta = response.body();
+                GeneralResponse rpta = response.body();
 
                 if (rpta != null && rpta.getCode() == 1) {
                     Toast.makeText(CalificarActivity.this,
@@ -100,7 +100,7 @@ public class CalificarActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
 
                 btnEnviar.setEnabled(true);
 

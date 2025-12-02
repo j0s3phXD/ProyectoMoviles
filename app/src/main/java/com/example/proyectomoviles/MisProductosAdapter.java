@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
-import com.example.proyectomoviles.model.ProductoEntry;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;

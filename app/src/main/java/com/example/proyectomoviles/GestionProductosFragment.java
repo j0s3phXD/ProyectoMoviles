@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,20 +19,17 @@ import android.widget.Toast;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentGestionProductosBinding;
-import com.example.proyectomoviles.model.EliminarProductoRequest;
-import com.example.proyectomoviles.model.ProductoEntry;
+import com.example.proyectomoviles.model.producto.EliminarProductoRequest;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
 import com.example.proyectomoviles.model.ProductoGridItemDecoration;
-import com.example.proyectomoviles.model.PublicarRequest;
-import com.example.proyectomoviles.model.RptaGeneral;
-import com.example.proyectomoviles.model.RptaProducto;
+import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.producto.ProductoResponse;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -110,17 +105,17 @@ public class GestionProductosFragment extends Fragment {
 
         Swaply api = RetrofitClient.getApiService(token);
 
-        Call<RptaProducto> call = api.misProductos();
+        Call<ProductoResponse> call = api.misProductos();
 
-        call.enqueue(new Callback<RptaProducto>() {
+        call.enqueue(new Callback<ProductoResponse>() {
             @Override
-            public void onResponse(Call<RptaProducto> call, Response<RptaProducto> response) {
+            public void onResponse(Call<ProductoResponse> call, Response<ProductoResponse> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(getActivity(), "Código: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                RptaProducto rpta = response.body();
+                ProductoResponse rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
                     List<ProductoEntry> listaProductos = rpta.getData();
 
@@ -166,7 +161,7 @@ public class GestionProductosFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaProducto> call, Throwable t) {
+            public void onFailure(Call<ProductoResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -180,17 +175,17 @@ public class GestionProductosFragment extends Fragment {
 
         EliminarProductoRequest request = new EliminarProductoRequest(idProducto);
 
-        Call<RptaGeneral> call = api.eliminarProducto(request);
+        Call<GeneralResponse> call = api.eliminarProducto(request);
 
-        call.enqueue(new Callback<RptaGeneral>() {
+        call.enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
 
                 if (!response.isSuccessful()) {
                     Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                RptaGeneral rpta = response.body();
+                GeneralResponse rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
 
                     Toast.makeText(getActivity(), "Producto eliminado", Toast.LENGTH_SHORT).show();
@@ -203,7 +198,7 @@ public class GestionProductosFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

@@ -22,18 +22,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
-import com.example.proyectomoviles.model.IniciarIntercambioRequest;
-import com.example.proyectomoviles.model.IniciarIntercambioResponse;
-import com.example.proyectomoviles.model.ProductoEntry;
-import com.example.proyectomoviles.model.RptaProducto;
+import com.example.proyectomoviles.model.intercambio.IniciarIntercambioRequest;
+import com.example.proyectomoviles.model.intercambio.IniciarIntercambioResponse;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
+import com.example.proyectomoviles.model.producto.ProductoResponse;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProponerIntercambioFragment extends Fragment {
 
@@ -139,11 +137,11 @@ public class ProponerIntercambioFragment extends Fragment {
 
         Swaply api = RetrofitClient.getApiService(token);
 
-        Call<RptaProducto> call = api.misProductos();
+        Call<ProductoResponse> call = api.misProductos();
 
-        call.enqueue(new Callback<RptaProducto>() {
+        call.enqueue(new Callback<ProductoResponse>() {
             @Override
-            public void onResponse(Call<RptaProducto> call, Response<RptaProducto> response) {
+            public void onResponse(Call<ProductoResponse> call, Response<ProductoResponse> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(getContext(),
                             "Error al obtener productos: " + response.code(),
@@ -151,7 +149,7 @@ public class ProponerIntercambioFragment extends Fragment {
                     return;
                 }
 
-                RptaProducto rpta = response.body();
+                ProductoResponse rpta = response.body();
 
                 if (rpta != null && rpta.getCode() == 1) {
                     List<ProductoEntry> listaMisProductos = rpta.getData();
@@ -178,7 +176,7 @@ public class ProponerIntercambioFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaProducto> call, Throwable t) {
+            public void onFailure(Call<ProductoResponse> call, Throwable t) {
                 Toast.makeText(getContext(),
                         "Error: " + t.getMessage(),
                         Toast.LENGTH_SHORT).show();

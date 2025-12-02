@@ -22,11 +22,11 @@ import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.FragmentPublicarBinding;
-import com.example.proyectomoviles.model.CategoriaRequest;
-import com.example.proyectomoviles.model.CategoriaResponse;
-import com.example.proyectomoviles.model.ProductoEntry;
-import com.example.proyectomoviles.model.PublicarRequest;
-import com.example.proyectomoviles.model.RptaGeneral;
+import com.example.proyectomoviles.model.categoria.CategoriaRequest;
+import com.example.proyectomoviles.model.categoria.CategoriaResponse;
+import com.example.proyectomoviles.model.producto.ProductoEntry;
+import com.example.proyectomoviles.model.producto.PublicarRequest;
+import com.example.proyectomoviles.model.GeneralResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -215,7 +215,7 @@ public class PublicarFragment extends Fragment {
         RequestBody rbIntercambio = RequestBody.create(MediaType.parse("text/plain"), intercambio);
 
         Swaply api = RetrofitClient.getApiService(token);
-        Call<RptaGeneral> call = api.publicarProductoConFoto(
+        Call<GeneralResponse> call = api.publicarProductoConFoto(
                 fotoPart,
                 rbTitulo,
                 rbDescripcion,
@@ -224,15 +224,15 @@ public class PublicarFragment extends Fragment {
                 rbIntercambio
         );
 
-        call.enqueue(new Callback<RptaGeneral>() {
+        call.enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                RptaGeneral rpta = response.body();
+                GeneralResponse rpta = response.body();
                 if (rpta != null && rpta.getCode() == 1) {
                     Toast.makeText(getActivity(), rpta.getMessage(), Toast.LENGTH_LONG).show();
                     requireActivity().onBackPressed();
@@ -242,7 +242,7 @@ public class PublicarFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<RptaGeneral> call, Throwable t) {
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
                 Toast.makeText(getActivity(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -302,17 +302,17 @@ public class PublicarFragment extends Fragment {
             PublicarRequest request = new PublicarRequest(titulo, descripcion, condicion, idCategoria, intercambio);
             request.setId_producto(idProducto);
 
-            Call<RptaGeneral> call = api.editarProducto(request);
+            Call<GeneralResponse> call = api.editarProducto(request);
 
-            call.enqueue(new Callback<RptaGeneral>() {
+            call.enqueue(new Callback<GeneralResponse>() {
                 @Override
-                public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+                public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                     if (!response.isSuccessful()) {
                         Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    RptaGeneral rpta = response.body();
+                    GeneralResponse rpta = response.body();
                     if (rpta != null && rpta.getCode() == 1) {
                         Toast.makeText(getActivity(), "Producto actualizado correctamente", Toast.LENGTH_SHORT).show();
                         requireActivity().onBackPressed();
@@ -322,7 +322,7 @@ public class PublicarFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<RptaGeneral> call, Throwable t) {
+                public void onFailure(Call<GeneralResponse> call, Throwable t) {
                     Toast.makeText(getActivity(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -350,7 +350,7 @@ public class PublicarFragment extends Fragment {
             RequestBody rbIntercambio = RequestBody.create(
                     MediaType.parse("text/plain"), intercambio);
 
-            Call<RptaGeneral> call = api.editarProductoConFoto(
+            Call<GeneralResponse> call = api.editarProductoConFoto(
                     rbIdProducto,
                     rbTitulo,
                     rbDescripcion,
@@ -360,15 +360,15 @@ public class PublicarFragment extends Fragment {
                     fotoPart
             );
 
-            call.enqueue(new Callback<RptaGeneral>() {
+            call.enqueue(new Callback<GeneralResponse>() {
                 @Override
-                public void onResponse(Call<RptaGeneral> call, Response<RptaGeneral> response) {
+                public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                     if (!response.isSuccessful()) {
                         Toast.makeText(getActivity(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    RptaGeneral rpta = response.body();
+                    GeneralResponse rpta = response.body();
                     if (rpta != null && rpta.getCode() == 1) {
                         Toast.makeText(getActivity(), "Producto actualizado correctamente", Toast.LENGTH_SHORT).show();
                         requireActivity().onBackPressed();
@@ -378,7 +378,7 @@ public class PublicarFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<RptaGeneral> call, Throwable t) {
+                public void onFailure(Call<GeneralResponse> call, Throwable t) {
                     Toast.makeText(getActivity(), "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });

@@ -14,10 +14,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityLoginBinding;
-import com.example.proyectomoviles.model.AuthRequest;
-import com.example.proyectomoviles.model.AuthResponse;
-import com.example.proyectomoviles.model.Usuario;
-import com.example.proyectomoviles.model.UsuarioResponse;
+import com.example.proyectomoviles.model.auth.AuthRequest;
+import com.example.proyectomoviles.model.auth.AuthResponse;
+import com.example.proyectomoviles.model.usuario.Usuario;
+import com.example.proyectomoviles.model.usuario.UsuarioResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
