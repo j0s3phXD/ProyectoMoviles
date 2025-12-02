@@ -44,6 +44,10 @@ public class    DetalleProductoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.btnBack.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
+        
         if (getArguments() != null) {
             productoActual = (ProductoEntry) getArguments().getSerializable("producto");
 

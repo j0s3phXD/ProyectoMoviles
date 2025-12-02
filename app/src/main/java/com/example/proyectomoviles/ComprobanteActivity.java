@@ -33,6 +33,7 @@ public class ComprobanteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityComprobanteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.btnBackComprobante.setOnClickListener(v -> finish());
 
         intercambio = (IntercambioEntry) getIntent().getSerializableExtra("intercambio");
 

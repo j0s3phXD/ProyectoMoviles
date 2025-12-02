@@ -34,11 +34,8 @@ public interface Swaply {
 
     @POST("auth")
     Call<AuthResponse> obtenerToken(@Body AuthRequest authRequest);
-
     @POST("api_registrar_usuario")
     Call<RegistroResponse> registrarUsuario(@Body RegistroRequest registroRequest);
-    @POST("api_registrar_producto")
-    Call<GeneralResponse> publicarProductoJson(@Body PublicarRequest publicarRequest);
     @GET("api_listarcategoria")
     Call<CategoriaResponse> listarCategorias();
     @GET("api_listar_productos")
