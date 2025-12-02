@@ -27,7 +27,7 @@ import com.example.proyectomoviles.model.categoria.CategoriaRequest;
 import com.example.proyectomoviles.model.categoria.CategoriaResponse;
 import com.example.proyectomoviles.model.producto.ProductoEntry;
 import com.example.proyectomoviles.model.producto.PublicarRequest;
-import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.auth.GeneralResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;

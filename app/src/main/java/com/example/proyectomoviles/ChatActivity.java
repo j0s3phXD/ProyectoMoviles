@@ -18,7 +18,7 @@ import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.model.mensaje.EnviarMensajeRequest;
 import com.example.proyectomoviles.model.mensaje.Mensaje;
-import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.auth.GeneralResponse;
 import com.example.proyectomoviles.model.mensaje.MensajesResponse;
 
 import java.util.ArrayList;

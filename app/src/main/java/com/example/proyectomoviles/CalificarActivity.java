@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.proyectomoviles.Interface.RetrofitClient;
 import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.model.calificacion.CalificacionRequest;
-import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.auth.GeneralResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;

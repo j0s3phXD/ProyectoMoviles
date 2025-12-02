@@ -22,7 +22,7 @@ import com.example.proyectomoviles.databinding.FragmentGestionProductosBinding;
 import com.example.proyectomoviles.model.producto.EliminarProductoRequest;
 import com.example.proyectomoviles.model.producto.ProductoEntry;
 import com.example.proyectomoviles.model.ProductoGridItemDecoration;
-import com.example.proyectomoviles.model.GeneralResponse;
+import com.example.proyectomoviles.model.auth.GeneralResponse;
 import com.example.proyectomoviles.model.producto.ProductoResponse;
 
 import java.util.List;
