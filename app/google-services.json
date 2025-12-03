@@ -1,7 +1,6 @@
 {
   "project_info": {
     "project_number": "325246730216",
-    "firebase_url": "https://swaply-a76ae-default-rtdb.firebaseio.com",
     "project_id": "swaply-a76ae",
     "storage_bucket": "swaply-a76ae.firebasestorage.app"
   },
@@ -28,5 +27,3 @@
   ],
   "configuration_version": "1"
 }
-
-

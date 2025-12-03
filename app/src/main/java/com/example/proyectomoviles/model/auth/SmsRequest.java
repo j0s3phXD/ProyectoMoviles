@@ -9,8 +9,6 @@ public class SmsRequest {
         this.tipo = tipo;
     }
 
-    // Getters y Setters (Opcional, Retrofit suele usar los campos directamente,
-    // pero es buena práctica tenerlos si necesitas acceder a los datos después)
     public String getTelefono() {
         return telefono;
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,8 @@ import com.example.proyectomoviles.Interface.Swaply;
 import com.example.proyectomoviles.databinding.ActivityRecuperarPasswordBinding;
 import com.example.proyectomoviles.model.auth.GeneralResponse;
 import com.example.proyectomoviles.model.auth.RestablecerPasswordRequest;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
+import com.example.proyectomoviles.model.auth.SmsRequest; // Requerido para solicitar código
+import com.example.proyectomoviles.model.auth.VerificationRequest; // Requerido para verificar código
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,9 +29,7 @@ import retrofit2.Response;
 public class RecuperarPasswordActivity extends AppCompatActivity {
 
     private ActivityRecuperarPasswordBinding binding;
-    private FirebaseAuth mAuth;
     private Swaply api;
-    private String mVerificationId;
 
     // Variables para guardar los datos
     private String telefono, email;
@@ -44,7 +40,7 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
         binding = ActivityRecuperarPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mAuth = FirebaseAuth.getInstance();
+        // Inicializamos Retrofit
         api = RetrofitClient.getApiService();
 
         // Botón principal
@@ -54,121 +50,108 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     private void iniciarRecuperacion() {
         email = binding.txtEmailRecuperar.getText().toString().trim();
 
-        // 1. Obtener lo que escribió el usuario (Solo los 9 dígitos)
+        // 1. Obtener y validar el teléfono (asumiendo lógica de +51 y 9 dígitos)
         String rawPhone = binding.txtTelefonoRecuperar.getText().toString().trim();
 
         if (email.isEmpty()) {
             Toast.makeText(this, "Ingresa el correo electrónico", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // 2. Validar que sean exactamente 9 dígitos
         if (rawPhone.length() != 9) {
             binding.ilTelefono.setError("El teléfono debe tener 9 dígitos");
             return;
         } else {
-            binding.ilTelefono.setError(null); // Limpiar error visual
+            binding.ilTelefono.setError(null);
         }
 
-        // 3. Concatenar manualmente el prefijo +51
+        // 2. Concatenar y asignar el teléfono final
         telefono = "+51" + rawPhone;
 
-        // 4. INICIAR VERIFICACIÓN CON FIREBASE
-        Toast.makeText(this, "Verificando número...", Toast.LENGTH_SHORT).show();
+        // LLAMADA 1: Solicitar código SMS al Backend
+        Toast.makeText(this, "Enviando código SMS...", Toast.LENGTH_SHORT).show();
+        SmsRequest request = new SmsRequest(telefono, "recuperacion");
 
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(telefono)          // Enviamos el número completo (+519...)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(mCallbacks)
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        api.solicitarCodigo(request).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    mostrarDialogoCodigo(); // Muestra el Dialog para ingresar el código
+                } else {
+                    Toast.makeText(RecuperarPasswordActivity.this, "Error SMS: " + (response.body() != null ? response.body().getMessage() : "Fallo de servidor"), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                Toast.makeText(RecuperarPasswordActivity.this, "Error de conexión.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // --- CALLBACKS DE FIREBASE ---
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-            // Verificación automática
-            signInWithPhoneAuthCredential(credential);
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(RecuperarPasswordActivity.this, "Error Firebase: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e("RECUPERAR_ERROR", e.getMessage());
-        }
-
-        @Override
-        public void onCodeSent(@NonNull String verificationId,
-                               @NonNull PhoneAuthProvider.ForceResendingToken token) {
-            // 2. SMS ENVIADO -> PEDIR CÓDIGO
-            mVerificationId = verificationId;
-            mostrarDialogoCodigo();
-        }
-    };
-
     private void mostrarDialogoCodigo() {
+        // --- EL DIALOGO TWILIO/RETROFIT AHORA PIDE CÓDIGO Y CONTRASEÑA ---
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Código de Seguridad");
-        builder.setMessage("Ingresa el código SMS que te llegó");
+        builder.setTitle("Seguridad y Nueva Contraseña");
+        builder.setMessage("Ingresa el código SMS y tu nueva contraseña.");
 
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
+        // Creamos un layout personalizado para pedir código y nueva clave a la vez
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 20, 50, 20);
 
-        builder.setPositiveButton("Verificar", (dialog, which) -> {
-            String code = input.getText().toString().trim();
-            if (!code.isEmpty()) {
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
-                signInWithPhoneAuthCredential(credential);
+        final EditText inputCodigo = new EditText(this);
+        inputCodigo.setHint("Código SMS (6 dígitos)");
+        inputCodigo.setInputType(InputType.TYPE_CLASS_NUMBER);
+        layout.addView(inputCodigo);
+
+        final EditText inputPass = new EditText(this);
+        inputPass.setHint("Nueva Contraseña");
+        inputPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        layout.addView(inputPass);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton("Restablecer", (dialog, which) -> {
+            String codigo = inputCodigo.getText().toString().trim();
+            String nuevaPass = inputPass.getText().toString().trim();
+
+            if (!codigo.isEmpty() && !nuevaPass.isEmpty()) {
+                // PRIMERO VERIFICAMOS EL CÓDIGO, LUEGO ENVIAMOS EL CAMBIO
+                verificarCodigoEnBackend(codigo, nuevaPass);
+            } else {
+                Toast.makeText(this, "Faltan datos", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
         builder.show();
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // 3. ¡ÉXITO! ERES EL DUEÑO DEL TELÉFONO.
-                        // AHORA TE PIDO LA NUEVA CONTRASEÑA
-                        mostrarDialogoNuevaPassword();
-                    } else {
-                        Toast.makeText(RecuperarPasswordActivity.this, "Código Incorrecto", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+    private void verificarCodigoEnBackend(String codigo, String nuevaPass) {
+        // LLAMADA 2: Verificar si el código es correcto
+        VerificationRequest request = new VerificationRequest(telefono, codigo, "recuperacion");
 
-    // --- EL PASO EXTRA: PEDIR NUEVA CONTRASEÑA ---
-    private void mostrarDialogoNuevaPassword() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Restablecer Contraseña");
-        builder.setMessage("Escribe tu nueva contraseña");
+        api.verificarCodigo(request).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
+                    // CÓDIGO CORRECTO: LLAMADA 3: Guardar la nueva contraseña
+                    enviarCambioAlBackend(codigo, nuevaPass);
+                } else {
+                    Toast.makeText(RecuperarPasswordActivity.this, "Código incorrecto o expirado", Toast.LENGTH_LONG).show();
+                }
+            }
 
-        final EditText inputPass = new EditText(this);
-        inputPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        builder.setView(inputPass);
-
-        builder.setPositiveButton("Cambiar", (dialog, which) -> {
-            String nuevaPass = inputPass.getText().toString().trim();
-            if (!nuevaPass.isEmpty()) {
-                // 4. MANDAR AL BACKEND PYTHON
-                enviarCambioAlBackend(nuevaPass);
-            } else {
-                Toast.makeText(RecuperarPasswordActivity.this, "La contraseña no puede estar vacía", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                Toast.makeText(RecuperarPasswordActivity.this, "Error al verificar código: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setCancelable(false); // Obligamos a que cambie o cierre la app
-        builder.show();
     }
 
-    private void enviarCambioAlBackend(String nuevaPass) {
-        // Creamos el objeto con los datos que Python espera
-        RestablecerPasswordRequest request = new RestablecerPasswordRequest(email, "FIREBASE_VERIFIED", nuevaPass, telefono);
+    private void enviarCambioAlBackend(String codigo, String nuevaPass) {
+        // LLAMADA 3: Mandar la nueva contraseña al Backend para que haga el UPDATE
+        RestablecerPasswordRequest request = new RestablecerPasswordRequest(email, codigo, nuevaPass, telefono);
 
         api.restablecerPassword(request).enqueue(new Callback<GeneralResponse>() {
             @Override
