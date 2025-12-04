@@ -13,11 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProyectoMoviles">
 
-        <!-- 1. Nueva Splash Activity como pantalla de inicio -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar"> <!-- Opcional: para ocultar la barra de título -->
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,16 +35,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
-        <!-- 2. LoginActivity ya no es la pantalla de inicio -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".CalificarActivity"
             android:exported="false"/>
-        <activity android:name=".RecuperarPasswordActivity" />
+        <activity
+            android:name=".RecuperarPasswordActivity" />
+        <activity
+            android:name=".PagoActivity"
+            android:exported="false" />
 
     </application>
 

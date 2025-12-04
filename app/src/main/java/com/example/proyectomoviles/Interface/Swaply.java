@@ -8,6 +8,7 @@ import com.example.proyectomoviles.model.auth.VerificationRequest;
 import com.example.proyectomoviles.model.calificacion.CalificacionRequest;
 import com.example.proyectomoviles.model.categoria.CategoriaResponse;
 import com.example.proyectomoviles.model.intercambio.ConfirmarIntercambioRequest;
+import com.example.proyectomoviles.model.intercambio.PagarComisionRequest;
 import com.example.proyectomoviles.model.producto.EliminarProductoRequest;
 import com.example.proyectomoviles.model.mensaje.EnviarMensajeRequest;
 import com.example.proyectomoviles.model.intercambio.IniciarIntercambioRequest;
@@ -100,13 +101,14 @@ public interface Swaply {
     Call<UsuarioResponse> obtenerUsuario(@Path("id") int idUsuario);
     @GET("api/calificaciones/autor/{id_autor}")
     Call<CalificacionesResponse> obtenerCalificacionesPorAutor(@Path("id_autor") int idAutor);
-
     @POST("api_solicitar_codigo_sms")
     Call<GeneralResponse> solicitarCodigo(@Body SmsRequest request);
-
     @POST("api_verificar_codigo")
     Call<GeneralResponse> verificarCodigo(@Body VerificationRequest request);
-
     @POST("api_restablecer_password")
     Call<GeneralResponse> restablecerPassword(@Body RestablecerPasswordRequest request);
+    @POST("api_pagar_comision")
+    Call<GeneralResponse> pagarComision(@Body PagarComisionRequest request);
+
+
 }

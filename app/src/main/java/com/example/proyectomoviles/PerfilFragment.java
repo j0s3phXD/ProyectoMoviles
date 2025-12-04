@@ -9,9 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.app.Activity;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.example.proyectomoviles.Interface.RetrofitClient;
@@ -25,6 +28,7 @@ import com.example.proyectomoviles.model.auth.GeneralResponse;
 import com.example.proyectomoviles.model.intercambio.IntercambiosResponse;
 import com.example.proyectomoviles.model.calificacion.CalificacionesResponse;
 import com.example.proyectomoviles.model.producto.ProductoResponse;
+import com.example.proyectomoviles.model.intercambio.PagarComisionRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +51,8 @@ public class PerfilFragment extends Fragment {
     private List<CalificacionEntry> listaCalificaciones = new ArrayList<>();
 
     private int idUsuarioActual;
+    private static final int RC_PAGO_COMISION = 500;
+    private IntercambioEntry intercambioSeleccionado; // Para recordar cuál se está pagando
 
     private void mostrarAvatar(String nombre, String apellido, String nombreArchivoFoto) {
         String iniciales = obtenerIniciales(nombre, apellido);
@@ -121,7 +127,6 @@ public class PerfilFragment extends Fragment {
     }
 
     private void configurarRecycler() {
-
         binding.rvMisIntercambios.setLayoutManager(new LinearLayoutManager(getContext()));
         enviadosAdapter = new IntercambiosEnviadosAdapter(requireContext(), listaEnviados);
         binding.rvMisIntercambios.setAdapter(enviadosAdapter);
@@ -133,12 +138,45 @@ public class PerfilFragment extends Fragment {
                 new IntercambiosRecibidosAdapter.OnIntercambioClick() {
                     @Override
                     public void onAceptar(IntercambioEntry intercambio) {
-                        confirmarIntercambio(intercambio.getId_intercambio(), "aceptado");
+
+                        double comision = intercambio.getComision_monto();
+
+                        String mensaje;
+                        if (comision > 0) {
+                            mensaje = "La comisión por aceptar este intercambio es de S/ "
+                                    + String.format("%.2f", comision)
+                                    + ".\n\n¿Deseas continuar y pagar la comisión para aceptar el intercambio?";
+                        } else {
+                            mensaje = "¿Seguro que deseas aceptar este intercambio?";
+                        }
+
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("Confirmar intercambio")
+                                .setMessage(mensaje)
+                                .setPositiveButton("Aceptar", (dialog, which) -> {
+                                    if (comision > 0) {
+                                        intercambioSeleccionado = intercambio;
+                                        Intent intent = new Intent(getContext(), PagoActivity.class);
+                                        startActivityForResult(intent, RC_PAGO_COMISION);
+                                    } else {
+                                        confirmarIntercambio(intercambio.getId_intercambio(), "aceptado");
+                                    }
+                                })
+                                .setNegativeButton("Cancelar", null)
+                                .show();
                     }
+
 
                     @Override
                     public void onRechazar(IntercambioEntry intercambio) {
-                        confirmarIntercambio(intercambio.getId_intercambio(), "rechazado");
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("Rechazar intercambio")
+                                .setMessage("¿Seguro que quieres rechazar este intercambio?")
+                                .setPositiveButton("Sí, rechazar", (dialog, which) ->
+                                        confirmarIntercambio(intercambio.getId_intercambio(), "rechazado")
+                                )
+                                .setNegativeButton("Cancelar", null)
+                                .show();
                     }
                 }
         );
@@ -288,6 +326,66 @@ public class PerfilFragment extends Fragment {
             public void onFailure(Call<IntercambiosResponse> call, Throwable t) { }
         });
     }
+    private void pagarComisionYConfirmar(IntercambioEntry intercambio, String paymentToken) {
+        // 1. Obtener token JWT
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+        String token = prefs.getString("tokenJWT", null);
+
+        if (token == null) {
+            Toast.makeText(getContext(), "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 2. Convertir la comisión a céntimos (ej: 4.50 -> 450)
+        double comision = intercambio.getComision_monto();
+        int montoCentimos = (int) Math.round(comision * 100);
+
+        // 3. Crear request con el token real de Stripe
+        PagarComisionRequest request = new PagarComisionRequest(
+                intercambio.getId_intercambio(),
+                paymentToken,   // 👉 token real devuelto por PagoActivity
+                montoCentimos
+        );
+
+        Swaply api = RetrofitClient.getApiService(token);
+
+        api.pagarComision(request).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    Toast.makeText(getContext(),
+                            "Error al procesar el pago: " + response.code(),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                GeneralResponse rpta = response.body();
+
+                if (rpta.getCode() == 1) {
+                    Toast.makeText(getContext(),
+                            "Pago de comisión exitoso",
+                            Toast.LENGTH_SHORT).show();
+
+                    // 🔹 Después de pagar, confirmamos el intercambio
+                    confirmarIntercambio(intercambio.getId_intercambio(), "aceptado");
+
+                } else {
+                    Toast.makeText(getContext(),
+                            "No se pudo cobrar la comisión: " + rpta.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                Toast.makeText(getContext(),
+                        "Error de conexión al pagar comisión: " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void confirmarIntercambio(int idIntercambio, String estado) {
 
@@ -344,6 +442,26 @@ public class PerfilFragment extends Fragment {
             public void onFailure(Call<ProductoResponse> call, Throwable t) { }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_PAGO_COMISION && resultCode == Activity.RESULT_OK && data != null) {
+
+            String paymentToken = data.getStringExtra(PagoActivity.EXTRA_PAYMENT_TOKEN);
+
+            if (paymentToken != null && intercambioSeleccionado != null) {
+                // 🔹 Ya tenemos token y el intercambio que se estaba aceptando
+                pagarComisionYConfirmar(intercambioSeleccionado, paymentToken);
+            } else {
+                Toast.makeText(getContext(),
+                        "No se pudo obtener el token de pago",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

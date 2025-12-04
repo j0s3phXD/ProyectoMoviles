@@ -10,14 +10,18 @@ public class IntercambioEntry implements Serializable {
     private int id_producto_solicitado;
     private int id_producto_ofrecido;
 
-    private String nombre_origen;        // Quien solicita
-    private String nombre_destino;       // Dueño del producto
-    private String producto_solicitado;  // Tu producto
-    private String producto_ofrecido;    // Producto que te ofrecen
-    private String estado;               // Pendiente / Aceptado / Rechazado
+    private String nombre_origen;
+    private String nombre_destino;
+    private String producto_solicitado;
+    private String producto_ofrecido;
+    private String estado;
 
-    private String imagen_solicitado;    // URL o nombre img (opcional)
-    private String imagen_ofrecido;      // URL o nombre img (opcional)
+    private String imagen_solicitado;
+    private String imagen_ofrecido;
+
+    // 🔹 NUEVOS CAMPOS PARA COMISIÓN
+    private double comision_monto;
+    private String comision_estado;
 
     // ---- Getters y Setters ----
     public int getId_intercambio() { return id_intercambio; }
@@ -55,4 +59,11 @@ public class IntercambioEntry implements Serializable {
 
     public String getImagen_ofrecido() { return imagen_ofrecido; }
     public void setImagen_ofrecido(String imagen_ofrecido) { this.imagen_ofrecido = imagen_ofrecido; }
+
+    // 🔹 Getters y setters de comisión
+    public double getComision_monto() { return comision_monto; }
+    public void setComision_monto(double comision_monto) { this.comision_monto = comision_monto; }
+
+    public String getComision_estado() { return comision_estado; }
+    public void setComision_estado(String comision_estado) { this.comision_estado = comision_estado; }
 }

@@ -55,5 +55,6 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
+    implementation(libs.stripe.android)
 
 }

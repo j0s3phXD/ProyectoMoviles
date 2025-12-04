@@ -72,6 +72,17 @@
                     android:textStyle="bold"
                     android:textColor="@color/primary_dark"
                     android:layout_marginTop="6dp"/>
+
+                <TextView
+                    android:id="@+id/txtComision"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comisión por aceptar: S/ 0.00"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone"/>
+
             </LinearLayout>
         </LinearLayout>
 

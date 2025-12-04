@@ -52,6 +52,20 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
         holder.txtNombreUsuario.setText("Solicitante: " + item.getNombre_origen());
         holder.txtEstado.setText("Estado: " + item.getEstado());
 
+        // 🔹 Mostrar comisión (si existe)
+        double comision = item.getComision_monto();
+        if (comision > 0 && item.getEstado() != null
+                && item.getEstado().equalsIgnoreCase("Pendiente")) {
+
+            holder.txtComision.setVisibility(View.VISIBLE);
+            // Formato simple, puedes mejorarlo luego con NumberFormat si quieres
+            holder.txtComision.setText(
+                    "Comisión por aceptar: S/ " + String.format("%.2f", comision)
+            );
+        } else {
+            holder.txtComision.setVisibility(View.GONE);
+        }
+
         // Imagen del producto solicitado
         String urlImagen = item.getImagen_solicitado();
         if (urlImagen != null && !urlImagen.isEmpty()) {
@@ -68,7 +82,6 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
         } else {
             holder.imgProducto.setImageResource(R.drawable.logo_registrar);
         }
-
 
         // Mostrar u ocultar botones según estado
         if (item.getEstado().equalsIgnoreCase("Pendiente")) {
@@ -109,6 +122,7 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
 
         ImageView imgProducto;
         TextView txtProductoSolicitado, txtProductoOfrecido, txtNombreUsuario, txtEstado;
+        TextView txtComision; // 🔹 NUEVO
         Button btnAceptar, btnRechazar, btnComprobante;
 
         public ViewHolder(@NonNull View itemView) {
@@ -120,10 +134,10 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
             txtNombreUsuario = itemView.findViewById(R.id.txtNombreUsuario);
             txtEstado = itemView.findViewById(R.id.txtEstadoIntercambio);
 
+            txtComision = itemView.findViewById(R.id.txtComision); // 🔹 enlace al TextView
+
             btnAceptar = itemView.findViewById(R.id.btnAceptar);
             btnRechazar = itemView.findViewById(R.id.btnRechazar);
-
-            // Nuevo botón para ver comprobante
             btnComprobante = itemView.findViewById(R.id.btnComprobante);
         }
     }
