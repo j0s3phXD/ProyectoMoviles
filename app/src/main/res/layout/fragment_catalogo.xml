@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Título -->
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
@@ -17,7 +16,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="12dp" />
 
-    <!-- 🔍 Barra de búsqueda -->
     <EditText
         android:id="@+id/etBuscar"
         android:layout_width="match_parent"
@@ -31,12 +29,10 @@
         android:imeOptions="actionSearch"
         android:textSize="14sp" />
 
-    <!-- separador -->
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp" />
 
-    <!-- 🔹 Chips de categoría en scroll horizontal -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,12 +49,10 @@
 
     </HorizontalScrollView>
 
-    <!-- separador -->
     <View
         android:layout_width="match_parent"
         android:layout_height="8dp" />
 
-    <!-- Lista de productos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProductos"
         android:layout_width="match_parent"

@@ -39,10 +39,7 @@ public class ProponerIntercambioFragment extends Fragment {
     private int idProductoSolicitado;
     private int idUsuarioDestino;
 
-    // Tu producto elegido
     private int idProductoOfrecidoSeleccionado = -1;
-
-    // Views
     private RecyclerView rvMisProductos;
     private TextView tvNombreProductoDestino;
     private EditText etMensaje;
@@ -81,7 +78,6 @@ public class ProponerIntercambioFragment extends Fragment {
 
                 tvNombreProductoDestino.setText(productoDestino.getTitulo());
 
-                // === CATEGORÍA: intentamos primero con el objeto, luego con des_categoria ===
                 TextView tvCategoria = view.findViewById(R.id.tvCategoriaDestino);
                 String textoCategoria = null;
 
@@ -96,7 +92,6 @@ public class ProponerIntercambioFragment extends Fragment {
                     tvCategoria.setText(textoCategoria);
                 }
 
-                // Nombre del dueño
                 TextView tvDueno = view.findViewById(R.id.tvDuenoDestino);
                 tvDueno.setText("De " + productoDestino.getNombre_usuario());
 
@@ -245,7 +240,6 @@ public class ProponerIntercambioFragment extends Fragment {
 
                 if (rpta != null) {
                     Toast.makeText(getContext(), rpta.getMessage(), Toast.LENGTH_SHORT).show();
-                    // volver atrás
                     if (getView() != null) {
                         Navigation.findNavController(getView())
                                 .popBackStack(R.id.nav_explorar, false);

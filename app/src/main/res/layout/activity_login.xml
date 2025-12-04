@@ -32,7 +32,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- TEXTO DE BIENVENIDA -->
     <TextView
         android:id="@+id/txtBienvenida"
         android:layout_width="wrap_content"
@@ -46,7 +45,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- SUBTEXTO -->
     <TextView
         android:id="@+id/txtDescripcion"
         android:layout_width="wrap_content"
@@ -72,7 +70,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- USUARIO -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILUsername"
         android:layout_width="0dp"
@@ -94,7 +91,6 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- CONTRASEÑA -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILPassword"
         android:layout_width="0dp"
@@ -117,19 +113,6 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- ¿OLVIDASTE TU CONTRASEÑA?
-    <TextView
-        android:id="@+id/txtOlvidoPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿Olvidaste tu contraseña?"
-        android:textSize="12sp"
-        android:textColor="@color/primary"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@+id/txtILPassword"
-        app:layout_constraintEnd_toEndOf="@+id/txtILPassword" /> -->
-
-    <!-- BOTÓN INGRESAR (PRIMARIO) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
@@ -144,7 +127,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BOTÓN REGISTRAR (SECUNDARIO OUTLINED) -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnResgistrar"
         android:layout_width="0dp"

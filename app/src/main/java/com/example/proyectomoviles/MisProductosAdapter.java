@@ -45,7 +45,6 @@ public class MisProductosAdapter extends RecyclerView.Adapter<MisProductosAdapte
 
         holder.tvNombre.setText(p.getTitulo());
 
-        // Cargar foto desde servidor
         String urlFoto = RetrofitClient.BASE_URL + "uploads/productos/" + p.getFoto();
         Glide.with(holder.itemView.getContext())
                 .load(urlFoto)
@@ -54,7 +53,6 @@ public class MisProductosAdapter extends RecyclerView.Adapter<MisProductosAdapte
                 .centerCrop()
                 .into(holder.imgProducto);
 
-        // Selección visual
         holder.cardView.setStrokeWidth(selected == position ? 6 : 0);
         holder.cardView.setStrokeColor(
                 holder.itemView.getResources().getColor(R.color.purple_500)

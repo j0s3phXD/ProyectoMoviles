@@ -41,7 +41,6 @@ public class PagoActivity extends AppCompatActivity {
                 publishableKey
         );
 
-        // Enlazar vistas
         edtCardNumber = findViewById(R.id.edtCardNumber);
         edtExpMonth   = findViewById(R.id.edtExpMonth);
         edtExpYear    = findViewById(R.id.edtExpYear);

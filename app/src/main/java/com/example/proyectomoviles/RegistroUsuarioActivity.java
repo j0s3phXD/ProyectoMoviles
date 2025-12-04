@@ -29,7 +29,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
     private ActivityRegistroUsuarioBinding binding;
     private Swaply api;
 
-    // Variables temporales
     private String tempNombre, tempApellido, tempEmail, tempPassword, tempTelefono;
 
     @Override
@@ -38,15 +37,13 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         binding = ActivityRegistroUsuarioBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Inicializamos Retrofit
         api = RetrofitClient.getApiService();
 
-        // Al hacer clic, iniciamos el flujo de SMS
         binding.btnRegistrar.setOnClickListener(v -> iniciarFlujoRegistro());
     }
 
     private void iniciarFlujoRegistro() {
-        // --- 1. CAPTURA DE DATOS RAW ---
+        // CAPTURA DE DATOS RAW
         tempNombre = binding.txtNombre.getText().toString().trim();
         tempApellido = binding.txtApellidos.getText().toString().trim();
         tempEmail = binding.txtEmail.getText().toString().trim();
@@ -55,7 +52,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         String confirmPassword = binding.txtConfirmPassword.getText().toString().trim();
         String rawPhone = binding.txtTelefono.getText().toString().trim();
 
-        // --- 2. VALIDACIONES DE FORMULARIO ---
+        // VALIDACIONES DE FORMULARIO
         if (tempNombre.isEmpty() || tempApellido.isEmpty() || tempEmail.isEmpty() || tempPassword.isEmpty() || rawPhone.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show();
             return;
@@ -77,10 +74,10 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
             binding.txtILTelefono.setError(null);
         }
 
-        // --- 3. CONCATENAR PREFIJO MANUALMENTE ---
+        // CONCATENAR PREFIJO MANUALMENTE
         tempTelefono = "+51" + rawPhone;
 
-        // 4. LLAMADA 1: Solicitar código SMS al Backend (Twilio)
+        // LLAMADA 1: Solicitar código SMS al Backend (Twilio)
         Toast.makeText(this, "Enviando código SMS...", Toast.LENGTH_SHORT).show();
         SmsRequest request = new SmsRequest(tempTelefono, "registro");
 
@@ -110,12 +107,10 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         builder.setTitle("Verificación SMS");
         builder.setMessage("Ingresa el código de 6 dígitos enviado a " + tempTelefono);
 
-        // Crear el campo de texto dentro del Dialog
         final EditText inputCodigo = new EditText(this);
         inputCodigo.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(inputCodigo);
 
-        // Botón Verificar del Dialog
         builder.setPositiveButton("Verificar", (dialog, which) -> {
             String codigoIngresado = inputCodigo.getText().toString().trim();
             if (!codigoIngresado.isEmpty()) {
@@ -137,7 +132,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
-                    // CÓDIGO CORRECTO: LLAMADA 3: Guardar el usuario
                     registrarUsuarioFinal();
                 } else {
                     Toast.makeText(RegistroUsuarioActivity.this, "Código incorrecto o expirado", Toast.LENGTH_LONG).show();
@@ -152,7 +146,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
     }
 
     private void registrarUsuarioFinal() {
-        // LLAMADA 3: Registro final en la Base de Datos (SQL INSERT)
+        // LLAMADA 3: Registro final en la Base de Datos
         RegistroRequest registroRequest = new RegistroRequest(tempNombre, tempApellido, tempEmail, tempPassword, tempTelefono);
 
         Log.d("REGISTRO_DEBUG", "Enviando a Python: " + tempEmail);
@@ -163,7 +157,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(RegistroUsuarioActivity.this, "¡Registro Exitoso!", Toast.LENGTH_LONG).show();
 
-                    // Ir al Login
                     startActivity(new Intent(RegistroUsuarioActivity.this, LoginActivity.class));
                     finish();
                 } else {

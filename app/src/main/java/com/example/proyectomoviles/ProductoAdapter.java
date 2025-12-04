@@ -85,7 +85,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
                         .centerCrop()
                         .into(imgProducto);
             } else {
-                // Si no hay foto, opcionalmente dejas limpio o pones un placeholder
                 imgProducto.setImageResource(0);
             }
 

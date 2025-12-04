@@ -122,8 +122,6 @@ public class CatalogoFragment extends Fragment {
         return binding.getRoot();
     }
 
-    // ------- BÚSQUEDA -------
-
     private void configurarBuscador() {
         binding.etBuscar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -138,8 +136,6 @@ public class CatalogoFragment extends Fragment {
         });
     }
 
-    // ------- CHIPS DE CATEGORÍA -------
-
     private void configurarChipsCategorias() {
         ChipGroup chipGroup = binding.chipGroupCategorias;
         chipGroup.removeAllViews();
@@ -149,7 +145,6 @@ public class CatalogoFragment extends Fragment {
         chipTodos.setTag("Todos");
         chipGroup.addView(chipTodos);
 
-        // Categorías únicas
         Set<String> categorias = new LinkedHashSet<>();
         for (ProductoEntry p : listaOriginal) {
             if (p.getDes_categoria() != null && !p.getDes_categoria().trim().isEmpty()) {
@@ -187,8 +182,6 @@ public class CatalogoFragment extends Fragment {
         chip.setId(View.generateViewId());
         return chip;
     }
-
-    // ------- APLICAR FILTROS (TEXTO + CATEGORÍA) Y AGRUPAR -------
 
     private void aplicarFiltros() {
         String query = currentQuery.toLowerCase().trim();
@@ -235,8 +228,6 @@ public class CatalogoFragment extends Fragment {
 
         seccionAdapter.updateList(secciones);
     }
-
-    // ------- CARGAR PRODUCTOS DESDE API -------
 
     private void cargarProductos() {
         Swaply api = RetrofitClient.getApiService();

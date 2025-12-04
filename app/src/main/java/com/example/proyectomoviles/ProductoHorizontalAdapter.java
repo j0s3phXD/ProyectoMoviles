@@ -58,7 +58,7 @@ public class ProductoHorizontalAdapter extends RecyclerView.Adapter<ProductoHori
             holder.txtCategoria.setVisibility(View.GONE);
         }
 
-        // CARGAR FOTO DEL PRODUCTO
+        // cargar foto del producto
         String nombreFoto = producto.getFoto();
         if (nombreFoto != null && !nombreFoto.isEmpty()) {
             String urlFoto = RetrofitClient.BASE_URL
@@ -70,7 +70,6 @@ public class ProductoHorizontalAdapter extends RecyclerView.Adapter<ProductoHori
                     .centerCrop()
                     .into(holder.imgProducto);
         } else {
-            // si no tiene foto, limpiamos o puedes poner un placeholder
             holder.imgProducto.setImageResource(0);
         }
 

@@ -32,7 +32,6 @@ public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.ViewHo
     @Override
     public int getItemViewType(int position) {
         int senderId = listaMensajes.get(position).getId_remitente();
-        // Imprimimos los IDs para depuración
         Log.d("MensajesAdapter", "ID Remitente: " + senderId + ", ID Usuario Actual: " + idUsuarioActual);
 
         if (senderId == idUsuarioActual) {

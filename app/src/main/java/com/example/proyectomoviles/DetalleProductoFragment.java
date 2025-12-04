@@ -53,7 +53,6 @@ public class    DetalleProductoFragment extends Fragment {
 
             if (productoActual != null) {
 
-                // ------- CAMPOS DE TEXTO -------
                 binding.tvNombreProducto.setText(productoActual.getTitulo());
                 binding.tvDescripcionProducto.setText(productoActual.getDescripcion());
                 binding.tvIntercambioTexto.setText(productoActual.getIntercambio_deseado());
@@ -62,14 +61,13 @@ public class    DetalleProductoFragment extends Fragment {
                     binding.tvCategoriaProducto.setText(productoActual.getCategoria().getDes_categoria());
                 }
 
-                // ------- CAMPOS DE OFRECIDO POR -------
                 if (productoActual.getNombre_usuario() != null) {
                     binding.tvNombreUsuario.setText(productoActual.getNombre_usuario());
                 } else {
                     binding.tvNombreUsuario.setText("Usuario desconocido");
                 }
 
-                // ------- IMAGEN DEL PRODUCTO -------
+                // IMAGEN DEL PRODUCTO
                 if (productoActual.getFoto() != null && !productoActual.getFoto().isEmpty()) {
 
                     String urlImagen = RetrofitClient.BASE_URL
@@ -84,7 +82,6 @@ public class    DetalleProductoFragment extends Fragment {
                     binding.imgProducto.setImageResource(android.R.color.darker_gray);
                 }
 
-                // ------- BOTÓN CONTACTAR -------
                 binding.btnContactarVendedor.setOnClickListener(v -> {
 
                     Bundle bundle = new Bundle();

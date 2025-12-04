@@ -43,7 +43,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
         this.listener = listener;
     }
 
-    // Permite actualizar las calificaciones cargadas luego en PerfilFragment
     public void updateCalificaciones(List<CalificacionEntry> nuevas) {
         this.listaCalificaciones = nuevas;
         notifyDataSetChanged();
@@ -121,7 +120,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             holder.btnCalificar.setText("Calificar");
         }
 
-        //  ACCIÓN DEL BOTÓN CALIFICAR
         holder.btnCalificar.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, CalificarActivity.class);

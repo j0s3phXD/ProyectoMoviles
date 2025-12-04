@@ -2,11 +2,11 @@ package com.example.proyectomoviles.model.calificacion;
 
 public class CalificacionRequest {
 
-    private int id_usuario;      // Usuario que recibe la calificación
-    private int id_autor;        // Usuario que califica
-    private int estrellas;       // 1 - 5
-    private String comentario;   // Opcional
-    private int id_intercambio;  // Intercambio asociado
+    private int id_usuario;
+    private int id_autor;
+    private int estrellas;
+    private String comentario;
+    private int id_intercambio;
 
     public CalificacionRequest(int id_usuario, int id_autor, int estrellas, String comentario, int id_intercambio) {
         this.id_usuario = id_usuario;
@@ -16,12 +16,9 @@ public class CalificacionRequest {
         this.id_intercambio = id_intercambio;
     }
 
-    // ======= GETTERS =========
-
     public int getId_usuario() {
         return id_usuario;
     }
-
     public int getId_autor() {
         return id_autor;
     }
@@ -37,8 +34,6 @@ public class CalificacionRequest {
     public int getId_intercambio() {
         return id_intercambio;
     }
-
-    // ======= SETTERS =========
 
     public void setId_usuario(int id_usuario) {
         this.id_usuario = id_usuario;

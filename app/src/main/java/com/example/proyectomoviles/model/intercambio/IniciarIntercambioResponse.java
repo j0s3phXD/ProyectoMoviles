@@ -7,8 +7,8 @@ public class IniciarIntercambioResponse {
 
     public static class Data {
         private int id_intercambio;
-        private double comision_monto;       // Nuevo
-        private String comision_estado;      // Nuevo
+        private double comision_monto;
+        private String comision_estado;
 
         public int getId_intercambio() {
             return id_intercambio;

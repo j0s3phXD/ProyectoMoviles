@@ -41,18 +41,12 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Botón Iniciar Sesión
         binding.btnLogin.setOnClickListener(v -> getToken());
 
-        // Botón Registrarse
         binding.btnResgistrar.setOnClickListener(v ->
                 startActivity(new Intent(this, RegistroUsuarioActivity.class))
         );
 
-        // =========================================================
-        // NUEVO: Botón "¿Olvidaste tu contraseña?"
-        // =========================================================
-        // Asegúrate de haber agregado el ID 'txtOlvidastePass' en tu XML
         binding.txtOlvidastePass.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RecuperarPasswordActivity.class))
         );

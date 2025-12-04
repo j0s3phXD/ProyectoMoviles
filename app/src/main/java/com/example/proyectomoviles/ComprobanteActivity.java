@@ -45,7 +45,6 @@ public class ComprobanteActivity extends AppCompatActivity {
         cargarDatosEnPantalla();
         configurarBotonPDF();
     }
-//
     private void cargarDatosEnPantalla() {
 
         binding.txtId.setText("ID: " + intercambio.getId_intercambio());
@@ -84,7 +83,6 @@ public class ComprobanteActivity extends AppCompatActivity {
                     .into(binding.imgOfrecido);
         }
 
-        // Código único
         String codigo = "COMP-" + intercambio.getId_intercambio() + "-" + (System.currentTimeMillis() % 100000);
         binding.txtCodigoComprobante.setText("Código: " + codigo);
     }
@@ -104,7 +102,6 @@ public class ComprobanteActivity extends AppCompatActivity {
         PdfDocument.Page page = pdf.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
-        // ======= TÍTULO ==========
         titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         titlePaint.setTextSize(22);
         canvas.drawText("COMPROBANTE DE INTERCAMBIO", 110, 50, titlePaint);
@@ -112,7 +109,6 @@ public class ComprobanteActivity extends AppCompatActivity {
         int y = 100;
         paint.setTextSize(16);
 
-        // ======= Código, ID, Estado ==========
         canvas.drawText(binding.txtCodigoComprobante.getText().toString(), 40, y, paint);
         y += 25;
 
@@ -122,7 +118,6 @@ public class ComprobanteActivity extends AppCompatActivity {
         canvas.drawText(binding.txtEstado.getText().toString(), 40, y, paint);
         y += 40;
 
-        // ======= Solicitante ==========
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         canvas.drawText("Solicitante:", 40, y, paint);
 
@@ -174,7 +169,6 @@ public class ComprobanteActivity extends AppCompatActivity {
 
         pdf.finishPage(page);
 
-        // ======= Guardar PDF ==========
         String fileName = "comprobante_intercambio_" + intercambio.getId_intercambio() + ".pdf";
         Uri uri;
 

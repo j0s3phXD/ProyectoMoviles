@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void run() {
                 cargarMensajes();
-                handler.postDelayed(this, 5000); // Repetir cada 5 segundos
+                handler.postDelayed(this, 5000);
             }
         };
         handler.post(runnable);
@@ -160,6 +160,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable); // Detener el polling
+        handler.removeCallbacks(runnable);
     }
 }

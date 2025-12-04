@@ -40,17 +40,15 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
         binding = ActivityRecuperarPasswordBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Inicializamos Retrofit
         api = RetrofitClient.getApiService();
 
-        // Botón principal
         binding.btnEnviarCodigo.setOnClickListener(v -> iniciarRecuperacion());
     }
 
     private void iniciarRecuperacion() {
         email = binding.txtEmailRecuperar.getText().toString().trim();
 
-        // 1. Obtener y validar el teléfono (asumiendo lógica de +51 y 9 dígitos)
+        // Obtener y validar el teléfono (asumiendo lógica de +51 y 9 dígitos)
         String rawPhone = binding.txtTelefonoRecuperar.getText().toString().trim();
 
         if (email.isEmpty()) {
@@ -64,7 +62,7 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
             binding.ilTelefono.setError(null);
         }
 
-        // 2. Concatenar y asignar el teléfono final
+        // Concatenar y asignar el teléfono final
         telefono = "+51" + rawPhone;
 
         // LLAMADA 1: Solicitar código SMS al Backend
@@ -89,13 +87,11 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     }
 
     private void mostrarDialogoCodigo() {
-        // --- EL DIALOGO TWILIO/RETROFIT AHORA PIDE CÓDIGO Y CONTRASEÑA ---
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Seguridad y Nueva Contraseña");
         builder.setMessage("Ingresa el código SMS y tu nueva contraseña.");
 
-        // Creamos un layout personalizado para pedir código y nueva clave a la vez
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(50, 20, 50, 20);
@@ -117,7 +113,6 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
             String nuevaPass = inputPass.getText().toString().trim();
 
             if (!codigo.isEmpty() && !nuevaPass.isEmpty()) {
-                // PRIMERO VERIFICAMOS EL CÓDIGO, LUEGO ENVIAMOS EL CAMBIO
                 verificarCodigoEnBackend(codigo, nuevaPass);
             } else {
                 Toast.makeText(this, "Faltan datos", Toast.LENGTH_SHORT).show();
