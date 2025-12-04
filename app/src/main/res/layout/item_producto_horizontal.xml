@@ -28,7 +28,6 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <!-- Título -->
             <TextView
                 android:id="@+id/txtTitulo"
                 android:layout_width="match_parent"
@@ -40,7 +39,6 @@
                 android:maxLines="1"
                 android:ellipsize="end" />
 
-            <!-- Chip de categoría -->
             <TextView
                 android:id="@+id/txtCategoria"
                 android:layout_width="wrap_content"
@@ -54,7 +52,6 @@
                 android:background="@drawable/chip_categoria"
                 android:maxLines="1" />
 
-            <!-- Descripción -->
             <TextView
                 android:id="@+id/txtDescripcion"
                 android:layout_width="match_parent"
@@ -66,7 +63,6 @@
                 android:ellipsize="end"
                 android:paddingTop="4dp" />
 
-            <!-- Condición -->
             <TextView
                 android:id="@+id/txtCondicion"
                 android:layout_width="match_parent"

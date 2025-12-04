@@ -8,7 +8,6 @@
     android:background="#F5F5F5"
     tools:context=".GestionProductosFragment">
 
-    <!-- Lista de productos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerProductos"
         android:layout_width="0dp"
@@ -21,7 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón flotante para agregar producto -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnRegistrar"
         android:layout_width="wrap_content"

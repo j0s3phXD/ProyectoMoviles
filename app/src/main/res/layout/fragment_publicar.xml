@@ -33,7 +33,6 @@
                 android:src="@drawable/logo_back"
                 android:contentDescription="Regresar" />
 
-            <!-- Título principal -->
             <TextView
                 android:id="@+id/textTituloPrincipal"
                 android:layout_width="match_parent"
@@ -104,7 +103,6 @@
                     android:background="@android:color/transparent" />
             </FrameLayout>
 
-            <!-- Subtítulo -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,7 +113,6 @@
                 android:paddingBottom="8dp"
                 android:textSize="16sp" />
 
-            <!-- Campo: Título -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +132,6 @@
                 android:textColor="@color/text_primary"
                 android:textSize="14sp" />
 
-            <!-- Campo: Categoría -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,7 +148,6 @@
                 android:background="@android:drawable/edit_text"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Campo: Descripción -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -174,7 +169,6 @@
                 android:textColor="@color/text_primary"
                 android:textSize="14sp" />
 
-            <!-- Campo: Nivel de uso -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -192,7 +186,6 @@
                 android:background="@android:drawable/edit_text"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Campo: ¿Qué buscas a cambio? -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -212,7 +205,6 @@
                 android:textColor="@color/text_primary"
                 android:textSize="14sp" />
 
-            <!-- Botón -->
             <Button
                 android:id="@+id/btnPublicar"
                 android:layout_width="match_parent"
