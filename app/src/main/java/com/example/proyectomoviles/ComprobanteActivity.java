@@ -47,7 +47,6 @@ public class ComprobanteActivity extends AppCompatActivity {
     }
     private void cargarDatosEnPantalla() {
 
-        binding.txtId.setText("ID: " + intercambio.getId_intercambio());
         binding.txtEstado.setText("Estado: " + intercambio.getEstado());
         binding.txtUsuarioOrigen.setText("Solicitante: " + intercambio.getNombre_origen());
         binding.txtUsuarioDestino.setText("Dueño del producto: " + intercambio.getNombre_destino());
@@ -92,83 +91,81 @@ public class ComprobanteActivity extends AppCompatActivity {
     }
 
     private void generarPDF() {
+        int pageWidth = 595;
+        int pageHeight = 842;
+        int margin = 40;
 
         PdfDocument pdf = new PdfDocument();
-        Paint paint = new Paint();
-        Paint titlePaint = new Paint();
-
-        // Crear página PDF (A4)
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+        PdfDocument.PageInfo pageInfo =
+                new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create();
         PdfDocument.Page page = pdf.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
+        // ----- TÍTULO -----
+        Paint titlePaint = new Paint();
         titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        titlePaint.setTextSize(22);
-        canvas.drawText("COMPROBANTE DE INTERCAMBIO", 110, 50, titlePaint);
+        titlePaint.setTextSize(20);
+        titlePaint.setTextAlign(Paint.Align.CENTER);
 
-        int y = 100;
-        paint.setTextSize(16);
-
-        canvas.drawText(binding.txtCodigoComprobante.getText().toString(), 40, y, paint);
-        y += 25;
-
-        canvas.drawText(binding.txtId.getText().toString(), 40, y, paint);
-        y += 25;
-
-        canvas.drawText(binding.txtEstado.getText().toString(), 40, y, paint);
+        int y = 60;
+        canvas.drawText("COMPROBANTE DE INTERCAMBIO", pageWidth / 2f, y, titlePaint);
         y += 40;
 
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Solicitante:", 40, y, paint);
+        // ----- TEXTO GENERAL -----
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(14);
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        textPaint.setTextAlign(Paint.Align.LEFT);
 
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        canvas.drawText(intercambio.getNombre_origen(), 160, y, paint);
+        // Código y estado
+        canvas.drawText(binding.txtCodigoComprobante.getText().toString(), margin, y, textPaint);
+        y += 20;
+        canvas.drawText(binding.txtEstado.getText().toString(), margin, y, textPaint);
         y += 30;
 
-        // ======= Dueño del producto ==========
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Dueño del producto:", 40, y, paint);
+        // Línea separadora
+        canvas.drawLine(margin, y, pageWidth - margin, y, textPaint);
+        y += 25;
 
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        canvas.drawText(intercambio.getNombre_destino(), 240, y, paint);
-        y += 45;
+        // ----- SOLICITANTE Y DUEÑO -----
+        Paint boldPaint = new Paint(textPaint);
+        boldPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-        // ======= Producto solicitado ==========
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Producto solicitado:", 40, y, paint);
-        y += 30;
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        canvas.drawText(intercambio.getProducto_solicitado(), 40, y, paint);
+        canvas.drawText("Solicitante: " + intercambio.getNombre_origen(), margin, y, boldPaint);
         y += 20;
 
-        // -------- Imagen Producto Solicitado --------
+        canvas.drawText("Dueño del producto: " + intercambio.getNombre_destino(), margin, y, boldPaint);
+        y += 35;
+
+        // ----- PRODUCTO SOLICITADO -----
+        canvas.drawText("Producto solicitado:", margin, y, boldPaint);
+        y += 20;
+        canvas.drawText(intercambio.getProducto_solicitado(), margin, y, textPaint);
+        y += 15;
+
         try {
             Bitmap bmp = ((BitmapDrawable) binding.imgSolicitado.getDrawable()).getBitmap();
-            Bitmap resized = Bitmap.createScaledBitmap(bmp, 200, 200, false);
-            canvas.drawBitmap(resized, 40, y, paint);
+            Bitmap resized = Bitmap.createScaledBitmap(bmp, 200, 200, true);
+            canvas.drawBitmap(resized, margin, y, null);
         } catch (Exception ignored) {}
 
-        y += 230;
+        y += 220;
 
-        // ======= Producto ofrecido ==========
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Producto ofrecido:", 40, y, paint);
-        y += 30;
-
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        canvas.drawText(intercambio.getProducto_ofrecido(), 40, y, paint);
+        // ----- PRODUCTO OFRECIDO -----
+        canvas.drawText("Producto ofrecido:", margin, y, boldPaint);
         y += 20;
+        canvas.drawText(intercambio.getProducto_ofrecido(), margin, y, textPaint);
+        y += 15;
 
-        // -------- Imagen Producto Ofrecido --------
         try {
             Bitmap bmp2 = ((BitmapDrawable) binding.imgOfrecido.getDrawable()).getBitmap();
-            Bitmap resized2 = Bitmap.createScaledBitmap(bmp2, 200, 200, false);
-            canvas.drawBitmap(resized2, 40, y, paint);
+            Bitmap resized2 = Bitmap.createScaledBitmap(bmp2, 200, 200, true);
+            canvas.drawBitmap(resized2, margin, y, null);
         } catch (Exception ignored) {}
 
         pdf.finishPage(page);
 
+        // ===== Guardar archivo (tu mismo código) =====
         String fileName = "comprobante_intercambio_" + intercambio.getId_intercambio() + ".pdf";
         Uri uri;
 
@@ -179,7 +176,6 @@ public class ComprobanteActivity extends AppCompatActivity {
             values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
 
             uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-
         } else {
             File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             File file = new File(downloads, fileName);
@@ -192,9 +188,7 @@ public class ComprobanteActivity extends AppCompatActivity {
                 pdf.writeTo(out);
                 out.close();
             }
-
             Toast.makeText(this, "PDF guardado en Descargas", Toast.LENGTH_LONG).show();
-
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Error al guardar PDF", Toast.LENGTH_SHORT).show();
@@ -202,5 +196,6 @@ public class ComprobanteActivity extends AppCompatActivity {
 
         pdf.close();
     }
+
 
 }
