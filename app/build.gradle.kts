@@ -57,4 +57,6 @@ dependencies {
     annotationProcessor(libs.glide.compiler)
     implementation(libs.stripe.android)
 
+
+    implementation(libs.text.recognition)
 }

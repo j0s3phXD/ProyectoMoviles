@@ -28,7 +28,7 @@
         android:hint="Nombre"
         android:layout_marginTop="24dp"
         app:startIconDrawable="@drawable/logo_nombre"
-        app:layout_constraintTop_toBottomOf="@+id/txtTituloRegistro"
+        app:layout_constraintTop_toBottomOf="@id/txtTituloRegistro"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -46,7 +46,7 @@
         android:layout_marginTop="12dp"
         android:hint="Apellidos"
         app:startIconDrawable="@drawable/logo_apellido"
-        app:layout_constraintTop_toBottomOf="@+id/txtILNombre"
+        app:layout_constraintTop_toBottomOf="@id/txtILNombre"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -64,7 +64,7 @@
         android:layout_marginTop="12dp"
         android:hint="Correo electrónico"
         app:startIconDrawable="@drawable/logo_email"
-        app:layout_constraintTop_toBottomOf="@+id/txtILApellidos"
+        app:layout_constraintTop_toBottomOf="@id/txtILApellidos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -83,7 +83,7 @@
         android:hint="Teléfono"
         app:prefixText="+51 "
         app:startIconDrawable="@android:drawable/ic_menu_call"
-        app:layout_constraintTop_toBottomOf="@+id/txtILEmail"
+        app:layout_constraintTop_toBottomOf="@id/txtILEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -96,6 +96,26 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- CAMPO DNI -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtILDni"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="DNI"
+        app:startIconDrawable="@drawable/logo_dni"
+        app:layout_constraintTop_toBottomOf="@id/txtILTelefono"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtDni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="8"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILPassword"
         android:layout_width="0dp"
@@ -104,7 +124,7 @@
         android:hint="Contraseña"
         app:startIconDrawable="@drawable/logo_lock"
         app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@+id/txtILTelefono"
+        app:layout_constraintTop_toBottomOf="@id/txtILDni"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -117,13 +137,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ilConfirmPassword"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:hint="Confirmar Contraseña"
         app:passwordToggleEnabled="true"
         app:startIconDrawable="@drawable/logo_lock"
-        app:layout_constraintTop_toBottomOf="@+id/txtILPassword"
+        app:layout_constraintTop_toBottomOf="@id/txtILPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -144,8 +164,8 @@
         android:layout_marginBottom="16dp"
         app:backgroundTint="@color/primary"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/ilConfirmPassword"
-        app:layout_constraintStart_toStartOf="@+id/txtILPassword"
-        app:layout_constraintEnd_toEndOf="@+id/txtILPassword" />
+        app:layout_constraintTop_toBottomOf="@id/ilConfirmPassword"
+        app:layout_constraintStart_toStartOf="@id/txtILPassword"
+        app:layout_constraintEnd_toEndOf="@id/txtILPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

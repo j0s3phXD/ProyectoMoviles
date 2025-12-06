@@ -41,15 +41,24 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        // BOTÓN LOGIN NORMAL
         binding.btnLogin.setOnClickListener(v -> getToken());
 
+        // BOTÓN REGISTRAR
         binding.btnResgistrar.setOnClickListener(v ->
                 startActivity(new Intent(this, RegistroUsuarioActivity.class))
         );
 
+        // OLVIDASTE CONTRASEÑA
         binding.txtOlvidastePass.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RecuperarPasswordActivity.class))
         );
+
+        // BOTÓN LOGIN CON DNI (ya existe en tu XML)
+        binding.btnLoginDni.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, DniActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void getToken() {
@@ -62,9 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Cliente SIN token (login)
         Swaply api = RetrofitClient.getApiService();
-
         AuthRequest authRequest = new AuthRequest(email, password);
 
         api.obtenerToken(authRequest).enqueue(new Callback<AuthResponse>() {
@@ -112,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!response.isSuccessful() || response.body() == null) {
                     Toast.makeText(LoginActivity.this, "No se pudo cargar información del usuario", Toast.LENGTH_SHORT).show();
-                    irAlHome(); // igual lo mandamos al home
+                    irAlHome();
                     return;
                 }
 
@@ -124,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                     ed.putString("nombreUsuario", u.getNombre());
                     ed.putString("apellidoUsuario", u.getApellido());
                     ed.putString("emailUsuario", u.getEmail());
+                    ed.putString("dniUsuario", u.getDni()); // 👈 clave para login con foto
                     ed.apply();
                 }
 

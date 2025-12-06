@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutDni"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="24dp"
+    tools:context=".DniActivity">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/txtTituloDni"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Inicio de sesión con DNI"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Subtítulo / instrucciones -->
+    <TextView
+        android:id="@+id/txtSubtituloDni"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sube una foto clara de tu DNI para continuar con tu sesión."
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/txtTituloDni"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Contenedor de la imagen -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDni"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#DDDDDD"
+        app:layout_constraintTop_toBottomOf="@id/txtSubtituloDni"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Vista previa del DNI"
+            android:background="#F5F5F5"
+            android:padding="8dp"
+            tools:src="@drawable/logo" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Texto pequeño debajo de la imagen -->
+    <TextView
+        android:id="@+id/txtTipDni"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Asegúrate de que los datos del DNI sean legibles y no esté borroso."
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardDni"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón para seleccionar foto -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSeleccionarFoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar foto de DNI"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/primary"
+        app:backgroundTint="@android:color/transparent"
+        android:textColor="@color/primary"
+        app:layout_constraintTop_toBottomOf="@id/txtTipDni"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón para iniciar sesión -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="INICIAR SESIÓN"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        style="@style/Widget.MaterialComponents.Button"
+        app:backgroundTint="@color/primary"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/btnSeleccionarFoto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
