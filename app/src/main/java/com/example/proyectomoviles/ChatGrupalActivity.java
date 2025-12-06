@@ -6,23 +6,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.proyectomoviles.Interface.RetrofitClient;
-import com.example.proyectomoviles.Interface.Swaply;
-import com.example.proyectomoviles.model.auth.GeneralResponse;
-import com.example.proyectomoviles.model.chat.EnviarMensajeGrupalRequest;
 import com.example.proyectomoviles.model.chat.MensajeGrupal;
-import com.example.proyectomoviles.model.chat.MensajesGrupalesResponse;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Locale;
 
 public class ChatGrupalActivity extends AppCompatActivity {
 
@@ -33,6 +34,8 @@ public class ChatGrupalActivity extends AppCompatActivity {
     private MensajesGrupalesAdapter mensajesAdapter;
     private List<MensajeGrupal> listaMensajes = new ArrayList<>();
     private int idChatProducto;
+
+    private DatabaseReference chatDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,61 +57,69 @@ public class ChatGrupalActivity extends AppCompatActivity {
         mensajesAdapter = new MensajesGrupalesAdapter(this, listaMensajes);
         rvMensajes.setAdapter(mensajesAdapter);
 
-        cargarMensajes();
+        // Usamos el ID del chat para crear una "sala" de chat única en Firebase
+        chatDatabaseReference = FirebaseDatabase.getInstance().getReference("grupales").child(String.valueOf(idChatProducto));
+
+        escucharMensajes();
 
         btnEnviar.setOnClickListener(v -> enviarMensaje());
     }
 
-    private void cargarMensajes() {
-        SharedPreferences prefs = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
-        String token = prefs.getString("tokenJWT", null);
-
-        if (token == null) return;
-
-        Swaply api = RetrofitClient.getApiService(token);
-        api.obtenerMensajesGrupales(idChatProducto).enqueue(new Callback<MensajesGrupalesResponse>() {
+    private void escucharMensajes() {
+        chatDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onResponse(Call<MensajesGrupalesResponse> call, Response<MensajesGrupalesResponse> response) {
-                if (response.body() != null && response.body().getCode() == 1) {
-                    listaMensajes.clear();
-                    listaMensajes.addAll(response.body().getData());
-                    mensajesAdapter.notifyDataSetChanged();
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                MensajeGrupal mensaje = dataSnapshot.getValue(MensajeGrupal.class);
+                if (mensaje != null) {
+                    listaMensajes.add(mensaje);
+                    mensajesAdapter.notifyItemInserted(listaMensajes.size() - 1);
                     rvMensajes.scrollToPosition(listaMensajes.size() - 1);
                 }
             }
 
             @Override
-            public void onFailure(Call<MensajesGrupalesResponse> call, Throwable t) {
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(ChatGrupalActivity.this, "Error al cargar mensajes.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void enviarMensaje() {
-        String mensaje = etMensaje.getText().toString().trim();
-        if (mensaje.isEmpty()) {
+        String mensajeTexto = etMensaje.getText().toString().trim();
+        if (mensajeTexto.isEmpty()) {
             return;
         }
 
         SharedPreferences prefs = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
-        String token = prefs.getString("tokenJWT", null);
+        int idUsuario = prefs.getInt("idUsuario", -1);
+        String nombreUsuario = prefs.getString("nombreUsuario", "Tú");
 
-        if (token == null) return;
+        if (idUsuario == -1) {
+            Toast.makeText(this, "Error: Usuario no identificado.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Swaply api = RetrofitClient.getApiService(token);
-        EnviarMensajeGrupalRequest request = new EnviarMensajeGrupalRequest(mensaje);
+        // Creamos el objeto del mensaje
+        MensajeGrupal nuevoMensaje = new MensajeGrupal();
+        nuevoMensaje.setIdUsuario(idUsuario);
+        nuevoMensaje.setNombreUsuario(nombreUsuario);
+        nuevoMensaje.setMensaje(mensajeTexto);
+        // Añadimos la fecha de envío
+        String fecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        nuevoMensaje.setFechaEnvio(fecha);
 
-        api.enviarMensajeGrupal(idChatProducto, request).enqueue(new Callback<GeneralResponse>() {
-            @Override
-            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
-                if (response.body() != null && response.body().getCode() == 1) {
-                    etMensaje.setText("");
-                    cargarMensajes();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GeneralResponse> call, Throwable t) {
-            }
-        });
+        // Lo enviamos a Firebase
+        chatDatabaseReference.push().setValue(nuevoMensaje)
+            .addOnSuccessListener(aVoid -> etMensaje.setText(""))
+            .addOnFailureListener(e -> Toast.makeText(ChatGrupalActivity.this, "Error al enviar el mensaje.", Toast.LENGTH_SHORT).show());
     }
 }

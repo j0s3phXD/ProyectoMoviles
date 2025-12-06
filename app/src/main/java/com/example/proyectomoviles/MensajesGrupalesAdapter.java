@@ -67,6 +67,11 @@ public class MensajesGrupalesAdapter extends RecyclerView.Adapter<MensajesGrupal
         return listaMensajes.size();
     }
 
+    public void addMensaje(MensajeGrupal mensaje) {
+        listaMensajes.add(mensaje);
+        notifyItemInserted(listaMensajes.size() - 1);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtMensaje, txtNombreUsuario;
 
