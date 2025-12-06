@@ -52,13 +52,11 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
         holder.txtNombreUsuario.setText("Solicitante: " + item.getNombre_origen());
         holder.txtEstado.setText("Estado: " + item.getEstado());
 
-        // 🔹 Mostrar comisión (si existe)
         double comision = item.getComision_monto();
         if (comision > 0 && item.getEstado() != null
                 && item.getEstado().equalsIgnoreCase("Pendiente")) {
 
             holder.txtComision.setVisibility(View.VISIBLE);
-            // Formato simple, puedes mejorarlo luego con NumberFormat si quieres
             holder.txtComision.setText(
                     "Comisión por aceptar: S/ " + String.format("%.2f", comision)
             );
@@ -122,7 +120,7 @@ public class IntercambiosRecibidosAdapter extends RecyclerView.Adapter<Intercamb
 
         ImageView imgProducto;
         TextView txtProductoSolicitado, txtProductoOfrecido, txtNombreUsuario, txtEstado;
-        TextView txtComision; // 🔹 NUEVO
+        TextView txtComision;
         Button btnAceptar, btnRechazar, btnComprobante;
 
         public ViewHolder(@NonNull View itemView) {

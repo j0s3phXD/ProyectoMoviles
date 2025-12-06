@@ -2,7 +2,7 @@ package com.example.proyectomoviles.model.calificacion;
 
 public class CalificacionPromedioResponse {
 
-    private int code;       // 1 = OK, 0 = error
+    private int code;
     private float promedio;
     private int total;
 

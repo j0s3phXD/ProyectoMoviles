@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <!-- CORRECCIÓN: Usar el logo principal de la app -->
         <ImageView
             android:id="@+id/imgLogoSplash"
             android:layout_width="150dp"
@@ -21,7 +20,6 @@
             android:src="@mipmap/ic_launcher"
             android:contentDescription="Logo de Swaply" />
 
-        <!-- El texto de bienvenida -->
         <TextView
             android:id="@+id/txtWelcome"
             android:layout_width="wrap_content"

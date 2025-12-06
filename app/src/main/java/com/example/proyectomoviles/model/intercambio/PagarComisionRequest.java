@@ -2,7 +2,7 @@ package com.example.proyectomoviles.model.intercambio;
 public class PagarComisionRequest {
     private int id_intercambio;
     private String payment_token;
-    private int monto; // en céntimos: 500 = S/5.00
+    private int monto;
     public PagarComisionRequest(int id_intercambio, String payment_token, int monto) {
         this.id_intercambio = id_intercambio;
         this.payment_token = payment_token;

@@ -63,7 +63,6 @@
                 android:paddingTop="4dp" />
         </LinearLayout>
 
-        <!-- Botones de acción (UNO DEBAJO DEL OTRO) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -77,10 +77,8 @@ public class ProductoEntry implements Serializable {
     public void setId_usuario(int id_usuario) { this.id_usuario = id_usuario; }
     public String getNombre_usuario() { return nombre_usuario; }
     public void setNombre_usuario(String nombre_usuario) { this.nombre_usuario = nombre_usuario; }
-
     public String getDes_categoria() { return des_categoria; }
     public void setDes_categoria(String des_categoria) { this.des_categoria = des_categoria; }
-
     public int getId_categoria() { return id_categoria; }
     public void setId_categoria(int id_categoria) { this.id_categoria = id_categoria; }
     public String getFoto() { return foto; }

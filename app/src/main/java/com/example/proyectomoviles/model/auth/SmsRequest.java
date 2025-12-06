@@ -2,7 +2,7 @@ package com.example.proyectomoviles.model.auth;
 
 public class SmsRequest {
     private String telefono;
-    private String tipo; // "registro" o "recuperacion"
+    private String tipo;
 
     public SmsRequest(String telefono, String tipo) {
         this.telefono = telefono;

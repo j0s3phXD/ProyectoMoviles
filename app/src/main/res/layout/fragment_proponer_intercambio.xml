@@ -19,7 +19,6 @@
             android:src="@drawable/logo_back"
             android:contentDescription="Volver" />
 
-        <!-- Título principal -->
         <TextView
             android:id="@+id/tvTituloPantalla"
             android:layout_width="wrap_content"
@@ -75,7 +74,6 @@
                         android:textSize="16sp"
                         android:layout_marginBottom="4dp" />
 
-                    <!-- Chip categoría -->
                     <TextView
                         android:id="@+id/tvCategoriaDestino"
                         android:layout_width="wrap_content"
@@ -89,7 +87,6 @@
                         android:background="@drawable/chip_categoria"
                         android:layout_marginBottom="4dp" />
 
-                    <!-- Nombre del dueño -->
                     <TextView
                         android:id="@+id/tvDuenoDestino"
                         android:layout_width="wrap_content"

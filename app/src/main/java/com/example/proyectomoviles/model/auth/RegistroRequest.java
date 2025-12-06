@@ -1,29 +1,46 @@
 package com.example.proyectomoviles.model.auth;
 
 public class RegistroRequest {
+
     private String nombre;
     private String apellido;
     private String email;
     private String password;
-    // 1. Agregamos la variable para el teléfono
     private String telefono;
+    private String dni;   //  NUEVO CAMPO
 
-    // 2. Actualizamos el constructor para recibir el teléfono
-    public RegistroRequest(String nombre, String apellido, String email, String password, String telefono) {
+    public RegistroRequest(String nombre, String apellido, String email,
+                           String password, String telefono, String dni) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
         this.password = password;
         this.telefono = telefono;
+        this.dni = dni;
     }
 
-    // (Opcional) Si usas Getters y Setters en otro lado, agrégalos aquí también.
-    // Para enviar los datos con Retrofit, con el constructor y las variables es suficiente.
+    // Getters
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public String getDni() {
+        return dni;
     }
 }

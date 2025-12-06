@@ -28,20 +28,17 @@
             android:gravity="center_vertical"
             android:paddingBottom="16dp">
 
-            <!-- Avatar: foto o iniciales -->
             <FrameLayout
                 android:id="@+id/avatarContainer"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="16dp">
 
-                <!-- Círculo de color para iniciales -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/logo_avatar_circle" />
 
-                <!-- Iniciales (cuando NO hay foto) -->
                 <TextView
                     android:id="@+id/tvInicialesPerfil"
                     android:layout_width="match_parent"
@@ -52,7 +49,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/white" />
 
-                <!-- Foto real del usuario -->
                 <ImageView
                     android:id="@+id/imgPerfil"
                     android:layout_width="match_parent"
@@ -63,7 +59,6 @@
 
             </FrameLayout>
 
-            <!-- Nombre y estrellas -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +99,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp">
 
-            <!-- Productos publicados -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -129,7 +123,6 @@
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
 
-            <!-- Intercambios completados -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -164,7 +157,6 @@
             android:orientation="vertical"
             android:paddingTop="20dp">
 
-            <!-- TÍTULO 1 -->
             <TextView
                 android:id="@+id/tvMisIntercambiosTitulo"
                 android:layout_width="match_parent"
@@ -183,7 +175,6 @@
                 android:overScrollMode="never"
                 android:paddingBottom="20dp" />
 
-            <!-- TÍTULO 2 -->
             <TextView
                 android:id="@+id/tvIntercambiosRecibidosTitulo"
                 android:layout_width="match_parent"
@@ -201,7 +192,6 @@
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never" />
 
-            <!-- TÍTULO 3 -->
             <TextView
                 android:id="@+id/tvHistorialIntercambiosTitulo"
                 android:layout_width="match_parent"

@@ -3,7 +3,7 @@ package com.example.proyectomoviles.model.producto;
 public class ProductoDetalleResponse {
     private int code;
     private String message;
-    private ProductoEntry data; // Aquí va un solo producto
+    private ProductoEntry data;
 
     public int getCode() {
         return code;
@@ -16,7 +16,6 @@ public class ProductoDetalleResponse {
     public String getMessage() {
         return message;
     }
-
     public void setMessage(String message) {
         this.message = message;
     }

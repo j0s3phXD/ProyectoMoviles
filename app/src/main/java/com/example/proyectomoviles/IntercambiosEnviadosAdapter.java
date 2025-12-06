@@ -72,7 +72,6 @@ public class IntercambiosEnviadosAdapter extends RecyclerView.Adapter<Intercambi
             holder.btnComprobante.setVisibility(View.GONE);
         }
 
-        // Acción del comprobante
         holder.btnComprobante.setOnClickListener(v -> {
             Intent intent = new Intent(context, ComprobanteActivity.class);
             intent.putExtra("intercambio", item);

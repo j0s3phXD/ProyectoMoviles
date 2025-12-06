@@ -60,8 +60,8 @@ public class PerfilFragment extends Fragment {
 
         if (nombreArchivoFoto == null || nombreArchivoFoto.trim().isEmpty()) {
             binding.imgPerfil.setImageDrawable(null);
-            binding.imgPerfil.setVisibility(View.GONE);          // ocultar imagen
-            binding.tvInicialesPerfil.setVisibility(View.VISIBLE); // mostrar iniciales
+            binding.imgPerfil.setVisibility(View.GONE);
+            binding.tvInicialesPerfil.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -109,7 +109,6 @@ public class PerfilFragment extends Fragment {
 
         binding.txtNombreUsuario.setText(nombre + " " + apellido);
 
-        //(iniciales + posible foto)
         mostrarAvatar(nombre, apellido, nombreArchivoFoto);
 
         configurarRecycler();
@@ -327,7 +326,6 @@ public class PerfilFragment extends Fragment {
         });
     }
     private void pagarComisionYConfirmar(IntercambioEntry intercambio, String paymentToken) {
-        // 1. Obtener token JWT
         SharedPreferences prefs = requireContext()
                 .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
         String token = prefs.getString("tokenJWT", null);
@@ -337,11 +335,11 @@ public class PerfilFragment extends Fragment {
             return;
         }
 
-        // 2. Convertir la comisión a céntimos (ej: 4.50 -> 450)
+        // Convertir la comisión a céntimos (ej: 4.50 -> 450)
         double comision = intercambio.getComision_monto();
         int montoCentimos = (int) Math.round(comision * 100);
 
-        // 3. Crear request con el token real de Stripe
+        // Crear request con el token real de Stripe
         PagarComisionRequest request = new PagarComisionRequest(
                 intercambio.getId_intercambio(),
                 paymentToken,   // 👉 token real devuelto por PagoActivity
@@ -368,7 +366,6 @@ public class PerfilFragment extends Fragment {
                             "Pago de comisión exitoso",
                             Toast.LENGTH_SHORT).show();
 
-                    // 🔹 Después de pagar, confirmamos el intercambio
                     confirmarIntercambio(intercambio.getId_intercambio(), "aceptado");
 
                 } else {
@@ -452,7 +449,6 @@ public class PerfilFragment extends Fragment {
             String paymentToken = data.getStringExtra(PagoActivity.EXTRA_PAYMENT_TOKEN);
 
             if (paymentToken != null && intercambioSeleccionado != null) {
-                // 🔹 Ya tenemos token y el intercambio que se estaba aceptando
                 pagarComisionYConfirmar(intercambioSeleccionado, paymentToken);
             } else {
                 Toast.makeText(getContext(),

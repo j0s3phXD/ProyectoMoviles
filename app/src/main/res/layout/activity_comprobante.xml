@@ -1,115 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:background="#F5F5F5"
+    android:padding="16dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/btnBackComprobante"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:padding="8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/logo_back"
-            android:contentDescription="Volver" />
-
-        <TextView
-            android:text="COMPROBANTE DE INTERCAMBIO"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
+        <!-- HEADER -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp">
 
-        <TextView
-            android:id="@+id/txtCodigoComprobante"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingBottom="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <ImageButton
+                android:id="@+id/btnBackComprobante"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/logo_back"
+                android:contentDescription="Volver" />
 
-        <TextView android:id="@+id/txtId"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="COMPROBANTE DE INTERCAMBIO"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="#212121"
+                android:paddingEnd="36dp"/>
+        </LinearLayout>
 
-        <TextView android:id="@+id/txtEstado"
-            android:textSize="16sp"
-            android:paddingBottom="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView android:id="@+id/txtUsuarioOrigen"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:paddingBottom="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView android:id="@+id/txtUsuarioDestino"
-            android:textSize="18sp"
-            android:paddingBottom="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <!-- Producto solicitado -->
-        <TextView
-            android:text="Producto solicitado:"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <ImageView
-            android:id="@+id/imgSolicitado"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/txtProductoSolicitado"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:paddingBottom="20dp"
+        <!-- CARD DATOS GENERALES -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp"
+            android:foreground="?android:attr/selectableItemBackground">
 
-        <!-- Producto ofrecido -->
-        <TextView android:text="Producto ofrecido:"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imgOfrecido"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/txtCodigoComprobante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF5722"
+                    android:paddingBottom="8dp" />
 
-        <TextView
-            android:id="@+id/txtProductoOfrecido"
-            android:textSize="16sp"
-            android:gravity="center"
+                <TextView
+                    android:id="@+id/txtEstado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="#444444"
+                    android:paddingBottom="12dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/txtUsuarioOrigen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/txtUsuarioDestino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#212121" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- CARD PRODUCTO SOLICITADO -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:text="Producto solicitado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:paddingBottom="8dp"/>
+
+                <ImageView
+                    android:id="@+id/imgSolicitado"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/txtProductoSolicitado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:textColor="#424242"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- CARD PRODUCTO OFRECIDO -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="12dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:text="Producto ofrecido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:paddingBottom="8dp"/>
+
+                <ImageView
+                    android:id="@+id/imgOfrecido"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/txtProductoOfrecido"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:textColor="#424242"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- BOTÓN DESCARGAR -->
         <Button
             android:id="@+id/btnDescargarPdf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Descargar comprobante en PDF"
-            android:padding="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="8dp"
+            android:padding="12dp"
             android:backgroundTint="@color/primary"
+            android:textAllCaps="false"
+            android:textSize="16sp"
             android:textColor="@android:color/white" />
-
 
     </LinearLayout>
 </ScrollView>

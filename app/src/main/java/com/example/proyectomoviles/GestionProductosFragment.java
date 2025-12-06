@@ -119,7 +119,6 @@ public class GestionProductosFragment extends Fragment {
                 if (rpta != null && rpta.getCode() == 1) {
                     List<ProductoEntry> listaProductos = rpta.getData();
 
-                    // Configurar RecyclerView
                     binding.recyclerProductos.setHasFixedSize(true);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
                     binding.recyclerProductos.setLayoutManager(gridLayoutManager);
@@ -190,7 +189,7 @@ public class GestionProductosFragment extends Fragment {
 
                     Toast.makeText(getActivity(), "Producto eliminado", Toast.LENGTH_SHORT).show();
 
-                    cargarProductos(); // Recargar la lista
+                    cargarProductos();
                 } else {
                     Toast.makeText(getActivity(),
                             rpta != null ? rpta.getMessage() : "Error desconocido",
