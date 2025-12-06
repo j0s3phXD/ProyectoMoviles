@@ -43,7 +43,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
         this.listener = listener;
     }
 
-    // Permite actualizar las calificaciones cargadas luego en PerfilFragment
     public void updateCalificaciones(List<CalificacionEntry> nuevas) {
         this.listaCalificaciones = nuevas;
         notifyDataSetChanged();
@@ -61,11 +60,11 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
 
         IntercambioEntry item = listaIntercambios.get(position);
 
-        holder.txtProductoSolicitado.setText("Tu producto: " + item.getProducto_solicitado());
-        holder.txtProductoOfrecido.setText("Producto del otro usuario: " + item.getProducto_ofrecido());
-        holder.txtNombreUsuario.setText("Usuario: " + item.getNombre_origen());
+        holder.txtProductoSolicitado.setText("Tu producto: " + item.getProductoMio());
+        holder.txtProductoOfrecido.setText("Producto del otro usuario: " + item.getProductoOtro());
+        holder.txtNombreUsuario.setText("Usuario: " + item.getNombreOtro());
 
-        String urlImagen = item.getImagen_solicitado();
+        String urlImagen = item.getImagenOtro();
         if (urlImagen != null && !urlImagen.isEmpty()) {
 
             if (!urlImagen.startsWith("http")) {
@@ -97,7 +96,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             idRecibe = item.getId_usuario_origen();
         }
 
-        //  VERIFICAR SI YA CALIFICÓ ESTE INTERCAMBIO
         boolean yaCalificado = false;
 
         if (listaCalificaciones != null) {
@@ -111,7 +109,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             }
         }
 
-        //  DESHABILITAR BOTÓN SI YA CALIFICÓ
         if (yaCalificado) {
             holder.btnCalificar.setEnabled(false);
             holder.btnCalificar.setText("Ya calificado");
@@ -121,7 +118,6 @@ public class HistorialIntercambiosAdapter extends RecyclerView.Adapter<Historial
             holder.btnCalificar.setText("Calificar");
         }
 
-        //  ACCIÓN DEL BOTÓN CALIFICAR
         holder.btnCalificar.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, CalificarActivity.class);

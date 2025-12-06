@@ -166,16 +166,35 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Botón para contactar al vendedor -->
-        <Button
-            android:id="@+id/btnContactarVendedor"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comunicarte con el vendedor"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/primary"
-            android:padding="12dp"
-            android:layout_marginBottom="24dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <Button
+                android:id="@+id/btnContactarVendedor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Iniciar intercambio"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnChatGrupal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chat Grupal"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/secondary"
+                android:padding="12dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

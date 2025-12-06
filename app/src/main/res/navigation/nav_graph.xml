@@ -16,16 +16,22 @@
     </fragment>
 
     <fragment
-    android:id="@+id/nav_publicar"
-    android:name="com.example.proyectomoviles.PublicarFragment"
-    android:label="Publicar Objeto"
-    tools:layout="@layout/fragment_publicar" />
+        android:id="@+id/nav_publicar"
+        android:name="com.example.proyectomoviles.PublicarFragment"
+        android:label="Publicar Objeto"
+        tools:layout="@layout/fragment_publicar" />
 
     <fragment
         android:id="@+id/nav_perfil"
         android:name="com.example.proyectomoviles.PerfilFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
+
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.proyectomoviles.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
         android:id="@+id/nav_gestionProductos"

@@ -1,5 +1,6 @@
 package com.example.proyectomoviles.model.intercambio;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class IntercambioEntry implements Serializable {
@@ -19,9 +20,24 @@ public class IntercambioEntry implements Serializable {
     private String imagen_solicitado;
     private String imagen_ofrecido;
 
-    // 🔹 NUEVOS CAMPOS PARA COMISIÓN
     private double comision_monto;
     private String comision_estado;
+
+    @SerializedName("nombre_otro")
+    private String nombreOtro;
+
+    @SerializedName("producto_otro")
+    private String productoOtro;
+
+    @SerializedName("imagen_otro")
+    private String imagenOtro;
+
+    @SerializedName("producto_mio")
+    private String productoMio;
+
+    @SerializedName("imagen_mio")
+    private String imagenMio;
+
 
     // ---- Getters y Setters ----
     public int getId_intercambio() { return id_intercambio; }
@@ -60,10 +76,24 @@ public class IntercambioEntry implements Serializable {
     public String getImagen_ofrecido() { return imagen_ofrecido; }
     public void setImagen_ofrecido(String imagen_ofrecido) { this.imagen_ofrecido = imagen_ofrecido; }
 
-    // 🔹 Getters y setters de comisión
     public double getComision_monto() { return comision_monto; }
     public void setComision_monto(double comision_monto) { this.comision_monto = comision_monto; }
 
     public String getComision_estado() { return comision_estado; }
     public void setComision_estado(String comision_estado) { this.comision_estado = comision_estado; }
+
+    public String getNombreOtro() { return nombreOtro; }
+    public void setNombreOtro(String nombreOtro) { this.nombreOtro = nombreOtro; }
+
+    public String getProductoOtro() { return productoOtro; }
+    public void setProductoOtro(String productoOtro) { this.productoOtro = productoOtro; }
+
+    public String getImagenOtro() { return imagenOtro; }
+    public void setImagenOtro(String imagenOtro) { this.imagenOtro = imagenOtro; }
+
+    public String getProductoMio() { return productoMio; }
+    public void setProductoMio(String productoMio) { this.productoMio = productoMio; }
+
+    public String getImagenMio() { return imagenMio; }
+    public void setImagenMio(String imagenMio) { this.imagenMio = imagenMio; }
 }
