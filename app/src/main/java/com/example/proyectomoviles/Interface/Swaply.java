@@ -7,6 +7,10 @@ import com.example.proyectomoviles.model.auth.SmsRequest;
 import com.example.proyectomoviles.model.auth.VerificationRequest;
 import com.example.proyectomoviles.model.calificacion.CalificacionRequest;
 import com.example.proyectomoviles.model.categoria.CategoriaResponse;
+import com.example.proyectomoviles.model.chat.ChatGrupalResponse;
+import com.example.proyectomoviles.model.chat.CrearChatGrupalResponse;
+import com.example.proyectomoviles.model.chat.EnviarMensajeGrupalRequest;
+import com.example.proyectomoviles.model.chat.MensajesGrupalesResponse;
 import com.example.proyectomoviles.model.intercambio.ConfirmarIntercambioRequest;
 import com.example.proyectomoviles.model.intercambio.PagarComisionRequest;
 import com.example.proyectomoviles.model.producto.EliminarProductoRequest;
@@ -141,5 +145,15 @@ public interface Swaply {
             @Part MultipartBody.Part foto
     );
 
+    @GET("api_chats_producto")
+    Call<ChatGrupalResponse> obtenerChatsGrupales();
 
+    @POST("api_crear_chat_producto/{id_producto}")
+    Call<CrearChatGrupalResponse> crearChatGrupal(@Path("id_producto") int idProducto);
+
+    @GET("api_mensajes_chat_producto/{id_chat_producto}")
+    Call<MensajesGrupalesResponse> obtenerMensajesGrupales(@Path("id_chat_producto") int idChatProducto);
+
+    @POST("api_enviar_mensaje_chat_producto/{id_chat_producto}")
+    Call<GeneralResponse> enviarMensajeGrupal(@Path("id_chat_producto") int idChatProducto, @Body EnviarMensajeGrupalRequest request);
 }
