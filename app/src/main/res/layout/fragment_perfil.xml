@@ -10,16 +10,37 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitulo"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Perfil"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Perfil"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvCerrarSesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cerrar sesión"
+                android:textSize="13sp"
+                android:textColor="@color/primary"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp"
+                android:background="@drawable/logo_cerrar_sesion"
+                android:clickable="true"
+                android:focusable="true"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,7 +103,6 @@
                     android:stepSize="0.5"
                     android:isIndicator="true"
                     android:rating="0"
-
                     android:progressTint="#FFC107"
                     android:secondaryProgressTint="#FFD54F"
                     android:progressBackgroundTint="#C0C0C0" />
@@ -149,7 +169,6 @@
 
         </LinearLayout>
 
-        <!-- Sección Intercambios -->
         <LinearLayout
             android:id="@+id/layoutIntercambios"
             android:layout_width="match_parent"

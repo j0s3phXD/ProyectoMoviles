@@ -229,7 +229,7 @@ public class PagoActivity extends AppCompatActivity {
                         btnCancelarPago.setEnabled(true);
 
                         Toast.makeText(PagoActivity.this,
-                                "Error generando token: " + e.getMessage(),
+                                "No se pudo procesar la tarjeta. Verifica los datos",
                                 Toast.LENGTH_LONG).show();
                     }
                 }

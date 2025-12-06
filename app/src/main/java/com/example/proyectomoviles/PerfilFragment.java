@@ -111,6 +111,8 @@ public class PerfilFragment extends Fragment {
 
         mostrarAvatar(nombre, apellido, nombreArchivoFoto);
 
+        binding.tvCerrarSesion.setOnClickListener(v -> mostrarDialogoCerrarSesion());
+
         configurarRecycler();
 
 
@@ -123,6 +125,28 @@ public class PerfilFragment extends Fragment {
         cargarContadorProductos();
 
         return binding.getRoot();
+    }
+
+    private void mostrarDialogoCerrarSesion() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Seguro que deseas cerrar sesión?")
+                .setPositiveButton("Sí, cerrar sesión", (dialog, which) -> cerrarSesion())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void cerrarSesion() {
+        SharedPreferences prefs = requireActivity()
+                .getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
+
+        prefs.edit().clear().apply();
+
+        Intent intent = new Intent(requireActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        requireActivity().finish();
     }
 
     private void configurarRecycler() {
