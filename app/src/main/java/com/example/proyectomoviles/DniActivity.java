@@ -40,7 +40,7 @@ public class DniActivity extends AppCompatActivity {
 
     private TextRecognizer textRecognizer;
 
-    private String dniGuardado;   // DNI guardado en SharedPreferences al hacer login normal
+    private String dniGuardado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class DniActivity extends AppCompatActivity {
         // Inicializar ML Kit
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-        // Leemos el DNI guardado (lo guarda LoginActivity en SP_SWAPLY)
+        // Leemos el DNI guardado ()
         SharedPreferences sp = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);
         dniGuardado = sp.getString("dniUsuario", null);
 
@@ -70,9 +70,7 @@ public class DniActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> procesarImagenYOcr());
     }
 
-    // ============================
-    // 1. Abrir galería
-    // ============================
+    // Abrimos Galeria
     private void abrirGaleria() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -107,9 +105,7 @@ public class DniActivity extends AppCompatActivity {
         }
     }
 
-    // ============================
-    // 2. Procesar imagen con ML Kit
-    // ============================
+    // Procesar imagen con ML Kit
     private void procesarImagenYOcr() {
         if (imagenUri == null) {
             Toast.makeText(this, "Primero selecciona la foto de tu DNI", Toast.LENGTH_SHORT).show();
@@ -155,9 +151,6 @@ public class DniActivity extends AppCompatActivity {
             return;
         }
 
-        // Para debug:
-        // Toast.makeText(this, "DNI detectado: " + dniDetectado, Toast.LENGTH_LONG).show();
-
         if (!dniDetectado.equals(dniGuardado)) {
             Toast.makeText(
                     this,
@@ -171,13 +164,10 @@ public class DniActivity extends AppCompatActivity {
         entrarConDni();
     }
 
-    // ============================
-    // 3. Extraer DNI (8 dígitos) del texto OCR
-    // ============================
+    // Extraer DNI del texto OCR
     private String extraerDniDesdeTexto(String texto) {
         if (texto == null) return null;
 
-        // 1) Buscar en la MRZ: ...PER72687997...
         Pattern patronMrz = Pattern.compile("PER(\\d{8})");
         Matcher matcherMrz = patronMrz.matcher(texto);
 
@@ -185,7 +175,7 @@ public class DniActivity extends AppCompatActivity {
             return matcherMrz.group(1); // 8 dígitos
         }
 
-        // 2) Buscar cualquier número de 8 dígitos
+        // Buscar cualquier número de 8 dígitos
         Pattern patronGeneral = Pattern.compile("\\b(\\d{8})\\b");
         Matcher matcherGeneral = patronGeneral.matcher(texto);
 
@@ -196,9 +186,7 @@ public class DniActivity extends AppCompatActivity {
         return null;
     }
 
-    // ============================
-    // 4. Entrar a la app (sin pedir dni/password)
-    // ============================
+    // Entrar a la app
     private void entrarConDni() {
         // Aquí usamos el token que ya tengas guardado del login normal.
         SharedPreferences sp = getSharedPreferences("SP_SWAPLY", MODE_PRIVATE);

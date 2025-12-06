@@ -5,7 +5,7 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private String email;
-    private String dni;  // 👈 NUEVO
+    private String dni;
 
     public int getId_usuario() {
         return id_usuario;

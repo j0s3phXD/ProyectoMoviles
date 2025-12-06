@@ -116,7 +116,6 @@
             android:nestedScrollingEnabled="false"
             android:layout_marginBottom="24dp" />
 
-        <!-- Sección mensaje -->
         <TextView
             android:id="@+id/tvTituloMensaje"
             android:layout_width="wrap_content"

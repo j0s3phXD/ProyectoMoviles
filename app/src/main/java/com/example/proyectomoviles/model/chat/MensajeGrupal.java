@@ -17,7 +17,6 @@ public class MensajeGrupal {
     @SerializedName("nombre_usuario")
     private String nombreUsuario;
 
-    // Getters
     public int getIdMensaje() { return idMensaje; }
     public int getIdUsuario() { return idUsuario; }
     public String getMensaje() { return mensaje; }

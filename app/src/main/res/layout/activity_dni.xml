@@ -10,7 +10,6 @@
     android:padding="24dp"
     tools:context=".DniActivity">
 
-    <!-- Título -->
     <TextView
         android:id="@+id/txtTituloDni"
         android:layout_width="0dp"
@@ -24,7 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Subtítulo / instrucciones -->
     <TextView
         android:id="@+id/txtSubtituloDni"
         android:layout_width="0dp"
@@ -38,7 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenedor de la imagen -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardDni"
         android:layout_width="0dp"
@@ -63,7 +60,6 @@
             tools:src="@drawable/logo" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Texto pequeño debajo de la imagen -->
     <TextView
         android:id="@+id/txtTipDni"
         android:layout_width="0dp"
@@ -77,7 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón para seleccionar foto -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSeleccionarFoto"
         android:layout_width="0dp"
@@ -95,7 +90,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botón para iniciar sesión -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="0dp"

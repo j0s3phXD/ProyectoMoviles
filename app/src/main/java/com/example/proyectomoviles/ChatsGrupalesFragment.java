@@ -35,7 +35,6 @@ public class ChatsGrupalesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Solo infla la vista aquí
         return inflater.inflate(R.layout.fragment_chats_grupales, container, false);
     }
 
@@ -43,7 +42,6 @@ public class ChatsGrupalesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Configura las vistas después de que se hayan creado
         rvChatsGrupales = view.findViewById(R.id.rv_chats_grupales);
         rvChatsGrupales.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -63,7 +61,6 @@ public class ChatsGrupalesFragment extends Fragment {
     }
 
     private void cargarChatsGrupales() {
-        // Asegúrate de tener el contexto antes de usarlo
         if (getContext() == null) return;
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("SP_SWAPLY", Context.MODE_PRIVATE);
@@ -75,7 +72,6 @@ public class ChatsGrupalesFragment extends Fragment {
         api.obtenerChatsGrupales().enqueue(new Callback<ChatGrupalResponse>() {
             @Override
             public void onResponse(Call<ChatGrupalResponse> call, Response<ChatGrupalResponse> response) {
-                // Comprueba si el fragmento todavía está adjunto
                 if (isAdded() && response.isSuccessful() && response.body() != null && response.body().getCode() == 1) {
                     listaChatsGrupales.clear();
                     listaChatsGrupales.addAll(response.body().getData());
@@ -85,7 +81,6 @@ public class ChatsGrupalesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ChatGrupalResponse> call, Throwable t) {
-                // Considera mostrar un mensaje de error aquí
             }
         });
     }

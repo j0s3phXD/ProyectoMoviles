@@ -41,7 +41,6 @@ public class CalificarActivity extends AppCompatActivity {
         btnBackCalificar = findViewById(R.id.btnBackCalificar);
         btnBackCalificar.setOnClickListener(v -> finish());
 
-        // Obtener datos enviados desde el adaptador
         idUsuarioRecibe = getIntent().getIntExtra("id_usuario_recibe", -1);
         idUsuarioAutor = getIntent().getIntExtra("id_usuario_autor", -1);
         idIntercambio = getIntent().getIntExtra("id_intercambio", -1);

@@ -31,7 +31,6 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     private ActivityRecuperarPasswordBinding binding;
     private Swaply api;
 
-    // Variables para guardar los datos
     private String telefono, email;
 
     @Override
@@ -48,7 +47,6 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     private void iniciarRecuperacion() {
         email = binding.txtEmailRecuperar.getText().toString().trim();
 
-        // Obtener y validar el teléfono (asumiendo lógica de +51 y 9 dígitos)
         String rawPhone = binding.txtTelefonoRecuperar.getText().toString().trim();
 
         if (email.isEmpty()) {
@@ -65,7 +63,7 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
         // Concatenar y asignar el teléfono final
         telefono = "+51" + rawPhone;
 
-        // LLAMADA 1: Solicitar código SMS al Backend
+        // Solicitar código SMS al Backend
         Toast.makeText(this, "Enviando código SMS...", Toast.LENGTH_SHORT).show();
         SmsRequest request = new SmsRequest(telefono, "recuperacion");
 
@@ -123,7 +121,7 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     }
 
     private void verificarCodigoEnBackend(String codigo, String nuevaPass) {
-        // LLAMADA 2: Verificar si el código es correcto
+        // Verificar si el código es correcto
         VerificationRequest request = new VerificationRequest(telefono, codigo, "recuperacion");
 
         api.verificarCodigo(request).enqueue(new Callback<GeneralResponse>() {
@@ -145,7 +143,7 @@ public class RecuperarPasswordActivity extends AppCompatActivity {
     }
 
     private void enviarCambioAlBackend(String codigo, String nuevaPass) {
-        // LLAMADA 3: Mandar la nueva contraseña al Backend para que haga el UPDATE
+        // Mandar la nueva contraseña al Backend para que haga el UPDATE
         RestablecerPasswordRequest request = new RestablecerPasswordRequest(email, codigo, nuevaPass, telefono);
 
         api.restablecerPassword(request).enqueue(new Callback<GeneralResponse>() {

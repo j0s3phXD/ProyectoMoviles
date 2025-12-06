@@ -9,7 +9,6 @@
     android:background="@color/white"
     tools:context=".LoginActivity">
 
-    <!-- LOGO -->
     <ImageView
         android:id="@+id/logoWelcome"
         android:layout_width="80dp"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- NOMBRE DE LA APP -->
     <TextView
         android:id="@+id/txtNombreApp"
         android:layout_width="wrap_content"
@@ -33,7 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- TITULO BIENVENIDA -->
     <TextView
         android:id="@+id/txtBienvenida"
         android:layout_width="wrap_content"
@@ -47,7 +44,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- DESCRIPCIÓN -->
     <TextView
         android:id="@+id/txtDescripcion"
         android:layout_width="wrap_content"
@@ -60,7 +56,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- USUARIO -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILUsername"
         android:layout_width="0dp"
@@ -81,7 +76,6 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- CONTRASEÑA -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtILPassword"
         android:layout_width="0dp"
@@ -103,7 +97,6 @@
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- BOTÓN LOGIN NORMAL -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
@@ -118,7 +111,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BOTÓN REGISTRAR -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnResgistrar"
         android:layout_width="0dp"
@@ -135,7 +127,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- BOTÓN NUEVO: LOGIN CON DNI -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLoginDni"
         android:layout_width="0dp"
@@ -152,7 +143,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- ¿OLVIDASTE TU CONTRASEÑA? -->
     <TextView
         android:id="@+id/txtOlvidastePass"
         android:layout_width="wrap_content"

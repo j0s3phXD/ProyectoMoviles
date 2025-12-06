@@ -39,7 +39,6 @@ public class IntercambioEntry implements Serializable {
     private String imagenMio;
 
 
-    // ---- Getters y Setters ----
     public int getId_intercambio() { return id_intercambio; }
     public void setId_intercambio(int id_intercambio) { this.id_intercambio = id_intercambio; }
 

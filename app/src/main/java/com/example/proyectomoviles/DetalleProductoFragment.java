@@ -89,7 +89,6 @@ public class    DetalleProductoFragment extends Fragment {
                     binding.imgProducto.setImageResource(android.R.color.darker_gray);
                 }
 
-                // ------- BOTÓN CONTACTAR -------
                 binding.btnContactarVendedor.setOnClickListener(v -> {
 
                     Bundle bundle = new Bundle();

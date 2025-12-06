@@ -165,7 +165,7 @@ public class ComprobanteActivity extends AppCompatActivity {
 
         pdf.finishPage(page);
 
-        // ===== Guardar archivo (tu mismo código) =====
+        // ===== Guardar archivo =====
         String fileName = "comprobante_intercambio_" + intercambio.getId_intercambio() + ".pdf";
         Uri uri;
 

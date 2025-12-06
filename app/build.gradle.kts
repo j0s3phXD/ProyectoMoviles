@@ -52,11 +52,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.retrofit.v250)
     implementation(libs.converter.gson.v250)
-    implementation(libs.picasso)
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.stripe.android)
-
-
     implementation(libs.text.recognition)
 }

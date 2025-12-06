@@ -20,7 +20,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Ocultar la barra de acción para una experiencia inmersiva
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -37,12 +36,10 @@ public class SplashActivity extends AppCompatActivity {
         logo.startAnimation(fadeIn);
         welcomeText.startAnimation(slideUp);
 
-        // Handler para la transición a la siguiente actividad
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            // CORRECCIÓN: Ir a LoginActivity en lugar de RegistroUsuarioActivity
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Cierra esta actividad para que el usuario no pueda volver a ella
+            finish();
         }, SPLASH_DELAY);
     }
 }

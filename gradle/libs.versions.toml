@@ -14,7 +14,6 @@ navigationUi = "2.9.3"
 activity = "1.10.1"
 navigationFragmentVersion = "2.4.2"
 navigationUiVersion = "2.9.5"
-picasso = "2.8"
 retrofit = "3.1.0-SNAPSHOT"
 retrofitVersion = "2.5.0"
 converterGson = "3.0.0"
@@ -42,7 +41,6 @@ navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragmentVersion" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUiVersion" }
-picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-v250 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }

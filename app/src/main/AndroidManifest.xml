@@ -60,7 +60,6 @@
             android:name=".PagoActivity"
             android:exported="false" />
 
-        <!-- Nueva actividad para el login con DNI -->
         <activity
             android:name=".DniActivity"
             android:exported="false" />

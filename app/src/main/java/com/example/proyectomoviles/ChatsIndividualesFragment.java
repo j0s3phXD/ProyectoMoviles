@@ -58,7 +58,7 @@ public class ChatsIndividualesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        cargarChatsIndividuales(); // Recarga cada vez que entras al fragment
+        cargarChatsIndividuales();
     }
 
     private void cargarChatsIndividuales() {
@@ -93,7 +93,6 @@ public class ChatsIndividualesFragment extends Fragment {
 
             @Override
             public void onFailure(Call<IntercambiosResponse> call, Throwable t) {
-                // Error opcional
             }
         });
     }

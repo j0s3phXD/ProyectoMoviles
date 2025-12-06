@@ -49,7 +49,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
     }
 
     private void iniciarFlujoRegistro() {
-        // CAPTURA DE DATOS DEL FORM
         tempNombre = binding.txtNombre.getText().toString().trim();
         tempApellido = binding.txtApellidos.getText().toString().trim();
         tempEmail = binding.txtEmail.getText().toString().trim();
@@ -58,7 +57,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         String rawPhone = binding.txtTelefono.getText().toString().trim();
         tempDni = binding.txtDni.getText().toString().trim();  // 👈 asumiendo que creaste txtDni en el XML
 
-        // VALIDACIONES
         if (tempNombre.isEmpty() || tempApellido.isEmpty() || tempEmail.isEmpty()
                 || tempPassword.isEmpty() || rawPhone.isEmpty()
                 || confirmPassword.isEmpty() || tempDni.isEmpty()) {
@@ -88,7 +86,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
 
         tempTelefono = "+51" + rawPhone;
 
-        // 1) SOLICITAR CÓDIGO SMS
+        // SOLICITAR CÓDIGO SMS
         Toast.makeText(this, "Enviando código SMS...", Toast.LENGTH_SHORT).show();
         SmsRequest request = new SmsRequest(tempTelefono, "registro");
 
@@ -169,7 +167,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
     }
 
     private void registrarUsuarioFinal() {
-        // 3) REGISTRO FINAL EN BD (AHORA CON DNI)
+        // REGISTRO FINAL EN BD
         RegistroRequest registroRequest =
                 new RegistroRequest(tempNombre, tempApellido, tempEmail,
                         tempPassword, tempTelefono, tempDni);
@@ -184,7 +182,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
                             "¡Registro Exitoso! Iniciando sesión...",
                             Toast.LENGTH_LONG).show();
 
-                    // 🔥 LOGIN AUTOMÁTICO DESPUÉS DEL REGISTRO
                     loginAutomatico();
                 } else {
                     Toast.makeText(RegistroUsuarioActivity.this,
@@ -202,9 +199,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         });
     }
 
-    // ================================
     // LOGIN AUTOMÁTICO POST-REGISTRO
-    // ================================
     private void loginAutomatico() {
 
         Swaply apiNoAuth = RetrofitClient.getApiService();
@@ -233,7 +228,6 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
                 ed.putInt("idUsuario", auth.getId_usuario());
                 ed.apply();
 
-                // Ahora cargamos los datos del usuario (incluye DNI)
                 cargarInfoUsuario(auth.getId_usuario());
             }
 
@@ -248,9 +242,7 @@ public class RegistroUsuarioActivity extends AppCompatActivity {
         });
     }
 
-    // ================================
     // CARGAR USUARIO Y GUARDAR DNI
-    // ================================
     private void cargarInfoUsuario(int idUsuario) {
 
         Swaply apiNoAuth = RetrofitClient.getApiService();

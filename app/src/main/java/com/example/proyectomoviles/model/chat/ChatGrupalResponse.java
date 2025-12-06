@@ -7,7 +7,6 @@ public class ChatGrupalResponse {
     private String message;
     private List<ChatGrupal> data;
 
-    // Getters
     public int getCode() { return code; }
     public String getMessage() { return message; }
     public List<ChatGrupal> getData() { return data; }

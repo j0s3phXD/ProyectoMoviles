@@ -60,7 +60,6 @@ public class PublicarFragment extends Fragment {
                         if (uri != null) {
                             imagenSeleccionadaUri = uri;
 
-                            // Mostrar imagen con Glide
                             Glide.with(this)
                                     .load(uri)
                                     .centerCrop()

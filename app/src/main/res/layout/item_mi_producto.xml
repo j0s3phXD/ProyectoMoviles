@@ -16,7 +16,6 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <!-- FOTO DE TU PRODUCTO -->
         <ImageView
             android:id="@+id/imgMiProducto"
             android:layout_width="70dp"

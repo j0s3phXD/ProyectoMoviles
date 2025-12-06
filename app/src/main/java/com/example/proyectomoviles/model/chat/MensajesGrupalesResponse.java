@@ -7,7 +7,6 @@ public class MensajesGrupalesResponse {
     private String message;
     private List<MensajeGrupal> data;
 
-    // Getters
     public int getCode() { return code; }
     public String getMessage() { return message; }
     public List<MensajeGrupal> getData() { return data; }

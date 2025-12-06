@@ -23,7 +23,6 @@
             android:contentDescription="Regresar"
             android:layout_gravity="start"/>
 
-        <!-- Título de la app-->
         <TextView
             android:id="@+id/tvTituloApp"
             android:layout_width="wrap_content"
@@ -34,7 +33,6 @@
             android:textStyle="bold"
             android:layout_marginBottom="12dp" />
 
-        <!-- Foto del producto -->
         <ImageView
             android:id="@+id/imgProducto"
             android:layout_width="match_parent"
@@ -46,7 +44,6 @@
             android:contentDescription="Imagen del producto" />
 
 
-        <!-- Nombre del producto -->
         <TextView
             android:id="@+id/tvNombreProducto"
             android:layout_width="match_parent"
@@ -58,7 +55,6 @@
             android:gravity="center"
             android:layout_marginBottom="4dp" />
 
-        <!-- Categoría -->
         <TextView
             android:id="@+id/tvCategoriaProducto"
             android:layout_width="wrap_content"
@@ -69,7 +65,6 @@
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="16dp" />
 
-        <!-- CARD: Descripción -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +91,6 @@
                 android:layout_marginTop="8dp" />
         </LinearLayout>
 
-        <!-- CARD: Busco a cambio -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,7 +117,6 @@
                 android:layout_marginTop="8dp" />
         </LinearLayout>
 
-        <!-- CARD: Ofrecido por -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,22 +133,13 @@
                 android:textSize="16sp"
                 android:textColor="@color/text_primary" />
 
-            <!-- Fila con avatar (futuro) + nombre -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:layout_marginTop="8dp">
-                <!--
-                Aquí más adelante puedes poner un avatar:
-                <ImageView
-                    android:id="@+id/ivAvatarUsuario"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_avatar_placeholder"
-                    android:layout_marginEnd="8dp" />
-                -->
+
                 <TextView
                     android:id="@+id/tvNombreUsuario"
                     android:layout_width="wrap_content"

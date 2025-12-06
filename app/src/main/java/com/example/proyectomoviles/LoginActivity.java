@@ -41,20 +41,16 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        // BOTÓN LOGIN NORMAL
         binding.btnLogin.setOnClickListener(v -> getToken());
 
-        // BOTÓN REGISTRAR
         binding.btnResgistrar.setOnClickListener(v ->
                 startActivity(new Intent(this, RegistroUsuarioActivity.class))
         );
 
-        // OLVIDASTE CONTRASEÑA
         binding.txtOlvidastePass.setOnClickListener(v ->
                 startActivity(new Intent(LoginActivity.this, RecuperarPasswordActivity.class))
         );
 
-        // BOTÓN LOGIN CON DNI (ya existe en tu XML)
         binding.btnLoginDni.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, DniActivity.class);
             startActivity(intent);

@@ -73,7 +73,6 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.Produc
             txtDescripcion.setText(producto.getDescripcion());
             txtCondicion.setText("Condición: " + producto.getCondicion());
 
-            // CARGAR FOTO DEL PRODUCTO
             String nombreFoto = producto.getFoto();
             if (nombreFoto != null && !nombreFoto.isEmpty()) {
                 String urlFoto = RetrofitClient.BASE_URL

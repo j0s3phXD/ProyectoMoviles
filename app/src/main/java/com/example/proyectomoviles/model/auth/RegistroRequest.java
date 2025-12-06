@@ -7,7 +7,7 @@ public class RegistroRequest {
     private String email;
     private String password;
     private String telefono;
-    private String dni;   //  NUEVO CAMPO
+    private String dni;
 
     public RegistroRequest(String nombre, String apellido, String email,
                            String password, String telefono, String dni) {
@@ -19,7 +19,6 @@ public class RegistroRequest {
         this.dni = dni;
     }
 
-    // Getters
     public String getNombre() {
         return nombre;
     }

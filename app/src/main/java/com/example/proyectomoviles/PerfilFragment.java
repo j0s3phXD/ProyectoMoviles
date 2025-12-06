@@ -52,7 +52,7 @@ public class PerfilFragment extends Fragment {
 
     private int idUsuarioActual;
     private static final int RC_PAGO_COMISION = 500;
-    private IntercambioEntry intercambioSeleccionado; // Para recordar cuál se está pagando
+    private IntercambioEntry intercambioSeleccionado;
 
     private void mostrarAvatar(String nombre, String apellido, String nombreArchivoFoto) {
         String iniciales = obtenerIniciales(nombre, apellido);
@@ -339,10 +339,9 @@ public class PerfilFragment extends Fragment {
         double comision = intercambio.getComision_monto();
         int montoCentimos = (int) Math.round(comision * 100);
 
-        // Crear request con el token real de Stripe
         PagarComisionRequest request = new PagarComisionRequest(
                 intercambio.getId_intercambio(),
-                paymentToken,   // 👉 token real devuelto por PagoActivity
+                paymentToken,
                 montoCentimos
         );
 
@@ -468,7 +467,6 @@ public class PerfilFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Recargar todo cuando el usuario vuelve al perfil
         cargarPromedioCalificacion(idUsuarioActual);
         cargarIntercambiosEnviados();
         cargarIntercambiosRecibidos();

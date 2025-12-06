@@ -79,7 +79,6 @@ public class ChatGrupalActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MensajesGrupalesResponse> call, Throwable t) {
-                // Manejar error
             }
         });
     }
@@ -109,7 +108,6 @@ public class ChatGrupalActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<GeneralResponse> call, Throwable t) {
-                // Manejar error
             }
         });
     }
